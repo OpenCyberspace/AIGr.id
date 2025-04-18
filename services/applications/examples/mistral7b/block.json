@@ -1,0 +1,102 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "blockId": "vllm-chat-01",
+                "blockComponentURI": "model.vllm-chat:1.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 2,
+                "blockInitData": {
+                    "vllm_server_url": "http://vllm-service:8080",
+                    "model_name": "mistralai/Mistral-7B-Instruct-v0.1"
+                },
+                "initSettings": {
+                    "max_new_tokens": 256,
+                    "timeout_ms": 2000
+                },
+                "parameters": {
+                    "temperature": 0.7
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "policy.clusterAllocator.default-selector:v1",
+                            "parameters": {
+                                "filter": {
+                                    "clusterQuery": {
+                                        "logicalOperator": "AND",
+                                        "conditions": [
+                                            {
+                                                "variable": "clusterMetadata.vendor",
+                                                "operator": "==",
+                                                "value": "dma-bangalore"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 2
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "policy.resourceAllocator.cpu-only-scheduler:v1",
+                            "parameters": {
+                                "cpus": 2,
+                                "min_memory_mb": 2048
+                            },
+                            "settings": {
+                                "selection_mode": "lightest-load"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "policy.loadBalancer.roundrobin:v0.0.1",
+                            "parameters": {
+                                "cache_sessions": true
+                            },
+                            "settings": {
+                                "session_cache_size": 1000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "policy.stabilityChecker.unhealthy-retry:v0.0.1",
+                            "parameters": {
+                                "unhealthy_threshold": 2
+                            },
+                            "settings": {
+                                "check_interval_sec": 10
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "policy.autoscaler.cpu-usage-autoscaler:v1",
+                            "parameters": {
+                                "target_cpu_utilization": 0.6
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 30,
+                                "scale_down_cooldown": 60
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,263 @@
+{
+    "parser_version": "Parser/V1",
+    "body": {
+        "header": {
+            "uid": {
+                "id": "block-aios-sept14-test",
+                "version": "v0.0.1",
+                "releaseTag": "stable"
+            }
+        },
+        "spec": {
+            "@templateType": "template.blocks.generic.llms_spec:v.0.0.1-beta",
+            "values": {
+                "blockId": "test-block-213",
+                "blockComponentURI": "node.algorithm.llms.qwen2.v0.0.2-beta",
+                "policyRulesSpec": [
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "polices.allocator.cluster.cluster_allocator_sample:v0.0.1",
+                            "settings": {},
+                            "parameters": {
+                                "allocationMode": "automatic",
+                                "clusterSelectorExp": {
+                                    "logicalOperator": "AND",
+                                    "conditions": [
+                                        {
+                                            "variable": "resource.cluster.regionId",
+                                            "operator": "IN",
+                                            "value": [
+                                                "IN",
+                                                "US",
+                                                "SA"
+                                            ]
+                                        },
+                                        {
+                                            "variable": "resource.cluster.maxNodes",
+                                            "operator": ">",
+                                            "value": 10
+                                        },
+                                        {
+                                            "variable": "resource.cluster.minGPUs",
+                                            "operator": "==",
+                                            "value": 10
+                                        },
+                                        {
+                                            "variable": "metrics.resource.cluster.mem.freeMem",
+                                            "operator": ">",
+                                            "value": 5192
+                                        }
+                                    ]
+                                },
+                                "allocationLayout": "nodeFirst",
+                                "top_n": 2
+                            },
+                            "executionMode": "local"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "polices.allocator.node.resource_allocator:v0.0.1",
+                            "settings": {},
+                            "parameters": {
+                                "allocationMode": "automatic",
+                                "nodesSelectorExp": {
+                                    "logicalOperator": "AND",
+                                    "conditions": [
+                                        {
+                                            "variable": "resource.node.minGPUs",
+                                            "operator": "==",
+                                            "value": 3
+                                        },
+                                        {
+                                            "variable": "resource.node.minCPUs",
+                                            "operator": "==",
+                                            "value": 8
+                                        },
+                                        {
+                                            "variable": "metrics.resource.node.cpu.average15m",
+                                            "operator": "<",
+                                            "value": 0.50
+                                        },
+                                        {
+                                            "variable": "metrics.resource.node.cpu",
+                                            "operator": ">",
+                                            "value": 0.90
+                                        }
+                                    ]
+                                },
+                                "allocationLayout": "nodeFirst",
+                                "top_n": 2
+                            },
+                            "executionMode": "local"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta",
+                            "settings": {},
+                            "parameters": {
+                                "max_refresh_count_vdag": 10000,
+                                "max_refresh_count_adhoc": 600
+                            },
+                            "executionMode": "local"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "loadBalancerMapper",
+                            "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta",
+                            "settings": {},
+                            "parameters": {
+                                "time_duration": 10,
+                                "adhoc_block_metrics": [
+                                    "metrics.resource.node.vcpu.load_1m",
+                                    "metrics.resource.node.gpus.memory.usedMem",
+                                    "metrics.resource.node.gpu.processes"
+                                ],
+                                "vdag_block_metrics": [
+                                    "metrics.resource.node.vcpu.load_1m",
+                                    "metrics.resource.node.gpus.memory.usedMem",
+                                    "metrics.resource.node.gpu.processes"
+                                ],
+                                "max_percent_diff_adhoc": 10,
+                                "max_percent_diff_stream": 30
+                            },
+                            "executionMode": "local"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "assignment",
+                            "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta",
+                            "settings": {},
+                            "parameters": {
+                                "max_vdags": 10
+                            },
+                            "executionMode": "central"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "",
+                            "settings": {},
+                            "parameters": {},
+                            "executionMode": "local"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "assetsLoader",
+                            "policyRuleURI": "",
+                            "settings": {},
+                            "parameters": {},
+                            "executionMode": "local"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta",
+                            "settings": {},
+                            "parameters": {
+                                "time_duration": 300,
+                                "resource_metrics_list": [
+                                    "metrics.resource.node.vcpu.load_1m",
+                                    "metrics.resource.node.gpus.memory.usedMem",
+                                    "metrics.resource.node.gpu.processes"
+                                ],
+                                "block_metrics_list": [
+                                    "metrics.block.model.instances.latency_1m",
+                                    "metrics.block.model.instances.queueLength"
+                                ],
+                                "local_metrics_list": [],
+                                "max_counter": 30
+                            },
+                            "executionMode": "local"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "accessRulesPolicy",
+                            "policyRuleURI": "",
+                            "parameters": {},
+                            "executionMode": "faas"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "modelSplitPolicyRule",
+                            "policyRuleURI": "policies.splitters.example-aug12:v0.0.1-beta",
+                            "settings": {
+                                "lib": "pippy",
+                                "n_hidden_layers": 24,
+                                "architecture": "qwen2",
+                                "include_embedding_layers": true
+                            },
+                            "parameters": {
+                                "balance_ratio": 0.40,
+                                "max_hidden_layers_per_split": 4,
+                                "max_splits": 2
+                            },
+                            "executionMode": "faas"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "splitResourceAllocatorPlugin",
+                            "policyRuleURI": "policies.allocator_plugins.example-aug12:v0.0.1-beta",
+                            "settings": {
+                                "preference": "node",
+                                "use_gpu": true
+                            },
+                            "parameters": {
+                                "max_gpus": 1,
+                                "scheduling_mode": "g_pipe"
+                            },
+                            "executionMode": "faas"
+                        }
+                    },
+                    {
+                        "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                        "values": {
+                            "name": "splitAutosharingPolicyRule",
+                            "policyRuleURI": "policies.allocator_plugins.example-aug12:v0.0.1-beta",
+                            "parameters": {},
+                            "executionMode": "local"
+                        }
+                    }
+                ],
+                "blockInitData": {
+                    "settings": {
+                        "autoscaler": {
+                            "interval": 30,
+                            "minReplicas": 1,
+                            "maxReplicas": 4,
+                            "maxCacheEntries": 2
+                        }
+                    },
+                    "parameters": {},
+                    "globals": {}
+                },
+                "enabledCustomMetrics": [
+                    "instance.metrics.average_dets"
+                ]
+            }
+        }
+    }
+}

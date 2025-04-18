@@ -1,0 +1,99 @@
+{
+    "header": {
+      "templateUri": "Parser/V1",
+      "parameters": {}
+    },
+    "body": {
+      "spec": {
+        "values": {
+          "componentId": {
+            "name": "mistral7b-chat",
+            "version": "2.0.0",
+            "releaseTag": "stable"
+          },
+          "componentType": "model",
+          "containerRegistryInfo": {
+            "containerImage": "registry.ai-platform.com/models/mistral7b-aios:2.0.0",
+            "containerRegistryId": "ai-platform-registry",
+            "containerImageMetadata": {
+              "author": "llm-team",
+              "description": "Mistral 7B chat model served via TransformersUtils on AIOS"
+            },
+            "componentMode": "aios"
+          },
+          "componentMetadata": {
+            "usecase": "chat-completion",
+            "framework": "Transformers",
+            "hardware": "GPU"
+          },
+          "componentInitData": {
+            "model_name": "mistralai/Mistral-7B-Instruct-v0.1",
+            "device": "cuda"
+          },
+          "componentInitParametersProtocol": {
+            "temperature": {
+              "type": "number",
+              "description": "Sampling temperature for generation",
+              "min": 0.0,
+              "max": 2.0
+            }
+          },
+          "componentInitSettingsProtocol": {
+            "tensor_parallel": {
+              "type": "boolean",
+              "description": "Enable multi-GPU parallelism"
+            },
+            "max_new_tokens": {
+              "type": "number",
+              "description": "Maximum number of new tokens to generate",
+              "min": 1,
+              "max": 2048
+            }
+          },
+          "componentInputProtocol": {
+            "message": {
+              "type": "string",
+              "description": "User input message"
+            },
+            "session_id": {
+              "type": "string",
+              "description": "Chat session identifier"
+            }
+          },
+          "componentOutputProtocol": {
+            "reply": {
+              "type": "string",
+              "description": "LLM-generated response"
+            }
+          },
+          "componentParameters": {
+            "temperature": 0.7
+          },
+          "componentInitSettings": {
+            "tensor_parallel": true,
+            "max_new_tokens": 256
+          },
+          "policies": {
+            "resource_affinity": {
+              "nodeType": "gpu",
+              "minMemory": "24GB"
+            }
+          },
+          "componentManagementCommandsTemplate": {
+            "reset": {
+              "description": "Clear all chat sessions",
+              "args": {}
+            }
+          },
+          "tags": [
+            "llm",
+            "chat",
+            "transformers",
+            "mistral",
+            "aios"
+          ]
+        }
+      }
+    }
+  }
+  

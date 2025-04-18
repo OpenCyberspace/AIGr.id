@@ -1,0 +1,39 @@
+{
+    "body": {
+        "values": {
+            "matchType": "cluster",
+            "filter": {
+                "clusterMetricsQuery": {
+                    "logicalOperator": "AND",
+                    "conditions": [
+                        {
+                            "variable": "cluster.vcpu.load_5m",
+                            "operator": ">",
+                            "value": 0.3
+                        },
+                        {
+                            "variable": "cluster.vcpu.load_5m",
+                            "operator": ">",
+                            "value": 0.3
+                        }
+                    ]
+                },
+                "clusterQuery": {
+                    "logicalOperator": "AND",
+                    "conditions": [
+                        {
+                            "variable": "nodes.count",
+                            "operator": ">",
+                            "value": "1"
+                        },
+                        {
+                            "variable": "reputation",
+                            "operator": ">",
+                            "value": "2"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,4 @@
+requests==2.32.3
+redis==3.2.1
+flask==3.0.3
+kubernetes==26.1.0

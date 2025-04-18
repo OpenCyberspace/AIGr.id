@@ -1,0 +1,370 @@
+{
+    "parser_version": "Parser/V1",
+    "body": {
+        "spec": {
+            "@templateType": "template.vdag.app-layout.sample-vdag:v0.0.1-beta",
+            "values": {
+                "vdagName": "test",
+                "vdagVersion": {
+                    "version": "0.0.1",
+                    "release-tag": "stable"
+                },
+                "discoveryTags": [
+                    "objedet",
+                    "narasimha",
+                    "prasanna"
+                ],
+                "controller": {
+                    "inputSources": [
+                        {
+                            "enabled": true,
+                            "sourceType": "adhoc",
+                            "sourceConfig": {
+                                "protocols": [
+                                    "ws",
+                                    "grpc",
+                                    "rest"
+                                ],
+                                "quotaCheckerPolicyRule": {
+                                    "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                                    "values": {
+                                        "policyRuleURI": "policies.quota_checkers.sample:v1-stable",
+                                        "settings": {},
+                                        "parameters": {},
+                                        "executionMode": "local"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "enabled": true,
+                            "sourceType": "gstreamer",
+                            "gstSourceSettings": {
+                                "cameraId": "test-mp4-1",
+                                "fps": "5/1",
+                                "allocationMode": "automatic",
+                                "allocationPolicyRule": {
+                                    "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                                    "values": {
+                                        "policyRuleURI": "policies.streams.gst_allocator:v1-stable",
+                                        "settings": {},
+                                        "parameters": {
+                                            "filter": {
+                                                "logicalOperator": "AND",
+                                                "conditions": [
+                                                    {
+                                                        "variable": "resource.cluster.regionId",
+                                                        "operator": "==",
+                                                        "value": "cluster-0"
+                                                    },
+                                                    {
+                                                        "variable": "resource.cluster.gpu.tags",
+                                                        "operator": "IN ANY",
+                                                        "value": [
+                                                            "decoder"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "variable": "metrics.resource.gpu.processes",
+                                                        "operator": "<",
+                                                        "value": 12
+                                                    },
+                                                    {
+                                                        "variable": "metrics.resource.gpu.freeMem",
+                                                        "operator": ">",
+                                                        "value": 1024
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "initParameters": {
+                        "metricsCache": {
+                            "enabled": true,
+                            "maxEntries": 10,
+                            "checkIntervalSeconds": 30,
+                            "metricsBackend": "redis"
+                        },
+                        "healthChecker": {
+                            "enabled": true,
+                            "healthCheckIntervalSeconds": 30
+                        }
+                    },
+                    "initSettings": {
+                        "maxOutputWaitTimeSeconds": 300,
+                        "maxAdhocConnections": -1,
+                        "enableAutoscaler": true,
+                        "autoscalerSettings": {
+                            "maxConcurrency": 30,
+                            "minReplicas": 1,
+                            "maxReplicas": 5
+                        },
+                        "enableFramedbPlugin": true,
+                        "replicas": 2,
+                        "maxConcurrentWebsockets": 10,
+                        "maxConcurrentgRPCConnections": 5,
+                        "accessListCache": {
+                            "enabled": true,
+                            "maxKeys": 100,
+                            "storageBackend": "memory"
+                        }
+                    },
+                    "policies": [
+                        {
+                            "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                            "values": {
+                                "policyRuleURI": "policies.output_validators.sample:v1-stable",
+                                "settings": {},
+                                "parameters": {},
+                                "executionMode": "local",
+                                "name": "outputValidationPolicy"
+                            }
+                        },
+                        {
+                            "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                            "values": {
+                                "policyRuleURI": "policies.failure_notifiers.sample:v1-stable",
+                                "settings": {},
+                                "parameters": {},
+                                "executionMode": "central",
+                                "name": "failureNotifierPolicyRule"
+                            }
+                        }
+                    ]
+                },
+                "nodes": [
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "obj-det-1",
+                                "nodeType": "block",
+                                "manualBlockId": "blk-fqasklid",
+                                "assignmentPolicyRule": {
+                                    "assignmentType": "automatic",
+                                    "assignmentPolicyRule": {
+                                        "@templateType": "",
+                                        "value": {
+                                            "assignmentPolicyRule": {
+                                                "executionMode": "central",
+                                                "policyRuleURI": "policies.assignment.sample:v1-stable",
+                                                "settings": {},
+                                                "parameters": {
+                                                    "filter": {
+                                                        "logicalOperator": "AND",
+                                                        "conditions": [
+                                                            {
+                                                                "variable": "block.component.componentURI",
+                                                                "operator": "==",
+                                                                "value": "node.algorithms.objdet.yolov5:v0.0.1-stable"
+                                                            },
+                                                            {
+                                                                "variable": "resource.cluster.regionId",
+                                                                "operator": "IN ANY",
+                                                                "value": [
+                                                                    "cluster-0",
+                                                                    "cluster-1",
+                                                                    "cluster-2"
+                                                                ]
+                                                            },
+                                                            {
+                                                                "logicalOperator": "OR",
+                                                                "conditions": [
+                                                                    {
+                                                                        "variable": "metrics.block.model.instances.latency_5m",
+                                                                        "operator": "<",
+                                                                        "value": 1.5
+                                                                    },
+                                                                    {
+                                                                        "variable": "metrics.block.model.instances.latency_1m",
+                                                                        "operator": "<",
+                                                                        "value": 0.5
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "variable": "block.inputProtocols",
+                                                                "operator": "IN ANY",
+                                                                "value": [
+                                                                    "node.algorithms.inputs.object.yolo_block:v1-stable"
+                                                                ]
+                                                            },
+                                                            {
+                                                                "variable": "block.outputProtocols",
+                                                                "operator": "IN ANY",
+                                                                "value": [
+                                                                    "node.algorithms.outputs.object.yolo_block:v1-stable"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "preprocessingPolicyRule": {
+                                    "@templateType": "",
+                                    "values": {
+                                        "executionMode": "local",
+                                        "policyRuleURI": "",
+                                        "settings": {},
+                                        "parameters": {}
+                                    }
+                                },
+                                "postprocessingPolicyRule": {
+                                    "@templateType": "",
+                                    "values": {
+                                        "executionMode": "local",
+                                        "policyRuleURI": "",
+                                        "settings": {},
+                                        "parameters": {}
+                                    }
+                                },
+                                "modelParameters": {
+                                    "iou": 0.3,
+                                    "nms": 0.1,
+                                    "maxDets": 0.3
+                                },
+                                "outputProtocol": {
+                                    "output_0": "node.schemas.object.yolo-xywh"
+                                },
+                                "inputProtocol": {
+                                    "input_0": "node.schemas.object.yolo-xyxy"
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "tracker-0",
+                                "nodeType": "block",
+                                "manualBlockId": "blk-of3grjpq",
+                                "assignmentPolicyRule": {
+                                    "assignmentType": "automatic",
+                                    "assignmentPolicyRule": {
+                                        "@templateType": "",
+                                        "values": {
+                                            "settings": {},
+                                            "parameters": {
+                                                "filter": {
+                                                    "logicalOperator": "",
+                                                    "conditions": [
+                                                        {
+                                                            "variable": "block.blockId",
+                                                            "operator": "==",
+                                                            "value": "block-0211A2"
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            "executionMode": "local",
+                                            "policyRuleURI": ""
+                                        }
+                                    }
+                                },
+                                "preprocessingPolicyRule": {
+                                    "@templateType": "",
+                                    "values": {
+                                        "executionMode": "local",
+                                        "policyRuleURI": "policies.assignment.sample:v1-stable",
+                                        "settings": {},
+                                        "parameters": {}
+                                    }
+                                },
+                                "postprocessingPolicyRule": {
+                                    "@templateType": "",
+                                    "values": {
+                                        "executionMode": "local",
+                                        "policyRuleURI": "",
+                                        "settings": {},
+                                        "parameters": {}
+                                    }
+                                },
+                                "modelParameters": {
+                                    "cosineDistance": 0.4,
+                                    "budget": 0.2
+                                },
+                                "outputProtocol": {
+                                    "output_0": "node.schemas.object.yolo-xywh"
+                                },
+                                "inputProtocol": {
+                                    "input_0": "node.schemas.object.yolo-xywh"
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "graph": {
+                    "input": [
+                        {
+                            "nodeLabel": "obj-det-1",
+                            "inputNames": [
+                                "input_0"
+                            ]
+                        }
+                    ],
+                    "output": [
+                        {
+                            "nodeLabel": "tracker-0",
+                            "outputNames": [
+                                "output_0"
+                            ]
+                        }
+                    ],
+                    "connections": [
+                        {
+                            "nodeLabel": "tracker-0",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "obj-det-1",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

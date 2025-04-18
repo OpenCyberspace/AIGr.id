@@ -1,0 +1,7 @@
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: framedb-bucket-3
+spec:
+  generateBucketName: framedb-bucket-3
+  storageClassName: framedb-backup-objects

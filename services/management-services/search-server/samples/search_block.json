@@ -1,0 +1,35 @@
+{
+    "body": {
+        "values": {
+            "matchType": "cluster",
+            "rankingPolicyRule": {
+                "values": {
+                    "executionMode": "code",
+                    "policyRuleURI": "dummy:1.0-stable",
+                    "settings": {
+                        "maxResults": 10,
+                        "enableCaching": true
+                    },
+                    "parameters": {
+                        "filterRule": {
+                            "matchType": "block",
+                            "filter": {
+                                "clusterQuery": {
+                                    "variable": "id",
+                                    "operator": "==",
+                                    "value": "cluster-123"
+                                },
+                                "blockMetricsQuery": {
+                                    "variable": "latency.executor.instances.adhoc.latency",
+                                    "operator": "==",
+                                    "value": "0"
+                                }
+                            }
+                        },
+                        "return": 5
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-config
+  namespace: framedb-config
+  labels:
+    app: cluster-config
+spec:
+  selector:
+    matchLabels:
+      app: cluster-config
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cluster-config
+    spec:
+      containers:
+      - name: cluster-config
+        image: cluster-config:latest
+        imagePullPolicy : Never
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        env:
+         - name : "DB_NAME"
+           value : "framedb"
+         - name : "FRAMEDB_HOST"
+           value : "framedb-config-db-mongodb:27017"
+         - name : "FRAMEDB_USER"
+           valueFrom :
+            secretKeyRef :
+             name : config-db-creds
+             key : username 
+         - name : "FRAMEDB_PASSWORD"
+           valueFrom :
+            secretKeyRef :
+             name : config-db-creds
+             key : password
+         - name : "LOGGING"
+           value : "Yes"
+         - name : "PYTHONUNBUFFERED"
+           value : "0"
+         - name : "ROUTING_REASSIGN_API"
+           value : "http://routing-service-svc.framedb-routing.svc.cluster.local:8000/routing/reassignInstance"
+         - name : "DEPLOYMENT_PASSWORD"
+           valueFrom :
+            secretKeyRef :
+             name : framedb-creds
+             key : password
+        volumeMounts:
+         - name : logging 
+           mountPath : /logs
+         - name : kubeconfig
+           mountPath : /root/.kube
+      volumes :
+        - name : logging
+          hostPath:
+            path: /home/ubuntu/framedb-logs
+        - name : kubeconfig
+          hostPath :
+            path : /home/ubuntu/.kube
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-config-svc
+  namespace: framedb-config
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind: Mapping
+      name: cluster-config
+      prefix: /framedb-cluster/
+      rewrite : /
+      service: cluster-config-svc.framedb-config.svc.cluster.local:8000
+spec:
+  selector:
+    app: cluster-config
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort : 32502
+  type: NodePort

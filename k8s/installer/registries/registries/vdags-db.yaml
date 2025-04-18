@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vdag-db
+  namespace: registries
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vdag-db
+  template:
+    metadata:
+      labels:
+        app: vdag-db
+    spec:
+      containers:
+        - name: vdag-db
+          image: aiosv1/vdag-db:v1
+          ports:
+            - containerPort: 10501
+          env:
+            - name: MONGO_URL
+              value: "mongodb://registry-0.registries.svc.cluster.local:27017"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: vdag-db-svc
+  namespace: registries
+spec:
+  selector:
+    app: vdag-db
+  ports:
+    - protocol: TCP
+      port: 10501
+      targetPort: 10501
+      nodePort: 30103
+  type: NodePort

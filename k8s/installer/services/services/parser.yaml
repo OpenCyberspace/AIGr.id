@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parser
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: parser
+  template:
+    metadata:
+      labels:
+        app: parser
+    spec:
+      containers:
+        - name: parser
+          image: aiosv1/parser:v1
+          ports:
+            - containerPort: 8000
+          env:
+            - name: TEMPLATES_STORE_API_URL
+              value: "http://templates-registry-svc.registries.svc.cluster.local:9000"
+            - name: GLOBAL_BLOCK_METRICS_URL
+              value: "http://global-block-metrics.metrics-system.svc.cluster.local:8889"
+            - name: BLOCKS_SERVICE_URL
+              value: "http://blocks-db-svc.registries.svc.cluster.local:3001"
+            - name: vDAG_TEMPLATE_STORE_API_URL
+              value: "http://templates-registry-svc.registries.svc.cluster.local:9000"
+            - name: POLICY_DB_URL
+              value: "http://policies-system.registries.svc.cluster.local:10000"
+            - name: MAX_WORKER_POOL_SIZE
+              value: ""
+            - name: GLOBAL_CLUSTER_METRICS_URL
+              value: "http://global-cluster-metrics.metrics-system.svc.cluster.local:8888"
+            - name: POLICY_RULE_REMOTE_URL
+              value: ""
+            - name: COMPONENT_REGISTRY_API
+              value: "http://components-registry-svc.registries.svc.cluster.local:4000"
+            - name: CLUSTER_SERVICE_URL
+              value: "http://clusters-db-service.registries.svc.cluster.local:3000"
+            - name: PARSER_SVC_API
+              value: "http://parser.services.svc.cluster.local:8000"
+            - name: LLM_PLANNER_TASK_API
+              value: ""
+            - name: VDAG_SYSTEM_URL
+              value: "http://vdag-db-svc.registries.svc.cluster.local:10501"
+            - name: ENABLE_TASK_DB
+              value: "false"
+            - name: SPEC_STORE_API_URL
+              value: "http://spec-registry-svc.registries.svc.cluster.local:8000"
+            - name: CLUSTER_CONTROLLER_GATEWAY_URL
+              value: "http://cluster-controller-gateway.cluster-controller-gateway.svc.cluster.local:5000"
+            - name: LLM_LAYERS_API
+              value: "http://layers-registry-svc.registries.svc.cluster.local:8002"
+            - name: SEARCH_SERVER_API_URL
+              value: "http://search-server.utils.svc.cluster.local:12000"
+            - name: TEST_MODE_ON
+              value: ""
+            - name: TASK_DB_URI
+              value: "http://tasks-db-svc.registries.svc.cluster.local:8000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: parser
+  namespace: services
+spec:
+  selector:
+    app: parser
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort: 30500
+  type: NodePort

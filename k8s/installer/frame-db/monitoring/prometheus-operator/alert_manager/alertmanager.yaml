@@ -1,0 +1,24 @@
+global:
+  resolve_timeout: 20s
+  smtp_require_tls: false
+receivers:
+  - name: "email"
+    email_configs:
+      - to : "prasanna@cognitif.ai"
+        from: "cs@cognitif.ai"
+        smarthost : "smtp.zoho.com:465"
+        auth_username : "cs@cognitif.ai"
+        auth_identity : "cs@cognitif.ai"
+        auth_password : "csCog@123"
+        require_tls: false
+route:
+  group_by:
+    - job
+  group_interval: 5m
+  group_wait: 30s
+  receiver: "email"
+  repeat_interval: 12h
+  routes:
+    - match:
+        alertname: Watchdog
+      receiver: "email"

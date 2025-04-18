@@ -1,0 +1,69 @@
+{
+    "body": {
+        "spec": {
+            "values": {
+                "id": "cluster-123",
+                "regionId": "us-west-2",
+                "nodes": {
+                    "count": 5,
+                    "nodeData": [
+                        {
+                            "nodeId": "node-1",
+                            "status": "active"
+                        },
+                        {
+                            "nodeId": "node-2",
+                            "status": "inactive"
+                        },
+                        {
+                            "nodeId": "node-3",
+                            "status": "active"
+                        },
+                        {
+                            "nodeId": "node-4",
+                            "status": "active"
+                        },
+                        {
+                            "nodeId": "node-5",
+                            "status": "maintenance"
+                        }
+                    ]
+                },
+                "gpus": {
+                    "count": 4,
+                    "memory": 16384
+                },
+                "vcpus": {
+                    "count": 16
+                },
+                "memory": 65536,
+                "swap": 16384,
+                "storage": {
+                    "disks": 2,
+                    "size": 1536000
+                },
+                "network": {
+                    "interfaces": 2,
+                    "txBandwidth": 1000,
+                    "rxBandwidth": 1000
+                },
+                "config": {
+                    "autoScaling": true,
+                    "maintenanceWindow": "Sunday 02:00-06:00 UTC",
+                    "urlMap": {
+                        "controllerService": "http://localhost:4000"
+                    }
+                },
+                "tags": [
+                    "production",
+                    "gpu-cluster"
+                ],
+                "clusterMetadata": {
+                    "createdBy": "admin",
+                    "createdDate": "2024-11-01T12:00:00Z"
+                },
+                "reputation": 4.5
+            }
+        }
+    }
+}

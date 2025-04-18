@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentinel-config
+  namespace: framedb-config
+  labels:
+    app: sentinel-config
+spec:
+  selector:
+    matchLabels:
+      app: sentinel-config
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sentinel-config
+    spec:
+      containers:
+      - name: sentinel-config
+        image: sentinel-config:latest
+        imagePullPolicy : Never
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        env:
+         - name : "DB_NAME"
+           value : "framedb"
+         - name : "MONGO_URI"
+           value : "mongodb://admin:Friends123#@framedb-config-db-mongodb.framedb-config.svc.cluster.local:27017"
+         - name : "LOGGING"
+           value : "Yes"
+        volumeMounts:
+         - name : logging 
+           mountPath : /logs
+      volumes :
+        - name : logging
+          hostPath:
+            path: /home/ubuntu/disk2
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: sentinel-config-svc
+  namespace: framedb-config
+spec:
+  selector:
+    app: sentinel-config
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort : 32503
+  type: NodePort

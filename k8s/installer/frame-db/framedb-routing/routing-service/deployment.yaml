@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: routing-service
+  namespace: framedb-routing
+  labels:
+    app: routing-service
+spec:
+  selector:
+    matchLabels:
+      app: routing-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: routing-service
+    spec:
+      containers:
+      - name: routing-service
+        image: routing-service:latest
+        imagePullPolicy : Never
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        env:
+         - name : "FRAMEDB_MAPPING_HOST"
+           value : "framedb-routing-db-mongodb:27017"
+         - name : "FRAMEDB_MAPPING_USER"
+           valueFrom :
+            secretKeyRef:
+             name : mapping-db-creds
+             key : username
+         - name : "FRAMEDB_MAPPING_PASSWORD"
+           valueFrom : 
+            secretKeyRef :
+             name: mapping-db-creds
+             key : password
+         - name : "FRAMEDB_CONFIG_HOST"
+           value : "framedb-config-db-mongodb.framedb-config.svc.cluster.local:27017"
+         - name : "FRAMEDB_CONFIG_USER"
+           valueFrom :
+            secretKeyRef :
+             name : config-db-creds
+             key : username 
+         - name : "FRAMEDB_CONFIG_PASSWORD"
+           valueFrom :
+            secretKeyRef :
+             name : config-db-creds
+             key : password
+         - name : "PUBSUB_HOST"
+           value : "framedb-routing-pub-sub-redis"
+         - name : "PUBSUB_PORT"
+           value : "26379"
+         - name : "PUBSUB_PASSWORD"
+           valueFrom :
+            secretKeyRef :
+             name : routing-pubsub-creds
+             key : password
+         - name : "TEST_ENV"
+           valueFrom :
+            secretKeyRef:
+              name: mapping-db-creds
+              key: username
+         - name : "LOCAL_MODE"
+           value : "No"
+         - name : "LOGGING"
+           value : "Yes"
+         - name : "PYTHONUNBUFFERED"
+           value : "0"
+        volumeMounts:
+         - name : logging 
+           mountPath : /logs
+      volumes :
+        - name : logging
+          hostPath:
+            path: /home/ubuntu/framedb-logs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: routing-service-svc
+  namespace: framedb-routing
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind: Mapping
+      name: framedb-routing
+      prefix: /framedb-routing/
+      rewrite : /
+      service: routing-service-svc.framedb-routing.svc.cluster.local:8000
+spec:
+  selector:
+    app: routing-service
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort : 32605
+  type: NodePort

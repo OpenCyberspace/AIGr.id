@@ -1,0 +1,87 @@
+Thank you! Here's the complete YAML for the `inference-server` Deployment and Service:
+
+- **Namespace**: `inference-server`
+- **Ports**:  
+  - gRPC: `50052` → **NodePort: 31500**  
+  - REST: `20000` → **NodePort: 31501**
+- **Env variables**: filled using internal service URLs where available; others left as empty strings
+
+---
+
+### ✅ `inference-server.yaml`
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference-server
+  namespace: inference-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inference-server
+  template:
+    metadata:
+      labels:
+        app: inference-server
+    spec:
+      containers:
+        - name: inference-server
+          image: aiosv1/inference-server:v1
+          ports:
+            - containerPort: 50052  # gRPC
+            - containerPort: 20000  # REST
+          env:
+            - name: DB_PASSWORD
+              value: ""
+            - name: INFERENCE_REDIS_CONNECTION_URL
+              value: ""  # e.g., redis://<host>:<port>
+            - name: ADHOC_INSTANCE_ID
+              value: ""
+            - name: BLOCKS_URL
+              value: "http://blocks-db-svc.registries.svc.cluster.local:3001"
+            - name: DB_NAME
+              value: ""
+            - name: QUEUE_DEFAULT_URL
+              value: ""
+            - name: SEARCH_SERVER_API_URL
+              value: "http://search-server.utils.svc.cluster.local:12000"
+            - name: INFERENCE_REDIS_INTERNAL_URL
+              value: ""
+            - name: DB_HOST
+              value: ""
+            - name: DB_PORT
+              value: ""
+            - name: DB_USER
+              value: ""
+            - name: INSTANCE_BLOCK_DEFAULT_URL
+              value: ""
+            - name: BLOCKS_DB_URL
+              value: "http://blocks-db-svc.registries.svc.cluster.local:3001"
+            - name: DISCOVERY_MODE
+              value: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inference-server
+  namespace: inference-server
+spec:
+  selector:
+    app: inference-server
+  ports:
+    - name: grpc
+      protocol: TCP
+      port: 50052
+      targetPort: 50052
+      nodePort: 31500
+    - name: rest
+      protocol: TCP
+      port: 20000
+      targetPort: 20000
+      nodePort: 31501
+  type: NodePort
+```
+
+Let me know if you want to mount volumes, set CPU/memory limits, or add health probes.

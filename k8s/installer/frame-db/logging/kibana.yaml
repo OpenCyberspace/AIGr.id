@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana-service
+  namespace: framedb-logging
+  labels:
+    app: kibana
+spec:
+  ports:
+  - port: 5601
+    protocol: TCP
+    targetPort: 5601
+    nodePort: 32005
+  selector:
+    app: kibana
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: framedb-logging
+  labels:
+    app: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:7.2.0
+        resources:
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 100m
+        env:
+          - name: ELASTICSEARCH_HOSTS
+            value: http://elastic-search-service.framedb-logging.svc.cluster.local:9200
+        ports:
+        - containerPort: 5601
+      nodeSelector:
+        efk: "True"

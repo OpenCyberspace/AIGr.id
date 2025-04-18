@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vdag-processor
+  namespace: utils
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vdag-processor
+  template:
+    metadata:
+      labels:
+        app: vdag-processor
+    spec:
+      containers:
+        - name: vdag-processor
+          image: aiosv1/vdag-processor:v1
+          ports:
+            - containerPort: 10500
+          env:
+            - name: ADHOC_INFERENCE_API_URL
+              value: "http://adhoc-serviers-registry-svc.registries.svc.cluster.local:6000"
+            - name: VDAG_DB_SERVICE_URL
+              value: "http://vdag-db-svc.registries.svc.cluster.local:10501"
+            - name: SEARCH_SERVER_API_URL
+              value: "http://search-server.utils.svc.cluster.local:12000"
+            - name: GLOBAL_TASKS_DB_URL
+              value: "http://tasks-db-svc.registries.svc.cluster.local:8000"
+        - name: redis
+          image: redis:latest
+          ports:
+            - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vdag-processor
+  namespace: utils
+spec:
+  selector:
+    app: vdag-processor
+  ports:
+    - protocol: TCP
+      port: 10500
+      targetPort: 10500
+  type: ClusterIP

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: es
+  namespace: framedb-logging
+  labels:
+    app: es
+spec:
+  selector:
+    matchLabels:
+      app: es
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: es
+    spec:
+      containers:
+      - name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+        ports:
+        - containerPort: 9200
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/lib/es
+          name: elastic-storage
+        env:
+         - name: "discovery.type"
+           value: "single-node"
+      volumes:
+      - name: elastic-storage
+        emptyDir: {}
+      nodeSelector:
+        efk: "True"

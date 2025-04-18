@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: global-block-metrics
+  namespace: metrics-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: global-block-metrics
+  template:
+    metadata:
+      labels:
+        app: global-block-metrics
+    spec:
+      containers:
+        - name: global-block-metrics
+          image: aiosv1/global-block-metrics:v1
+          ports:
+            - containerPort: 8889
+          env:
+            - name: REDIS_HOST
+              value: "metrics-redis.utils.svc.cluster.local"
+            - name: MONGO_URL
+              value: "mongodb://metrics-db-0.metrics-system.svc.cluster.local:27017"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: global-block-metrics
+  namespace: metrics-system
+spec:
+  selector:
+    app: global-block-metrics
+  ports:
+    - protocol: TCP
+      port: 8889
+      targetPort: 8889
+      nodePort: 30201
+  type: NodePort

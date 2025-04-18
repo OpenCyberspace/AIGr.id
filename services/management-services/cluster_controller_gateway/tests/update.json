@@ -1,0 +1,9 @@
+{
+    "$set": {
+        "regionId": "india",
+        "config.os": "windows",
+        "config.urlMap": {
+            "metricsService": "http://localhost:6000"
+        }
+    }
+}

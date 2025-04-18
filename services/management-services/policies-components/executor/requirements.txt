@@ -1,0 +1,5 @@
+Flask
+requests
+pymongo
+kubernetes
+redis

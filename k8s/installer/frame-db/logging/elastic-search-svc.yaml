@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-search-service
+  namespace: framedb-logging
+spec:
+  selector:
+    app: es
+  ports:
+    - protocol: TCP
+      port: 9200
+      targetPort: 9200
+  type: ClusterIP

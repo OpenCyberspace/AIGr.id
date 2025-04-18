@@ -1,0 +1,280 @@
+{
+    "parser_version": "Parser/V1",
+    "body": {
+        "header": {
+            "uid": {
+                "id": "sample_vdag",
+                "version": "v0.0.1",
+                "releaseTag": "stable"
+            }
+        },
+        "spec": {
+            "@templateType": "template.vdag.app-layout.sample-llm-manual-spec:v0.0.1-beta",
+            "values": {
+                "discoveryTags": [
+                    "llm",
+                    "narasimha",
+                    "prasanna"
+                ],
+                "controller": {
+                    "inputSources": [
+                        {
+                            "enabled": true,
+                            "sourceType": "adhoc",
+                            "sourceConfig": {
+                                "protocols": [
+                                    "ws",
+                                    "grpc",
+                                    "rest"
+                                ],
+                                "quotaCheckerPolicyRule": {
+                                    "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                                    "values": {
+                                        "policyRuleURI": "policies.quota_checkers.sample:v1-stable",
+                                        "settings": {},
+                                        "parameters": {},
+                                        "executionMode": "local"
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "initParameters": {
+                        "metricsCache": {
+                            "enabled": true,
+                            "maxEntries": 10,
+                            "checkIntervalSeconds": 30,
+                            "metricsBackend": "redis"
+                        },
+                        "healthChecker": {
+                            "enabled": true,
+                            "healthCheckIntervalSeconds": 30
+                        }
+                    },
+                    "initSettings": {
+                        "maxOutputWaitTimeSeconds": 300,
+                        "maxAdhocConnections": -1,
+                        "enableAutoscaler": true,
+                        "autoscalerSettings": {
+                            "maxConcurrency": 30,
+                            "minReplicas": 1,
+                            "maxReplicas": 5
+                        },
+                        "enableFramedbPlugin": true,
+                        "replicas": 2,
+                        "maxConcurrentWebsockets": 10,
+                        "maxConcurrentgRPCConnections": 5,
+                        "accessListCache": {
+                            "enabled": true,
+                            "maxKeys": 100,
+                            "storageBackend": "memory"
+                        }
+                    },
+                    "policies": [
+                        {
+                            "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                            "values": {
+                                "policyRuleURI": "policies.output_validators.sample:v1-stable",
+                                "settings": {},
+                                "parameters": {},
+                                "executionMode": "local",
+                                "name": "outputValidationPolicy"
+                            }
+                        },
+                        {
+                            "@templateType": "template.policies.generic.policies_spec:v0.0.1-beta",
+                            "values": {
+                                "policyRuleURI": "policies.failure_notifiers.sample:v1-stable",
+                                "settings": {},
+                                "parameters": {},
+                                "executionMode": "central",
+                                "name": "failureNotifierPolicyRule"
+                            }
+                        }
+                    ]
+                },
+                "nodes": [
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "qwen-rank-0",
+                                "nodeType": "algorithm",
+                                "assignmentPolicyRule": {
+                                    "assignmentType": "automatic",
+                                    "assignmentPolicyRule": {
+                                        "@templateType": "",
+                                        "value": {
+                                            "assignmentPolicyRule": {
+                                                "executionMode": "central",
+                                                "policyRuleURI": "policies.assignment.sample:v1-stable",
+                                                "settings": {},
+                                                "parameters": {
+                                                    "filter": {
+                                                        "logicalOperator": "AND",
+                                                        "conditions": [
+                                                            {
+                                                                "variable": "block.blockId",
+                                                                "operator": "==",
+                                                                "value": "block-qwen-rank-0"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "preprocessingPolicyRule": {
+                                    "@templateType": "",
+                                    "values": {
+                                        "executionMode": "local",
+                                        "policyRuleURI": "",
+                                        "settings": {},
+                                        "parameters": {}
+                                    }
+                                },
+                                "postprocessingPolicyRule": {
+                                    "@templateType": "",
+                                    "values": {
+                                        "executionMode": "local",
+                                        "policyRuleURI": "",
+                                        "settings": {},
+                                        "parameters": {}
+                                    }
+                                },
+                                "modelParameters": {},
+                                "outputProtocol": {
+                                    "output_0": "node.schemas.llms.qwen-interm-0"
+                                },
+                                "inputProtocol": {
+                                    "input_0": "node.schemas.llms.qwen-interm-1"
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "spec": {
+                            "@templateType": "template.nodes.generic.generic_node:v0.0.1-beta",
+                            "values": {
+                                "nodeLabel": "qwen-rank-1",
+                                "nodeType": "algorithm",
+                                "assignmentPolicyRule": {
+                                    "assignmentType": "automatic",
+                                    "assignmentPolicyRule": {
+                                        "@templateType": "",
+                                        "values": {
+                                            "settings": {},
+                                            "parameters": {
+                                                "filter": {
+                                                    "logicalOperator": "",
+                                                    "conditions": [
+                                                        {
+                                                            "variable": "block.blockId",
+                                                            "operator": "==",
+                                                            "value": "block-qwen-rank-1"
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            "executionMode": "local",
+                                            "policyRuleURI": ""
+                                        }
+                                    }
+                                },
+                                "preprocessingPolicyRule": {
+                                    "@templateType": "",
+                                    "values": {
+                                        "executionMode": "local",
+                                        "policyRuleURI": "policies.assignment.sample:v1-stable",
+                                        "settings": {},
+                                        "parameters": {}
+                                    }
+                                },
+                                "postprocessingPolicyRule": {
+                                    "@templateType": "",
+                                    "values": {
+                                        "executionMode": "local",
+                                        "policyRuleURI": "",
+                                        "settings": {},
+                                        "parameters": {}
+                                    }
+                                },
+                                "modelParameters": {},
+                                "outputProtocol": {
+                                    "output_0": "node.schemas.llms.qwen-xywh"
+                                },
+                                "inputProtocol": {
+                                    "input_0": "node.schemas.llms.qwen-xywh"
+                                }
+                            }
+                        },
+                        "IOMap": [
+                            {
+                                "inputs": [
+                                    {
+                                        "name": "input_0",
+                                        "reference": "input_0"
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "name": "output_0",
+                                        "reference": "output_0"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "graph": {
+                    "input": [
+                        {
+                            "nodeLabel": "qwen-rank-0",
+                            "inputNames": [
+                                "input_0"
+                            ]
+                        }
+                    ],
+                    "output": [
+                        {
+                            "nodeLabel": "qwen-rank-1",
+                            "outputNames": [
+                                "output_0"
+                            ]
+                        }
+                    ],
+                    "connections": [
+                        {
+                            "nodeLabel": "qwen-rank-1",
+                            "inputs": [
+                                {
+                                    "nodeLabel": "qwen-rank-0",
+                                    "outputNames": [
+                                        "output_0"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

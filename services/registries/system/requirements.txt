@@ -1,0 +1,4 @@
+Flask
+requests
+pymongo==4.3.3
+kubernetes==26.1.0

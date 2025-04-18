@@ -1,0 +1,2092 @@
+{
+  "data": [
+    {
+      "__v": 0,
+      "_id": "676415f279ca686b9f4c168b",
+      "id": "blk-6AvhusUK",
+      "inputProtocols": [],
+      "outputProtocols": []
+    },
+    {
+      "__v": 0,
+      "_id": "6764180a79ca686b9f4c168d",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "executorNodes": [],
+        "id": "cluster-123"
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerImage": "ubuntu",
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-ksshxpiy",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "loadBalancer": {
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "policyRuleURI": ""
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "67641a2a79ca686b9f4c168f",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "executorNodes": []
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerImage": "ubuntu",
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-bfl3gbd5",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "loadBalancer": {
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "policyRuleURI": ""
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "67641cbe79ca686b9f4c1691",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "executorNodes": []
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerImage": "ubuntu",
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-zzlxabai",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "loadBalancer": {
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "policyRuleURI": ""
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "67641d8b79ca686b9f4c1694",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "executorNodes": []
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerRegistryInfo": {
+          "containerImage": "ubuntu"
+        },
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-puquid5x",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "loadBalancer": {
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "policyRuleURI": ""
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "67666e8e100c148fa8a77e22",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "executorNodes": []
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerRegistryInfo": {
+          "containerImage": "ubuntu"
+        },
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-tsonq3qr",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "loadBalancer": {
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "policyRuleURI": ""
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "67666fe1100c148fa8a77e25",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "executorNodes": []
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerRegistryInfo": {
+          "containerImage": "ubuntu"
+        },
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-bgmkscht",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "loadBalancer": {
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "policyRuleURI": ""
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "6766722d100c148fa8a77e28",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "executorNodes": []
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerRegistryInfo": {
+          "containerImage": "ubuntu"
+        },
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-gcgrgaaw",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "loadBalancer": {
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "policyRuleURI": "default"
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "6766729c100c148fa8a77e2b",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "executorNodes": []
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerRegistryInfo": {
+          "containerImage": "ubuntu"
+        },
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-fbmhphdf",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "loadBalancer": {
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "policyRuleURI": "default"
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "67667355100c148fa8a77e2e",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "executorNodes": []
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerRegistryInfo": {
+          "containerImage": "ubuntu"
+        },
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-weugwtns",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "loadBalancer": {
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "policyRuleURI": "default"
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "67b4475ceffcf519bd375f92",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "__v": 0,
+        "_id": "6762d660d8dcae5e1eef80c0",
+        "clusterMetadata": {
+          "createdBy": "admin",
+          "createdDate": "2024-11-01T12:00:00Z"
+        },
+        "config": {
+          "autoScaling": true,
+          "maintenanceWindow": "Sunday 02:00-06:00 UTC",
+          "urlMap": {
+            "controllerService": "http://localhost:4000"
+          }
+        },
+        "gpus": {
+          "count": 0,
+          "memory": 0
+        },
+        "id": "cluster-123",
+        "memory": 64010,
+        "network": {
+          "interfaces": 20,
+          "rxBandwidth": 0,
+          "txBandwidth": 0
+        },
+        "nodes": {
+          "count": 2,
+          "nodeData": [
+            {
+              "gpus": {
+                "count": 0,
+                "memory": 0
+              },
+              "id": "unknown_node",
+              "memory": 32005,
+              "network": {
+                "interfaces": 10,
+                "rxBandwidth": 0,
+                "txBandwidth": 0
+              },
+              "storage": {
+                "disks": 53,
+                "size": 488742
+              },
+              "swap": 975,
+              "vcpus": {
+                "count": 12
+              }
+            },
+            {
+              "gpus": {
+                "count": 0,
+                "memory": 0
+              },
+              "id": "unknown_node",
+              "memory": 32005,
+              "network": {
+                "interfaces": 10,
+                "rxBandwidth": 0,
+                "txBandwidth": 0
+              },
+              "storage": {
+                "disks": 53,
+                "size": 488742
+              },
+              "swap": 975,
+              "vcpus": {
+                "count": 12
+              }
+            }
+          ]
+        },
+        "regionId": "us-west-2",
+        "reputation": 4.5,
+        "storage": {
+          "disks": 106,
+          "size": 977484
+        },
+        "swap": 1950,
+        "tags": [
+          "production",
+          "gpu-cluster"
+        ],
+        "vcpus": {
+          "count": 24
+        }
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerRegistryInfo": {
+          "containerImage": "ubuntu"
+        },
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-nwpeshx1",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "executionMode": "faas",
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "assetsLoader": {
+          "executionMode": "local",
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "executionMode": "central",
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "executionMode": "local",
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "clusterAllocator": {
+          "executionMode": "local",
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "0",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "loadBalancer": {
+          "executionMode": "local",
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "executionMode": "local",
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "executionMode": "local",
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "executionMode": "local",
+          "policyCodePath": "",
+          "policyRuleURI": "default",
+          "settings": {
+            "interval": 5,
+            "max_times": 3
+          }
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "67b44b16effcf519bd375f94",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "__v": 0,
+        "_id": "6762d660d8dcae5e1eef80c0",
+        "clusterMetadata": {
+          "createdBy": "admin",
+          "createdDate": "2024-11-01T12:00:00Z"
+        },
+        "config": {
+          "autoScaling": true,
+          "maintenanceWindow": "Sunday 02:00-06:00 UTC",
+          "urlMap": {
+            "controllerService": "http://localhost:4000"
+          }
+        },
+        "gpus": {
+          "count": 0,
+          "memory": 0
+        },
+        "id": "cluster-123",
+        "memory": 64010,
+        "network": {
+          "interfaces": 20,
+          "rxBandwidth": 0,
+          "txBandwidth": 0
+        },
+        "nodes": {
+          "count": 2,
+          "nodeData": [
+            {
+              "gpus": {
+                "count": 0,
+                "memory": 0
+              },
+              "id": "unknown_node",
+              "memory": 32005,
+              "network": {
+                "interfaces": 10,
+                "rxBandwidth": 0,
+                "txBandwidth": 0
+              },
+              "storage": {
+                "disks": 53,
+                "size": 488742
+              },
+              "swap": 975,
+              "vcpus": {
+                "count": 12
+              }
+            },
+            {
+              "gpus": {
+                "count": 0,
+                "memory": 0
+              },
+              "id": "unknown_node",
+              "memory": 32005,
+              "network": {
+                "interfaces": 10,
+                "rxBandwidth": 0,
+                "txBandwidth": 0
+              },
+              "storage": {
+                "disks": 53,
+                "size": 488742
+              },
+              "swap": 975,
+              "vcpus": {
+                "count": 12
+              }
+            }
+          ]
+        },
+        "regionId": "us-west-2",
+        "reputation": 4.5,
+        "storage": {
+          "disks": 106,
+          "size": 977484
+        },
+        "swap": 1950,
+        "tags": [
+          "production",
+          "gpu-cluster"
+        ],
+        "vcpus": {
+          "count": 24
+        }
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerRegistryInfo": {
+          "containerImage": "ubuntu"
+        },
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-fqasklid",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "executionMode": "faas",
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "assetsLoader": {
+          "executionMode": "local",
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "executionMode": "central",
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "executionMode": "local",
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "clusterAllocator": {
+          "executionMode": "local",
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "0",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "loadBalancer": {
+          "executionMode": "local",
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "executionMode": "local",
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "executionMode": "local",
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "executionMode": "local",
+          "policyCodePath": "",
+          "policyRuleURI": "default",
+          "settings": {
+            "interval": 5,
+            "max_times": 3
+          }
+        }
+      }
+    },
+    {
+      "__v": 0,
+      "_id": "67b44b57effcf519bd375f96",
+      "blockInitData": {
+        "settings": {
+          "autoscaler": {
+            "interval": 30,
+            "maxCacheEntries": 2,
+            "maxReplicas": 4,
+            "minReplicas": 1
+          }
+        }
+      },
+      "cluster": {
+        "__v": 0,
+        "_id": "6762d660d8dcae5e1eef80c0",
+        "clusterMetadata": {
+          "createdBy": "admin",
+          "createdDate": "2024-11-01T12:00:00Z"
+        },
+        "config": {
+          "autoScaling": true,
+          "maintenanceWindow": "Sunday 02:00-06:00 UTC",
+          "urlMap": {
+            "controllerService": "http://localhost:4000"
+          }
+        },
+        "gpus": {
+          "count": 0,
+          "memory": 0
+        },
+        "id": "cluster-123",
+        "memory": 64010,
+        "network": {
+          "interfaces": 20,
+          "rxBandwidth": 0,
+          "txBandwidth": 0
+        },
+        "nodes": {
+          "count": 2,
+          "nodeData": [
+            {
+              "gpus": {
+                "count": 0,
+                "memory": 0
+              },
+              "id": "unknown_node",
+              "memory": 32005,
+              "network": {
+                "interfaces": 10,
+                "rxBandwidth": 0,
+                "txBandwidth": 0
+              },
+              "storage": {
+                "disks": 53,
+                "size": 488742
+              },
+              "swap": 975,
+              "vcpus": {
+                "count": 12
+              }
+            },
+            {
+              "gpus": {
+                "count": 0,
+                "memory": 0
+              },
+              "id": "unknown_node",
+              "memory": 32005,
+              "network": {
+                "interfaces": 10,
+                "rxBandwidth": 0,
+                "txBandwidth": 0
+              },
+              "storage": {
+                "disks": 53,
+                "size": 488742
+              },
+              "swap": 975,
+              "vcpus": {
+                "count": 12
+              }
+            }
+          ]
+        },
+        "regionId": "us-west-2",
+        "reputation": 4.5,
+        "storage": {
+          "disks": 106,
+          "size": 977484
+        },
+        "swap": 1950,
+        "tags": [
+          "production",
+          "gpu-cluster"
+        ],
+        "vcpus": {
+          "count": 24
+        }
+      },
+      "component": {
+        "componentConfig": {
+          "frameSize": [
+            {
+              "height": 416,
+              "width": 416
+            }
+          ],
+          "requireFrames": true
+        },
+        "componentId": {
+          "name": "yolo",
+          "release": "beta",
+          "version": "v0.0.2"
+        },
+        "componentMetadata": {
+          "author": {
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+              "linkName": "github",
+              "url": "https://github.com/Narasimha1997"
+            },
+            "authorName": "prasanna"
+          },
+          "description": "A testing component used for testing",
+          "license": "closed",
+          "tags": [
+            "testing",
+            "development",
+            "hello world"
+          ]
+        },
+        "componentType": "node.algorithm.objdet",
+        "component_uri": "node.algorithm.objdet.yolo:v0.0.02-beta",
+        "containerRegistryInfo": {
+          "containerImage": "ubuntu"
+        },
+        "requiresGPU": true
+      },
+      "componentUri": "node.algorithm.objdet.yolo.v0.0.2-beta",
+      "customMetrics": [
+        "instance.metrics.average_dets"
+      ],
+      "id": "blk-of3grjpq",
+      "inputProtocols": [],
+      "outputProtocols": [],
+      "policies": {
+        "accessRulesPolicy": {
+          "executionMode": "faas",
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "assetsLoader": {
+          "executionMode": "local",
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "assignment": {
+          "executionMode": "central",
+          "parameters": {
+            "max_vdags": 10
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.assignment.assignment_sep4:v0.0.1-beta"
+        },
+        "autoscaler": {
+          "executionMode": "local",
+          "parameters": {
+            "block_metrics_list": [
+              "metrics.block.model.instances.latency_1m",
+              "metrics.block.model.instances.queueLength"
+            ],
+            "local_metrics_list": [],
+            "max_counter": 30,
+            "resource_metrics_list": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "time_duration": 300
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.autoscaler.example-sept14:v0.0.1-beta"
+        },
+        "clusterAllocator": {
+          "executionMode": "local",
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "0",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "loadBalancer": {
+          "executionMode": "local",
+          "parameters": {
+            "max_refresh_count_adhoc": 600,
+            "max_refresh_count_vdag": 10000
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.load_balancer.gateway.load_balancer_sep2:v0.0.1-beta"
+        },
+        "loadBalancerMapper": {
+          "executionMode": "local",
+          "parameters": {
+            "adhoc_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ],
+            "max_percent_diff_adhoc": 10,
+            "max_percent_diff_stream": 30,
+            "time_duration": 10,
+            "vdag_block_metrics": [
+              "metrics.resource.node.vcpu.load_1m",
+              "metrics.resource.node.gpus.memory.usedMem",
+              "metrics.resource.node.gpu.processes"
+            ]
+          },
+          "policyCodePath": "",
+          "policyRuleURI": "policies.load_balancer.mapper.loadbalacner_mapping_aug30:v0.0.1-beta"
+        },
+        "resourceAllocator": {
+          "executionMode": "local",
+          "parameters": {
+            "filter": {
+              "clusterQuery": {
+                "conditions": [
+                  {
+                    "operator": ">",
+                    "value": "1",
+                    "variable": "nodes.count"
+                  },
+                  {
+                    "operator": ">",
+                    "value": "2",
+                    "variable": "reputation"
+                  }
+                ],
+                "logicalOperator": "AND"
+              }
+            }
+          },
+          "policyCodePath": "",
+          "policyRuleURI": ""
+        },
+        "stabilityChecker": {
+          "executionMode": "local",
+          "policyCodePath": "",
+          "policyRuleURI": "default",
+          "settings": {
+            "interval": 5,
+            "max_times": 3
+          }
+        }
+      }
+    }
+  ],
+  "success": true
+}

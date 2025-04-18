@@ -1,0 +1,19 @@
+/home/ubuntu/disk1.img /mnt/disks/disk1 ext4 defaults 0 2
+/home/ubuntu/disk2.img /mnt/disks/disk2 ext4 defaults 0 2
+/home/ubuntu/disk3.img /mnt/disks/disk3 ext4 defaults 0 2
+
+sudo mkdir -p /mnt/disks/disk1
+sudo mkdir -p /mnt/disks/disk2
+sudo mkdir -p /mnt/disks/disk3
+
+dd if=/dev/zero of=disk1.img bs=2G count=1
+dd if=/dev/zero of=disk2.img bs=2G count=1
+dd if=/dev/zero of=disk3.img bs=2G count=1
+
+sudo mkfs.ext4 disk1.img
+sudo mkfs.ext4 disk2.img
+sudo mkfs.ext4 disk3.img
+
+sudo mount -t ext4 disk1.img /mnt/disks/disk1
+sudo mount -t ext4 disk2.img /mnt/disks/disk2
+sudo mount -t ext4 disk3.img /mnt/disks/disk3

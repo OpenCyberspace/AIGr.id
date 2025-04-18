@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: policies-system
+  namespace: registries
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: policies-system
+  template:
+    metadata:
+      labels:
+        app: policies-system
+    spec:
+      containers:
+        - name: policies-system
+          image: aiosv1/policies-system:v1
+          ports:
+            - containerPort: 10000
+          env:
+            - name: RESOURCE_ALLOCATOR_API_URL
+              value: "http://resource-allocator.services.svc.cluster.local:3000"
+            - name: DB_URL
+              value: "mongodb://registry-0.registries.svc.cluster.local:27017/policies"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: policies-system
+  namespace: registries
+  labels:
+    app: policies-system
+spec:
+  selector:
+    app: policies-system
+  ports:
+    - protocol: TCP
+      port: 10000
+      targetPort: 10000
+      nodePort: 30102
+  type: NodePort

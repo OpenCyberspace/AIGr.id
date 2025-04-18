@@ -1,0 +1,88 @@
+{
+    "header": {
+      "templateUri": "Parser/V1",
+      "parameters": {}
+    },
+    "body": {
+      "spec": {
+        "values": {
+          "componentId": {
+            "name": "vllm-chat",
+            "version": "1.0.0",
+            "releaseTag": "stable"
+          },
+          "componentType": "model",
+          "containerRegistryInfo": {
+            "containerImage": "registry.ai-platform.com/models/mistral7b-vllm-external:2.0.0",
+            "containerRegistryId": "ai-platform-registry",
+            "containerImageMetadata": {
+              "author": "llm-team",
+              "description": "AIOS block for chat using an external vLLM OpenAI-compatible server"
+            },
+            "componentMode": "aios"
+          },
+          "componentMetadata": {
+            "usecase": "chat-completion",
+            "framework": "external-api",
+            "hardware": "external"
+          },
+          "componentInitData": {
+            "vllm_server_url": "http://vllm-service:8080",
+            "model_name": "mistralai/Mistral-7B-Instruct-v0.1"
+          },
+          "componentInitParametersProtocol": {
+            "temperature": {
+              "type": "number",
+              "description": "Sampling temperature",
+              "min": 0.0,
+              "max": 2.0
+            }
+          },
+          "componentInitSettingsProtocol": {
+            "max_new_tokens": {
+              "type": "number",
+              "description": "Maximum number of tokens to generate",
+              "min": 1,
+              "max": 2048
+            }
+          },
+          "componentInputProtocol": {
+            "message": {
+              "type": "string",
+              "description": "Input message from the user"
+            },
+            "session_id": {
+              "type": "string",
+              "description": "Unique identifier for the chat session"
+            }
+          },
+          "componentOutputProtocol": {
+            "reply": {
+              "type": "string",
+              "description": "Chat reply from the vLLM model"
+            }
+          },
+          "componentParameters": {
+            "temperature": 0.7
+          },
+          "componentInitSettings": {
+            "max_new_tokens": 256
+          },
+          "componentManagementCommandsTemplate": {
+            "reset": {
+              "description": "Clears all stored chat sessions",
+              "args": {}
+            }
+          },
+          "tags": [
+            "vllm",
+            "chat",
+            "openai-compatible",
+            "mistral",
+            "llm"
+          ]
+        }
+      }
+    }
+  }
+  

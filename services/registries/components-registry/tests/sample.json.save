@@ -1,0 +1,23 @@
+
+    "componentId" : {
+        "name" : "test_component",
+        "version": "v0.0.2",
+        "release": "beta"
+    },
+    "componentType" : "node.algorithms.objdet.testing",
+    "containerImage" : "cognitif.ai/testing:latest",
+    "requiresGPU" : false,
+    "componentMetadata": {
+        "description": "A testing component used for testing",
+        "tags": ["testing", "development", "hello world"],
+        "license": "closed",
+        "author": {
+            "authorName": "prasanna",
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+                "linkName": "github",
+                "url": "https://github.com/Narasimha1997"
+            }
+        }
+    }
+}

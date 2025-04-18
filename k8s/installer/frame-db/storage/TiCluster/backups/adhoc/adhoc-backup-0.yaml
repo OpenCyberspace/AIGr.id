@@ -1,0 +1,24 @@
+apiVersion: pingcap.com/v1alpha1
+kind: Backup
+metadata:
+  name: framedb-0-storage-adhoc-bkp-2
+  namespace: framedb-storage-cluster
+spec:
+  backupType: full
+  br:
+    cluster: framedb-0-storage
+    clusterNamespace: framedb-storage-cluster
+  from:
+    host: "framedb-0-storage-tidb.framedb-storage-cluster.svc.cluster.local"
+    port: 4000
+    user: root
+    secretName: storage-cluster-backup-auth
+  s3:
+    provider: aws
+    secretName: backup-secret
+    endpoint: "http://10.97.105.163"
+    bucket: framedb-backups-26f34420-fd36-4654-8023-9b8e127b18c6
+    prefix: test-bucket-4
+    region : us-east-1
+  storageClassName: local-storage
+  storageSize: "2Gi"

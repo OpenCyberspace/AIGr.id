@@ -1,0 +1,7 @@
+torch>=1.7.0
+torchvision>=0.8.1
+pillow
+pandas
+numpy
+opencv-python
+matplotlib 

@@ -1,0 +1,84 @@
+# --- Node.js ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+yarn.lock
+dist/
+build/
+
+# Optional: dotenv and local config
+.env
+.env.*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.log
+*.sqlite3
+*.db
+*.pot
+*.pyc
+*.pt
+*.pkl
+*.h5
+*.ipynb_checkpoints
+.Python
+pip-wheel-metadata/
+poetry.lock
+*.cache/
+.mypy_cache/
+.pytest_cache/
+.tox/
+.coverage
+coverage.xml
+htmlcov/
+.vscode/
+.env/
+.venv/
+venv/
+ENV/
+env/
+.idea/
+
+# --- Go ---
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.mod
+*.sum
+.*pem
+
+# Go vendor directory
+/vendor/
+
+# Go build cache
+**/go.sum
+**/go.mod
+
+# IDEs and editors
+*.swp
+*~
+*.sublime*
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini

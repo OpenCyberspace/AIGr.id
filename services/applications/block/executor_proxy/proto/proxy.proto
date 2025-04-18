@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+message InferenceMessage {
+   bytes rpc_data = 1; 
+}
+
+message InferenceRespose {
+     bool message = 1;
+}
+
+// Define the gRPC service
+service InferenceProxy {
+    rpc infer(InferenceMessage) returns (InferenceRespose);
+}

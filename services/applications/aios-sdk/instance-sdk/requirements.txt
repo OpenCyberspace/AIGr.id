@@ -1,0 +1,8 @@
+redis
+requests
+prometheus_client
+protobuf==3.20.3
+flask==3.0.3
+boto3==1.18.65
+kubernetes==26.1.0
+grpcio==1.62.1

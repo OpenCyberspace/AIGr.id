@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-controller-gateway
+  namespace: services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cluster-controller-gateway
+  template:
+    metadata:
+      labels:
+        app: cluster-controller-gateway
+    spec:
+      containers:
+        - name: cluster-controller-gateway
+          image: aiosv1/cluster-controller-gateway:v1
+          ports:
+            - containerPort: 5000
+          env:
+            - name: CLUSTER_SERVICE_URL
+              value: "http://clusters-db-service.registries.svc.cluster.local:3000"
+            - name: GLOBAL_SERVICES_MAP
+              value: ""
+            - name: CLUSTER_CONTROLLER_GATEWAY_ACTIONS_MAP
+              value: ""
+            - name: SEARCH_SERVER_API_URL
+              value: "http://search-server.utils.svc.cluster.local:12000"
+            - name: CLUSTER_CONTROLLER_ROUTE
+              value: ""
+            - name: CLUSTER_CONTROLLER_GATEWAY_POLICY_MAP
+              value: "{}"
+            - name: POLICY_EXECUTOR_HOST_URL
+              value: ""
+            - name: RESOURCE_ALLOCATOR_URL
+              value: "ws://resource-allocator.utils.svc.cluster.local:8765"
+            - name: GLOBAL_BLOCK_METRICS_URL
+              value: "http://global-block-metrics.metrics-system.svc.cluster.local:8889"
+            - name: POLICY_DB_URL
+              value: "http://policies-system.registries.svc.cluster.local:10000"
+            - name: BLOCKS_SERVICE_URL
+              value: "http://blocks-db-svc.registries.svc.cluster.local:3001"
+            - name: GLOBAL_TASKS_DB_URL
+              value: "http://tasks-db-svc.registries.svc.cluster.local:8000"
+            - name: ALLOCATION_EXECUTION_MODE
+              value: "online"
+            - name: POLICY_SYSTEM_EXECUTOR_ID
+              value: "executor-0"
+            - name: GLOBAL_CLUSTER_METRICS_URL
+              value: "http://global-cluster-metrics.metrics-system.svc.cluster.local:8888"
+            - name: POLICY_EXECUTION_MODE
+              value: "local"
+            - name: POLICY_RULE_REMOTE_URL
+              value: "http://policies-system.registries.svc.cluster.local:10000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-controller-gateway
+  namespace: services
+spec:
+  selector:
+    app: cluster-controller-gateway
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30600
+  type: NodePort

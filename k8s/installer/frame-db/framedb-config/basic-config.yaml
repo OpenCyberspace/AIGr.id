@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basic-config
+  namespace: framedb-config
+  labels:
+    app: basic-config
+spec:
+  selector:
+    matchLabels:
+      app: basic-config
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: basic-config
+    spec:
+      containers:
+      - name: basic-config
+        image: basic-config:latest
+        imagePullPolicy : Never
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        env:
+         - name : "DB_NAME"
+           value : "framedb"
+         - name : "FRAMEDB_HOST"
+           value : "framedb-config-db-mongodb:27017"
+         - name : "FRAMEDB_USER"
+           valueFrom :
+            secretKeyRef :
+             name : config-db-creds
+             key : username 
+         - name : "FRAMEDB_PASSWORD"
+           valueFrom :
+            secretKeyRef :
+             name : config-db-creds
+             key : password
+         - name : "LOGGING"
+           value : "Yes"
+         - name : "PYTHONUNBUFFERED"
+           value : "0"
+        volumeMounts:
+         - name : logging 
+           mountPath : /logs
+      volumes :
+        - name : logging
+          hostPath:
+            path: /home/ubuntu/framedb-logs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: basic-config-svc
+  namespace: framedb-config
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind: Mapping
+      name: basic-config
+      prefix: /framedb-basic/
+      rewrite : /
+      service: basic-config-svc.framedb-config.svc.cluster.local:8000
+spec:
+  selector:
+    app: basic-config
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort : 32501
+  type: NodePort

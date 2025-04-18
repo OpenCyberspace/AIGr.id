@@ -1,0 +1,11 @@
+{
+    "service_name": "aios_component_registry",
+    "logging_path": "/logs",
+    "serialize": true,
+    "enable_compression": false,
+    "compression_value": null,
+    "enable_log_rotation": false,
+    "enable_error_callbacks": false,
+    "rotation_value": "10MB",
+    "use_verbose_mode": true
+}

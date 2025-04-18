@@ -1,0 +1,28 @@
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name: grafana-framedb
+  namespace: ambassador
+spec:
+  prefix: /grafana-framedb/
+  service: framedb-metrics-dashboard-grafana.framedb-monitoring:3000
+
+--- 
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name: prometheus-framedb
+  namespace: ambassador
+spec:
+  prefix: /prometheus-framedb/
+  service: framedb-metrics-scraping-k-prometheus.framedb-monitoring:9090
+
+---
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name: alertmanager-framedb
+  namespace: ambassador
+spec:
+  prefix: /alertmanager-framedb/
+  service: framedb-metrics-scraping-k-alertmanager.framedb-monitoring:9093

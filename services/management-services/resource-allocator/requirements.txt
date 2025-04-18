@@ -1,0 +1,4 @@
+requests
+flask
+kubernetes
+websockets==13.1

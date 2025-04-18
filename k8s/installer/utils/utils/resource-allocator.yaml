@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resource-allocator
+  namespace: utils
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: resource-allocator
+  template:
+    metadata:
+      labels:
+        app: resource-allocator
+    spec:
+      containers:
+        - name: resource-allocator
+          image: aiosv1/resource-allocator:v1
+          ports:
+            - containerPort: 8765  # WebSocket
+            - containerPort: 7777  # REST API
+          env:
+            - name: POLICY_EXECUTOR_HOST_URL
+              value: "http://policies-system.registries.svc.cluster.local:10000"
+            - name: POLICY_EXECUTION_MODE
+              value: "local"
+            - name: CLUSTER_SERVICE_URL
+              value: "http://clusters-db-service.registries.svc.cluster.local:3000"
+            - name: POLICY_SYSTEM_EXECUTOR_ID
+              value: ""
+            - name: GLOBAL_CLUSTER_METRICS_URL
+              value: ""
+            - name: SEARCH_SERVER_API_URL
+              value: "http://search-server.utils.svc.cluster.local:12000"
+            - name: POLICY_DB_URL
+              value: "http://policies-system.registries.svc.cluster.local:10000"
+            - name: GLOBAL_BLOCK_METRICS_URL
+              value: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: resource-allocator
+  namespace: utils
+spec:
+  selector:
+    app: resource-allocator
+  ports:
+    - name: websocket
+      protocol: TCP
+      port: 8765
+      targetPort: 8765
+      nodePort: 30151
+    - name: rest
+      protocol: TCP
+      port: 7777
+      targetPort: 7777
+  type: NodePort

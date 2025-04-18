@@ -1,0 +1,55 @@
+{
+    "body": {
+        "values": {
+            "matchType": "cluster",
+            "rankingPolicyRule": {
+                "values": {
+                    "executionMode": "code",
+                    "policyRuleURI": "dummy:1.0-stable",
+                    "settings": {
+                        "maxResults": 10,
+                        "enableCaching": true
+                    },
+                    "parameters": {
+                        "filterRule": {
+                            "matchType": "cluster",
+                            "filter": {
+                                "clusterMetricsQuery": {
+                                    "logicalOperator": "AND",
+                                    "conditions": [
+                                        {
+                                            "variable": "cluster.vcpu.load_5m",
+                                            "operator": ">",
+                                            "value": 0.3
+                                        },
+                                        {
+                                            "variable": "cluster.vcpu.load_5m",
+                                            "operator": ">",
+                                            "value": 0.3
+                                        }
+                                    ]
+                                },
+                                "clusterQuery": {
+                                    "logicalOperator": "AND",
+                                    "conditions": [
+                                        {
+                                            "variable": "nodes.count",
+                                            "operator": ">",
+                                            "value": "1"
+                                        },
+                                        {
+                                            "variable": "reputation",
+                                            "operator": ">",
+                                            "value": "2"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "return": 5
+                    }
+                }
+            }
+        }
+    }
+}

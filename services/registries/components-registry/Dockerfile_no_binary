@@ -1,0 +1,11 @@
+FROM node:latest
+
+ENV CONTAINER=1
+
+COPY . /app
+WORKDIR /app
+
+RUN npm install
+RUN rm -f .env
+
+ENTRYPOINT ["npm", "run", "start"]

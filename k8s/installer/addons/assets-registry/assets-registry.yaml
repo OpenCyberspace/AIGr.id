@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: assets-registry
+  namespace: assets-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: assets-registry
+  template:
+    metadata:
+      labels:
+        app: assets-registry
+    spec:
+      containers:
+        - name: assets-registry
+          image: aiosv1/assets-registry:v1
+          ports:
+            - containerPort: 4000
+          env:
+            - name: AWS_SECRET_ACCESS_KEY
+              value: ""
+            - name: PUBLIC_URL
+              value: ""
+            - name: AWS_REGION
+              value: "us-east-1"
+            - name: AWS_ACCESS_KEY_ID
+              value: ""
+            - name: MONGO_URL
+              value: "mongodb://assets-db-0.assets-db.svc.cluster.local:27017"
+            - name: S3_BUCKET_NAME
+              value: ""
+            - name: S3_ENDPOINT_URL
+              value: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: assets-registry
+  namespace: assets-db
+spec:
+  selector:
+    app: assets-registry
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000
+      nodePort: 31700
+  type: NodePort

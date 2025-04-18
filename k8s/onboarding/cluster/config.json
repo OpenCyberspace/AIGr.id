@@ -1,0 +1,44 @@
+{
+    "id": "cluster-west-vision-001",
+    "regionId": "us-west-2",
+    "status": "live",
+    "nodes": {},
+    "config": {
+        "policyExecutorId": "",
+        "policyExecutionMode": "local",
+        "customPolicySystem": {},
+        "publicHostname": "cluster-west-vision-001.company.net",
+        "useGateway": true,
+        "actionsPolicyMap": {
+            "onScaleUp": "evaluate-gpu-availability",
+            "onFailure": "notify-admin"
+        }
+    },
+    "tags": [
+        "gpu",
+        "production",
+        "ml",
+        "vision",
+        "us-west"
+    ],
+    "clusterMetadata": {
+        "name": "Sample cluster",
+        "description": "Dedicated to serving large-scale computer vision models in production.",
+        "owner": "AI Infrastructure Team",
+        "email": "ai-infra@company.net",
+        "countries": [
+            "USA",
+            "Canada"
+        ],
+        "miscContactInfo": {
+            "pagerDuty": "https://sample-website/ai-clusters",
+            "slack": "#ml-infra"
+        },
+        "additionalInfo": {
+            "kubeadmVersion": "v28.0.1",
+            "kubectlVersion": "v28.0.01",
+            "joinCommand": ""
+        }
+    },
+    "reputation": 94
+}

@@ -1,0 +1,124 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "blockId": "mistral-chat-88",
+                "blockComponentURI": "model.mistral7b-chat:2.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 3,
+                "blockInitData": {
+                    "model_name": "mistralai/Mistral-7B-Instruct-v0.1",
+                    "device": "cuda"
+                },
+                "initSettings": {
+                    "tensor_parallel": true,
+                    "max_new_tokens": 256,
+                    "timeout_ms": 3000
+                },
+                "parameters": {
+                    "temperature": 0.7
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "policy.clusterAllocator.llm-cluster-selector:v1",
+                            "parameters": {
+                                "filter": {
+                                    "clusterMetricsQuery": {
+                                        "logicalOperator": "AND",
+                                        "conditions": [
+                                            {
+                                                "variable": "cluster.vcpu.load_15m",
+                                                "operator": "<",
+                                                "value": "10"
+                                            },
+                                            {
+                                                "variable": "cluster.gpu.totalFreeMem",
+                                                "operator": ">",
+                                                "value": "48000"
+                                            }
+                                        ]
+                                    },
+                                    "clusterQuery": {
+                                        "logicalOperator": "AND",
+                                        "conditions": [
+                                            {
+                                                "variable": "gpus.count",
+                                                "operator": ">=",
+                                                "value": "3"
+                                            },
+                                            {
+                                                "variable": "clusterMetadata.vendor",
+                                                "operator": "==",
+                                                "value": "dma-bangalore"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 2
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "policy.resourceAllocator.multi-gpu-llm:v0.1.0",
+                            "parameters": {
+                                "gpus": 3,
+                                "max_gpu_utilization": 0.9,
+                                "min_gpu_free_memory": 16000
+                            },
+                            "settings": {
+                                "selection_mode": "balanced"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "policy.loadBalancer.session-aware-llm:v0.1.0",
+                            "parameters": {
+                                "cache_sessions": true
+                            },
+                            "settings": {
+                                "session_cache_size": 2000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "policy.stabilityChecker.retry-on-fail:v0.1.0",
+                            "parameters": {
+                                "unhealthy_threshold": 2
+                            },
+                            "settings": {
+                                "check_interval_sec": 10
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "policy.autoscaler.large-model-autoscaler:v0.0.1",
+                            "parameters": {
+                                "target_gpu_utilization": 0.8
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 45,
+                                "scale_down_cooldown": 90
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+apiVersion: pingcap.com/v1alpha1
+kind: Restore
+metadata:
+  name: ""
+  namespace: framedb-storage-cluster
+spec:
+  br:
+    cluster: ""
+    clusterNamespace: ""
+  to:
+    host: ""
+    port: 4000
+    user: "root"
+    secretName: tidb-secret
+  s3:
+    provider: aws
+    secretName: backup-secret
+    endpoint: ""
+    prefix: ""
+    bucket: ""

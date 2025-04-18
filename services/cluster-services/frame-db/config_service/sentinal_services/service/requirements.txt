@@ -1,0 +1,5 @@
+pymongo
+redis
+fastapi[all]
+python-json-logger
+pymodm

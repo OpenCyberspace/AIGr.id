@@ -1,0 +1,5 @@
+flask
+requests
+sqlalchemy
+flask_sqlalchemy
+pyarango==2.0.1

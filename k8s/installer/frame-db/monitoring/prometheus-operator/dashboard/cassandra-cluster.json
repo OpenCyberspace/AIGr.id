@@ -1,0 +1,4282 @@
+{
+    "__inputs": [
+      {
+        "name": "FrameDB-Metrics-Source",
+        "label": "FrameDB-Metrics-Source",
+        "description": "",
+        "type": "datasource",
+        "pluginId": "prometheus",
+        "pluginName": "Prometheus"
+      }
+    ],
+    "__requires": [
+      {
+        "type": "grafana",
+        "id": "grafana",
+        "name": "Grafana",
+        "version": "7.2.0"
+      },
+      {
+        "type": "panel",
+        "id": "graph",
+        "name": "Graph",
+        "version": ""
+      },
+      {
+        "type": "datasource",
+        "id": "prometheus",
+        "name": "Prometheus",
+        "version": "1.0.0"
+      },
+      {
+        "type": "panel",
+        "id": "singlestat",
+        "name": "Singlestat",
+        "version": ""
+      },
+      {
+        "type": "panel",
+        "id": "text",
+        "name": "Text",
+        "version": "7.1.0"
+      }
+    ],
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Monitoring for Cassandra clusters, based on Prometheus backend and cassandra-exporter",
+    "editable": true,
+    "gnetId": 10849,
+    "graphTooltip": 1,
+    "id": null,
+    "iteration": 1622107445972,
+    "links": [],
+    "panels": [
+      {
+        "cacheTimeout": null,
+        "colorBackground": false,
+        "colorValue": true,
+        "colors": [
+          "#dedaf7",
+          "#dedaf7",
+          "#dedaf7"
+        ],
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "format": "none",
+        "gauge": {
+          "maxValue": 100,
+          "minValue": 0,
+          "show": false,
+          "thresholdLabels": false,
+          "thresholdMarkers": true
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 0,
+          "y": 0
+        },
+        "id": 4,
+        "interval": null,
+        "links": [],
+        "mappingType": 1,
+        "mappingTypes": [
+          {
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "name": "range to text",
+            "value": 2
+          }
+        ],
+        "maxDataPoints": 100,
+        "nullPointMode": "connected",
+        "nullText": null,
+        "postfix": "",
+        "postfixFontSize": "50%",
+        "prefix": "",
+        "prefixFontSize": "50%",
+        "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+        ],
+        "sparkline": {
+          "fillColor": "rgba(31, 118, 189, 0.18)",
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "show": false
+        },
+        "tableColumn": "",
+        "targets": [
+          {
+            "expr": "max(cassandra_stats{cluster=~\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",job=~\".*\",name=\"org:apache:cassandra:net:failuredetector:upendpointcount\"})",
+            "format": "time_series",
+            "instant": false,
+            "intervalFactor": 1,
+            "refId": "B"
+          }
+        ],
+        "thresholds": "",
+        "title": "Total Nodes",
+        "transparent": true,
+        "type": "singlestat",
+        "valueFontSize": "80%",
+        "valueMaps": [
+          {
+            "op": "=",
+            "text": "N/A",
+            "value": "null"
+          }
+        ],
+        "valueName": "current"
+      },
+      {
+        "cacheTimeout": null,
+        "colorBackground": false,
+        "colorValue": true,
+        "colors": [
+          "#299c46",
+          "#e5ac0e",
+          "#bf1b00"
+        ],
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "format": "none",
+        "gauge": {
+          "maxValue": 100,
+          "minValue": 0,
+          "show": false,
+          "thresholdLabels": false,
+          "thresholdMarkers": true
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 3,
+          "y": 0
+        },
+        "id": 6,
+        "interval": null,
+        "links": [],
+        "mappingType": 1,
+        "mappingTypes": [
+          {
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "name": "range to text",
+            "value": 2
+          }
+        ],
+        "maxDataPoints": 100,
+        "nullPointMode": "connected",
+        "nullText": null,
+        "postfix": "",
+        "postfixFontSize": "50%",
+        "prefix": "",
+        "prefixFontSize": "50%",
+        "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+        ],
+        "sparkline": {
+          "fillColor": "rgba(31, 118, 189, 0.18)",
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "show": false
+        },
+        "tableColumn": "",
+        "targets": [
+          {
+            "expr": "max(cassandra_stats{cluster=~\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",job=~\".*\",name=\"org:apache:cassandra:net:failuredetector:downendpointcount\"})",
+            "format": "time_series",
+            "instant": true,
+            "interval": "",
+            "intervalFactor": 1,
+            "refId": "A"
+          }
+        ],
+        "thresholds": "1,2",
+        "title": "Nodes down",
+        "transparent": true,
+        "type": "singlestat",
+        "valueFontSize": "80%",
+        "valueMaps": [
+          {
+            "op": "=",
+            "text": "All nodes down?",
+            "value": "null"
+          }
+        ],
+        "valueName": "current"
+      },
+      {
+        "cacheTimeout": null,
+        "colorBackground": false,
+        "colorValue": true,
+        "colors": [
+          "#299c46",
+          "#e5ac0e",
+          "#bf1b00"
+        ],
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "format": "none",
+        "gauge": {
+          "maxValue": 3000,
+          "minValue": 0,
+          "show": true,
+          "thresholdLabels": true,
+          "thresholdMarkers": true
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 6,
+          "y": 0
+        },
+        "id": 41,
+        "interval": null,
+        "links": [],
+        "mappingType": 1,
+        "mappingTypes": [
+          {
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "name": "range to text",
+            "value": 2
+          }
+        ],
+        "maxDataPoints": 100,
+        "nullPointMode": "connected",
+        "nullText": null,
+        "postfix": "",
+        "postfixFontSize": "50%",
+        "prefix": "",
+        "prefixFontSize": "50%",
+        "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+        ],
+        "sparkline": {
+          "fillColor": "rgba(31, 118, 189, 0.18)",
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "show": false
+        },
+        "tableColumn": "",
+        "targets": [
+          {
+            "expr": "max(cassandra_stats{cluster=~\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",job=~\".*\",name=\"org:apache:cassandra:metrics:client:connectednativeclients:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "thresholds": "1000,2000",
+        "title": "Native clients connected",
+        "transparent": true,
+        "type": "singlestat",
+        "valueFontSize": "80%",
+        "valueMaps": [
+          {
+            "op": "=",
+            "text": "N/A",
+            "value": "null"
+          }
+        ],
+        "valueName": "current"
+      },
+      {
+        "cacheTimeout": null,
+        "colorBackground": false,
+        "colorValue": true,
+        "colors": [
+          "#bf1b00",
+          "#e5ac0e",
+          "#299c46"
+        ],
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "format": "percent",
+        "gauge": {
+          "maxValue": 100,
+          "minValue": 0,
+          "show": false,
+          "thresholdLabels": false,
+          "thresholdMarkers": true
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 9,
+          "y": 0
+        },
+        "id": 56,
+        "interval": null,
+        "links": [],
+        "mappingType": 1,
+        "mappingTypes": [
+          {
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "name": "range to text",
+            "value": 2
+          }
+        ],
+        "maxDataPoints": 100,
+        "nullPointMode": "connected",
+        "nullText": null,
+        "postfix": "",
+        "postfixFontSize": "50%",
+        "prefix": "",
+        "prefixFontSize": "50%",
+        "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+        ],
+        "sparkline": {
+          "fillColor": "rgba(31, 118, 189, 0.18)",
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "show": false
+        },
+        "tableColumn": "",
+        "targets": [
+          {
+            "expr": "avg(cassandra_stats{cluster=~\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",name=~\"org:apache:cassandra:metrics:table:percentrepaired:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "refId": "A"
+          }
+        ],
+        "thresholds": "95,100",
+        "title": "Repair ratio",
+        "transparent": true,
+        "type": "singlestat",
+        "valueFontSize": "80%",
+        "valueMaps": [
+          {
+            "op": "=",
+            "text": "N/A",
+            "value": "null"
+          }
+        ],
+        "valueName": "current"
+      },
+      {
+        "content": "<img src=\"https://images.techhive.com/images/article/2014/06/cassandra-logo-fxd-100310326-primary.idge.jpg\" width=\"170\" height=\"120\" />\n<span style=\"font-family:verdana,geneva,sans-serif;\"><span style=\"font-size:28px;\"><span style=\"color:#ffffff;\">&nbsp;&nbsp;Cassandra cluster monitoring</span></span></span>\n",
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 10,
+          "x": 12,
+          "y": 0
+        },
+        "id": 12,
+        "links": [],
+        "mode": "html",
+        "options": {
+          "content": "<img src=\"https://images.techhive.com/images/article/2014/06/cassandra-logo-fxd-100310326-primary.idge.jpg\" width=\"170\" height=\"120\" />\n<span style=\"font-family:verdana,geneva,sans-serif;\"><span style=\"font-size:28px;\"><span style=\"color:#ffffff;\">&nbsp;&nbsp;Cassandra cluster monitoring</span></span></span>\n",
+          "mode": "html"
+        },
+        "pluginVersion": "7.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "content": "# Cluster operations",
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 4
+        },
+        "id": 20,
+        "links": [],
+        "mode": "markdown",
+        "options": {
+          "content": "# Cluster operations",
+          "mode": "markdown"
+        },
+        "pluginVersion": "7.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Total aggregated requests per second cluster-wise",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 6
+        },
+        "hiddenSeries": false,
+        "id": 8,
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "hideEmpty": false,
+          "hideZero": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",name=~\"org:apache:cassandra:metrics:clientrequest:(read|write|casread|caswrite|rangeslice|viewwrite):latency:oneminuterate\"})",
+            "format": "time_series",
+            "hide": false,
+            "intervalFactor": 1,
+            "legendFormat": "All",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",name=~\"org:apache:cassandra:metrics:clientrequest:read:latency:oneminuterate\"})",
+            "format": "time_series",
+            "hide": false,
+            "intervalFactor": 1,
+            "legendFormat": "Read",
+            "refId": "B"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",name=~\"org:apache:cassandra:metrics:clientrequest:write:latency:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Write",
+            "refId": "C"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",name=~\"org:apache:cassandra:metrics:clientrequest:casread:latency:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CasRead",
+            "refId": "D"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",name=~\"org:apache:cassandra:metrics:clientrequest:caswrite:latency:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CasWrite",
+            "refId": "E"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",name=~\"org:apache:cassandra:metrics:clientrequest:rangeslice:latency:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "RangeSlice",
+            "refId": "F"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",name=~\"org:apache:cassandra:metrics:clientrequest:viewwrite:latency:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ViewWrite",
+            "refId": "G"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Cluster ops",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 5,
+            "format": "ops",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 5,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Requests served by each instance of the cluster",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 6
+        },
+        "hiddenSeries": false,
+        "id": 16,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:(read|write|casread|caswrite|rangeslice|viewwrite):latency:oneminuterate\"}) by (instance), \"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "E"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Operations per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 5,
+            "format": "ops",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 5,
+            "format": "short",
+            "label": "",
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "content": "# Reads and Writes",
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 15
+        },
+        "id": 21,
+        "links": [],
+        "mode": "markdown",
+        "options": {
+          "content": "# Reads and Writes",
+          "mode": "markdown"
+        },
+        "pluginVersion": "7.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Read operations per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 17
+        },
+        "hiddenSeries": false,
+        "id": 24,
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:read:latency:oneminuterate\"}+0.00000001) by (instance),\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "D"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Read operations",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 5,
+            "format": "ops",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "decimals": 5,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Write operations per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 17
+        },
+        "hiddenSeries": false,
+        "id": 26,
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:write:latency:oneminuterate\"}+0.00000001) by (instance),\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "D"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Write operations",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 5,
+            "format": "ops",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "decimals": 5,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "content": "# Latencies",
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 26
+        },
+        "id": 22,
+        "links": [],
+        "mode": "markdown",
+        "options": {
+          "content": "# Latencies",
+          "mode": "markdown"
+        },
+        "pluginVersion": "7.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Average read latency per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 28
+        },
+        "hiddenSeries": false,
+        "id": 28,
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "sort": "total",
+          "sortDesc": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:read:latency:mean\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "D"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Average read latency per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 2,
+            "format": "µs",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 2,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "75th percentile read latency per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 28
+        },
+        "hiddenSeries": false,
+        "id": 29,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:read:latency:75thpercentile\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "instant": false,
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "D"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "75th percentile read latency per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 2,
+            "format": "µs",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 2,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "99th percentile read latency per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 28
+        },
+        "hiddenSeries": false,
+        "id": 30,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:read:latency:99thpercentile\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "D"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "99th percentile read latency per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 2,
+            "format": "µs",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 2,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Average write latency per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 35
+        },
+        "hiddenSeries": false,
+        "id": 31,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:write:latency:mean\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "D"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Average write latency per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 2,
+            "format": "µs",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 2,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "75th percentile write latency per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 35
+        },
+        "hiddenSeries": false,
+        "id": 32,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:write:latency:75thpercentile\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "D"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "75th percentile write latency per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 2,
+            "format": "µs",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 2,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "99th percentile write latency per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 35
+        },
+        "hiddenSeries": false,
+        "id": 33,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:write:latency:99thpercentile\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "D"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "99th percentile write latency per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 2,
+            "format": "µs",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 2,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "content": "# Timeouts and Unavailables",
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 42
+        },
+        "id": 27,
+        "links": [],
+        "mode": "markdown",
+        "options": {
+          "content": "# Timeouts and Unavailables",
+          "mode": "markdown"
+        },
+        "pluginVersion": "7.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Timeouts for read and write for each instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 44
+        },
+        "hiddenSeries": false,
+        "id": 14,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:.*:timeouts:oneminuterate\"}+0.00000001) by (instance),\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_All",
+            "refId": "B"
+          },
+          {
+            "expr": "label_replace(sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:read:timeouts:oneminuterate\"}+0.00000001) by (instance),\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_R",
+            "refId": "C"
+          },
+          {
+            "expr": "label_replace(sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:clientrequest:write:timeouts:oneminuterate\"}+0.00000001) by (instance),\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_W",
+            "refId": "E"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Timeouts per instance rate",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 3,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "decimals": 3,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Unavailables operations per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 44
+        },
+        "hiddenSeries": false,
+        "id": 18,
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",name=~\"org:apache:cassandra:metrics:clientrequest:.*:unavailables:oneminuterate\"}+0.00000001) by (instance),\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_All",
+            "refId": "B"
+          },
+          {
+            "expr": "label_replace(sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",name=~\"org:apache:cassandra:metrics:clientrequest:read:unavailables:oneminuterate\"}+0.00000001) by (instance),\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_R",
+            "refId": "C"
+          },
+          {
+            "expr": "label_replace(sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",name=~\"org:apache:cassandra:metrics:clientrequest:write:unavailables:oneminuterate\"}+0.00000001) by (instance),\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_W",
+            "refId": "F"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Unavailables per instance rate",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 3,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "decimals": 3,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "content": "# Errors",
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 53
+        },
+        "id": 42,
+        "links": [],
+        "mode": "markdown",
+        "options": {
+          "content": "# Errors",
+          "mode": "markdown"
+        },
+        "pluginVersion": "7.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Exceptions for each instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 55
+        },
+        "hiddenSeries": false,
+        "id": 43,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",name=~\"org:apache:cassandra:metrics:storage:exceptions:count\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "D"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Exceptions per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Total connection timeouts in the cluster",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 55
+        },
+        "hiddenSeries": false,
+        "id": 44,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".+\",name=\"org:apache:cassandra:metrics:connection:totaltimeouts:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ctt",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Total connection timeouts",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 3,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 3,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "content": "# Thread pools",
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 64
+        },
+        "id": 34,
+        "links": [],
+        "mode": "markdown",
+        "options": {
+          "content": "# Thread pools",
+          "mode": "markdown"
+        },
+        "pluginVersion": "7.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Active tasks per thread type",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 12,
+          "w": 12,
+          "x": 0,
+          "y": 66
+        },
+        "hiddenSeries": false,
+        "id": 46,
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:antientropystage:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "AntiEntropyStage",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:cachecleanupexecutor:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CacheCleanupExecutor",
+            "refId": "B"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:compactionexecutor:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CompactionExecutor",
+            "refId": "C"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:gossipstage:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "GossipStage",
+            "refId": "D"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:hintsdispatcher:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "HintsDispatcher",
+            "refId": "E"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:internalresponsestage:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "InternalResponseStage",
+            "refId": "F"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:memtableflushwriter:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MemtableFlushWriter",
+            "refId": "G"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:memtablepostflush:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MemtablePostFlush",
+            "refId": "H"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:memtablereclaimmemory:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MemtableReclaimMemory",
+            "refId": "I"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:migrationstage:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MigrationStage",
+            "refId": "J"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:miscstage:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MiscStage",
+            "refId": "K"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:pendingrangecalculator:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "PendingRangeCalculator",
+            "refId": "L"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:perdiskmemtableflushwriter_0:activetasks:value\"})",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "PerDiskMemtableFlushWriter",
+            "refId": "M"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:sampler:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Sampler",
+            "refId": "N"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:secondaryindexmanagement:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "SecondaryIndexManagement",
+            "refId": "O"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:validationexecutor:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ValidationExecutor",
+            "refId": "P"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:countermutationstage:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CounterMutationStage",
+            "refId": "Q"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:mutationstage:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MutationStage",
+            "refId": "R"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:readrepairstage:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ReadRepairStage",
+            "refId": "S"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:requestresponsestage:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "RequestResponseStage",
+            "refId": "T"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:viewmutationstage:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ViewMutationStage",
+            "refId": "U"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:transport:native-transport-requests:activetasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "NativeTransportRequest",
+            "refId": "V"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Active tasks",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Pending tasks per thread type",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 12,
+          "w": 12,
+          "x": 12,
+          "y": 66
+        },
+        "hiddenSeries": false,
+        "id": 47,
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:antientropystage:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "AntiEntropyStage",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:cachecleanupexecutor:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CacheCleanupExecutor",
+            "refId": "B"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:compactionexecutor:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CompactionExecutor",
+            "refId": "C"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:gossipstage:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "GossipStage",
+            "refId": "D"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:hintsdispatcher:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "HintsDispatcher",
+            "refId": "E"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:internalresponsestage:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "InternalResponseStage",
+            "refId": "F"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:memtableflushwriter:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MemtableFlushWriter",
+            "refId": "G"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:memtablepostflush:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MemtablePostFlush",
+            "refId": "H"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:memtablereclaimmemory:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MemtableReclaimMemory",
+            "refId": "I"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:migrationstage:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MigrationStage",
+            "refId": "J"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:miscstage:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MiscStage",
+            "refId": "K"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:pendingrangecalculator:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "PendingRangeCalculator",
+            "refId": "L"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:perdiskmemtableflushwriter_0:pendingtasks:value\"})",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "PerDiskMemtableFlushWriter",
+            "refId": "M"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:sampler:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Sampler",
+            "refId": "N"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:secondaryindexmanagement:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "SecondaryIndexManagement",
+            "refId": "O"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:validationexecutor:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ValidationExecutor",
+            "refId": "P"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:countermutationstage:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CounterMutationStage",
+            "refId": "Q"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:mutationstage:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MutationStage",
+            "refId": "R"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:readrepairstage:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ReadRepairStage",
+            "refId": "S"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:requestresponsestage:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "RequestResponseStage",
+            "refId": "T"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:viewmutationstage:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ViewMutationStage",
+            "refId": "U"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:transport:native-transport-requests:pendingtasks:value\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "NativeTransportRequest",
+            "refId": "V"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Pending tasks",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Blocked tasks per thread type",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 12,
+          "w": 12,
+          "x": 0,
+          "y": 78
+        },
+        "hiddenSeries": false,
+        "id": 48,
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:antientropystage:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "AntiEntropyStage",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:cachecleanupexecutor:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CacheCleanupExecutor",
+            "refId": "B"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:compactionexecutor:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CompactionExecutor",
+            "refId": "C"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:gossipstage:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "GossipStage",
+            "refId": "D"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:hintsdispatcher:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "HintsDispatcher",
+            "refId": "E"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:internalresponsestage:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "InternalResponseStage",
+            "refId": "F"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:memtableflushwriter:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MemtableFlushWriter",
+            "refId": "G"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:memtablepostflush:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MemtablePostFlush",
+            "refId": "H"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:memtablereclaimmemory:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MemtableReclaimMemory",
+            "refId": "I"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:migrationstage:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MigrationStage",
+            "refId": "J"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:miscstage:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MiscStage",
+            "refId": "K"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:pendingrangecalculator:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "PendingRangeCalculator",
+            "refId": "L"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:perdiskmemtableflushwriter_0:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "PerDiskMemtableFlushWriter",
+            "refId": "M"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:sampler:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Sampler",
+            "refId": "N"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:secondaryindexmanagement:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "SecondaryIndexManagement",
+            "refId": "O"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:internal:validationexecutor:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ValidationExecutor",
+            "refId": "P"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:countermutationstage:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CounterMutationStage",
+            "refId": "Q"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:mutationstage:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "MutationStage",
+            "refId": "R"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:readrepairstage:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ReadRepairStage",
+            "refId": "S"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:requestresponsestage:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "RequestResponseStage",
+            "refId": "T"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:request:viewmutationstage:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ViewMutationStage",
+            "refId": "U"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:threadpools:transport:native-transport-requests:currentlyblockedtasks:count\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "NativeTransportRequest",
+            "refId": "V"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Blocked tasks",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Dropped messages rates by message type",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 12,
+          "w": 12,
+          "x": 12,
+          "y": 78
+        },
+        "hiddenSeries": false,
+        "id": 49,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:batch_remove:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "BatchRemove",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:batch_store:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "BatchStore",
+            "refId": "B"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:counter_mutation:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "CounterMutation",
+            "refId": "C"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:hint:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Hint",
+            "refId": "D"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:mutation:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Mutation",
+            "refId": "E"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:paged_range:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "PagedRange",
+            "refId": "F"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:range_slice:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "RangeSlice",
+            "refId": "G"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:read:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "Read",
+            "refId": "H"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:read_repair:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "ReadRepair",
+            "refId": "I"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:request_response:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "RequestResponse",
+            "refId": "J"
+          },
+          {
+            "expr": "sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".*\",name=\"org:apache:cassandra:metrics:droppedmessage:_trace:dropped:oneminuterate\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "_Trace",
+            "refId": "K"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Dropped messages rates",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 3,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 3,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "content": "# Compactions and SSTables",
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 90
+        },
+        "id": 50,
+        "links": [],
+        "mode": "markdown",
+        "options": {
+          "content": "# Compactions and SSTables",
+          "mode": "markdown"
+        },
+        "pluginVersion": "7.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Pending and Running compactions per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 92
+        },
+        "hiddenSeries": false,
+        "id": 35,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",name=~\"org:apache:cassandra:metrics:compaction:pendingtasks:value\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_P",
+            "refId": "B"
+          },
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",name=~\"org:apache:cassandra:metrics:threadpools:internal:compactionexecutor:activetasks:value\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_A",
+            "refId": "C"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Pending and Running compactions",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Completed compactions per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 92
+        },
+        "hiddenSeries": false,
+        "id": 36,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",name=~\"org:apache:cassandra:metrics:compaction:completedtasks:value\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "B"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Completed compactions",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": null,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": null,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Total completed compactions per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 92
+        },
+        "hiddenSeries": false,
+        "id": 37,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:compaction:totalcompactionscompleted:count\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "B"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Total completed compactions",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": null,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": null,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Bytes compacted per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 99
+        },
+        "hiddenSeries": false,
+        "id": 38,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:compaction:bytescompacted:count\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "B"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Bytes compacted",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": null,
+            "format": "bytes",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "decimals": null,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Live SSTables per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 99
+        },
+        "hiddenSeries": false,
+        "id": 39,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:table:livesstablecount:value\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "B"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Live SSTables per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": "",
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "SSTables per read histogram percentiles",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 99
+        },
+        "hiddenSeries": false,
+        "id": 40,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "avg(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".+\",name=~\"org:apache:cassandra:metrics:table:sstablesperreadhistogram:50thpercentile\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "p55",
+            "refId": "A"
+          },
+          {
+            "expr": "avg(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".+\",name=~\"org:apache:cassandra:metrics:table:sstablesperreadhistogram:75thpercentile\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "p75",
+            "refId": "B"
+          },
+          {
+            "expr": "avg(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".+\",name=~\"org:apache:cassandra:metrics:table:sstablesperreadhistogram:99thpercentile\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "p99",
+            "refId": "C"
+          },
+          {
+            "expr": "avg(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".+\",job=~\".+\",name=~\"org:apache:cassandra:metrics:table:sstablesperreadhistogram:mean\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "mean",
+            "refId": "D"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "SSTables per read histogram",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": "",
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "content": "# Cache",
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 106
+        },
+        "id": 45,
+        "links": [],
+        "mode": "markdown",
+        "options": {
+          "content": "# Cache",
+          "mode": "markdown"
+        },
+        "pluginVersion": "7.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "KeyCache one minute hit rate per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 0,
+          "y": 108
+        },
+        "hiddenSeries": false,
+        "id": 51,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:cache:keycache:oneminutehitrate:value\"}*100,\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "B"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "KeyCache one minute hit rate per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 3,
+            "format": "short",
+            "label": "",
+            "logBase": 1,
+            "max": "100",
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 3,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": "100",
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "KeyCache size / entries per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 8,
+          "y": 108
+        },
+        "hiddenSeries": false,
+        "id": 52,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:cache:keycache:size:value\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_sz",
+            "refId": "B"
+          },
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:cache:keycache:entries:value\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_en",
+            "refId": "C"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "KeyCache size / entries per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "decbytes",
+            "label": "",
+            "logBase": 10,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 10,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "KeyCache hits / requests per instance",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 8,
+          "x": 16,
+          "y": 108
+        },
+        "hiddenSeries": false,
+        "id": 53,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:cache:keycache:hits:count\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_hits",
+            "refId": "B"
+          },
+          {
+            "expr": "label_replace(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:cache:keycache:requests:count\"},\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}_reqs",
+            "refId": "C"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "KeyCache hits / requests per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "decbytes",
+            "label": "",
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "content": "# Storage and health",
+        "datasource": "FrameDB-Metrics-Source",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 24,
+          "x": 0,
+          "y": 115
+        },
+        "id": 54,
+        "links": [],
+        "mode": "markdown",
+        "options": {
+          "content": "# Storage and health",
+          "mode": "markdown"
+        },
+        "pluginVersion": "7.1.0",
+        "title": "",
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "FrameDB-Metrics-Source",
+        "description": "Load per instance in bytes",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 117
+        },
+        "hiddenSeries": false,
+        "id": 55,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.2.0",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "label_replace(sum(cassandra_stats{cluster=\"$cluster\",datacenter=~\"$datacenter\",instance=~\".*\",name=~\"org:apache:cassandra:metrics:storage:load:count\"}) by (instance),\"short_instance\", \"$1\", \"instance\", \"(.*):.*\")",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{short_instance}}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Load per instance",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "decbytes",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": "0",
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      }
+    ],
+    "refresh": "30s",
+    "schemaVersion": 26,
+    "style": "dark",
+    "tags": [
+        "cassandra",
+        "graphdb",
+        "janusgaph",
+        "jmx",
+        "monitoring",
+        "AI",
+        "DAG",
+        "Framedb"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": null,
+          "current": {},
+          "datasource": "FrameDB-Metrics-Source",
+          "definition": "label_values(cassandra_stats{name=\"java:lang:memory:heapmemoryusage:max\"}, cluster)",
+          "hide": 0,
+          "includeAll": false,
+          "label": null,
+          "multi": false,
+          "name": "cluster",
+          "options": [],
+          "query": "label_values(cassandra_stats{name=\"java:lang:memory:heapmemoryusage:max\"}, cluster)",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        },
+        {
+          "allValue": ".+",
+          "current": {},
+          "datasource": "FrameDB-Metrics-Source",
+          "definition": "label_values(cassandra_stats{name=\"java:lang:memory:heapmemoryusage:max\"},datacenter)",
+          "hide": 0,
+          "includeAll": true,
+          "label": null,
+          "multi": false,
+          "name": "datacenter",
+          "options": [],
+          "query": "label_values(cassandra_stats{name=\"java:lang:memory:heapmemoryusage:max\"},datacenter)",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        }
+      ]
+    },
+    "time": {
+      "from": "now-3h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ]
+    },
+    "timezone": "",
+    "title": "Cassandra - DAG graph DB",
+    "uid": "dag-cassandra",
+    "version": 2
+  }

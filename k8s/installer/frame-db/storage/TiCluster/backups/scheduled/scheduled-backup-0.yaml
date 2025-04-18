@@ -1,0 +1,26 @@
+apiVersion: pingcap.com/v1alpha1
+kind: BackupSchedule
+metadata:
+  name: framedb-0-storage-sched-bkp
+  namespace: framedb-storage-cluster
+spec:
+  maxReservedTime: "3h"
+  schedule: "*/2 * * * *"
+  backupTemplate:
+    backupType: full
+    br:
+      cluster: framedb-0-storage
+      clusterNamespace: framedb-storage-cluster
+    from:
+      host: framedb-0-storage-tidb.framedb-storage-cluster.svc.cluster.local
+      port: 4000
+      user: admin
+      secretName: storage-cluster-backup-auth
+    s3:
+      provider: ceph
+      secretName: backup-secret
+      endpoint: rook-ceph-rgw-framedb-objectstore.rook-ceph.svc.cluster.local
+      prefix: framedb-buckets
+      bucket: framedb-buckets
+  storageClassName: local-storage
+  storageSize: "3Gi"

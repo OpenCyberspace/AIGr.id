@@ -1,0 +1,18 @@
+{
+  "uri": "node.algorithm.objdet.yolo5:v0.0.5-beta"
+}
+
+{
+  "uriString" : "node.algorithms.objectdet.test_component:v0.0.2-beta"
+}
+
+{
+  "typeString": "node.algorithms.objectdet"
+}
+
+{
+  "query" : {
+       "componentMetadata.author.authorEmail" : {"$regex" : "cognitif.ai$"}
+   }
+}
+

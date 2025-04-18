@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: registries
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clusters-db
+  namespace: registries
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clusters-db
+  template:
+    metadata:
+      labels:
+        app: clusters-db
+    spec:
+      containers:
+      - name: clusters-db
+        image: aiosv1/clusters_db:v1
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PORT
+          value: ""
+        - name: MONGO_HOST_URL
+          value: "mongodb://registry-0.registries.svc.cluster.local:27017/clusters"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: clusters-db-service
+  namespace: registries
+spec:
+  selector:
+    app: clusters-db
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+    nodePort: 30101
+  type: NodePort
+

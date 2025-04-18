@@ -1,0 +1,21 @@
+apiVersion: pingcap.com/v1alpha1
+kind: Restore
+metadata:
+  name: framedb-0-storage-restore
+  namespace: framedb-storage-cluster
+spec:
+  br:
+    cluster: framedb-0-storage
+    clusterNamespace: framedb-storage-cluster
+  to:
+    host: "framedb-0-storage-tidb.framedb-storage-cluster.svc.cluster.local"
+    port: 4000
+    user: "root"
+    secretName: storage-cluster-backup-auth
+  s3:
+    provider: s3
+    secretName: backup-secret
+    endpoint: "http://10.97.105.163"
+    prefix: test-bucket-4
+    bucket: framedb-backups-26f34420-fd36-4654-8023-9b8e127b18c6
+    region: us-east-1

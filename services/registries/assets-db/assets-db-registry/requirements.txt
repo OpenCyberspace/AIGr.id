@@ -1,0 +1,4 @@
+pymongo==4.3.3
+flask==3.0.3
+redis==3.2.1
+boto3==1.18.65

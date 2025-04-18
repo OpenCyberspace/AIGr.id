@@ -1,0 +1,158 @@
+{
+    "header": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "componentId": {
+                    "name": "object-detector",
+                    "version": "2.0.0",
+                    "releaseTag": "stable"
+                },
+                "componentType": "model",
+                "containerRegistryInfo": {
+                    "containerImage": "registry.ai-platform.com/models/object-detector:2.0.0",
+                    "containerRegistryId": "ai-platform-registry",
+                    "containerImageMetadata": {
+                        "author": "vision-team",
+                        "description": "YOLOv5-based real-time object detection model"
+                    },
+                    "componentMode": "aios"
+                },
+                "componentMetadata": {
+                    "usecase": "real-time object detection",
+                    "framework": "PyTorch",
+                    "hardware": "GPU"
+                },
+                "componentInitData": {
+                    "weights_path": "/models/yolov5s.pt",
+                    "device": "cuda"
+                },
+                "componentInputProtocol": {
+                    "roi": {
+                        "type": "object",
+                        "description": "Region of interest bounding box",
+                        "properties": {
+                            "x1": {
+                                "type": "number",
+                                "min": 0
+                            },
+                            "y1": {
+                                "type": "number",
+                                "min": 0
+                            },
+                            "x2": {
+                                "type": "number",
+                                "min": 1
+                            },
+                            "y2": {
+                                "type": "number",
+                                "min": 1
+                            }
+                        },
+                        "required": [
+                            "x1",
+                            "y1",
+                            "x2",
+                            "y2"
+                        ]
+                    }
+                },
+                "componentOutputProtocol": {
+                    "detections": {
+                        "type": "array",
+                        "description": "Detected objects in the region of interest",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "class": {
+                                    "type": "string"
+                                },
+                                "confidence": {
+                                    "type": "number",
+                                    "min": 0.0,
+                                    "max": 1.0
+                                },
+                                "bbox": {
+                                    "type": "array",
+                                    "description": "Bounding box [x_min, y_min, x_max, y_max]",
+                                    "max_length": 4,
+                                    "items": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "processing_time_ms": {
+                        "type": "number",
+                        "description": "Time taken to perform inference"
+                    }
+                },
+                "componentInitParametersProtocol": {
+                    "threshold": {
+                        "type": "number",
+                        "description": "Confidence threshold",
+                        "min": 0.0,
+                        "max": 1.0
+                    },
+                    "top_k": {
+                        "type": "number",
+                        "description": "Max number of detections",
+                        "min": 1,
+                        "max": 50
+                    }
+                },
+                "componentInitSettingsProtocol": {
+                    "enable_tracing": {
+                        "type": "boolean",
+                        "description": "Enable tracing"
+                    },
+                    "batch_size": {
+                        "type": "number",
+                        "description": "Batch size for inference",
+                        "min": 1,
+                        "max": 32
+                    }
+                },
+                "policies": {
+                    "resource_affinity": {
+                        "nodeType": "gpu",
+                        "minMemory": "4GB"
+                    }
+                },
+                "componentManagementCommandsTemplate": {
+                    "restart": {
+                        "description": "Restart the model",
+                        "args": {}
+                    },
+                    "reload_weights": {
+                        "description": "Reload weights from disk",
+                        "args": {
+                            "weights_path": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "componentParameters": {
+                    "threshold": 0.4,
+                    "top_k": 10
+                },
+                "componentInitSettings": {
+                    "enable_tracing": true,
+                    "batch_size": 4
+                },
+                "tags": [
+                    "vision",
+                    "object-detection",
+                    "yolo",
+                    "realtime"
+                ]
+            }
+        }
+    }
+}

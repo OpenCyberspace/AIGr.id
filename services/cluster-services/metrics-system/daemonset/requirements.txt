@@ -1,0 +1,3 @@
+pynvml
+flask
+requests

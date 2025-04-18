@@ -1,0 +1,24 @@
+{
+    "body": {
+        "values": {
+            "matchType": "cluster",
+            "filter": {
+                "clusterQuery": {
+                    "logicalOperator": "AND",
+                    "conditions": [
+                        {
+                            "variable": "nodes.count",
+                            "operator": ">",
+                            "value": "1"
+                        },
+                        {
+                            "variable": "reputation",
+                            "operator": ">",
+                            "value": "2"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

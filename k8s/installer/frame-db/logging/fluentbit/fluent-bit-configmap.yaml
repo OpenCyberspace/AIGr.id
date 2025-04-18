@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: framedb-logging
+  labels:
+    k8s-app: fluent-bit
+data:
+  # Configuration files: server, input, filters and output
+  # ======================================================
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+
+    @INCLUDE input-kubernetes.conf
+    @INCLUDE filter-kubernetes.conf
+    @INCLUDE output-elasticsearch.conf
+
+  input-kubernetes.conf: |
+    [INPUT]
+        Name              tail
+        Tag               kubernetes.framedb.*
+        Path              /var/framedb-logs/*.log
+        Parser            framedb
+        DB                /var/log/flb_framedb.db
+        Mem_Buf_Limit     5MB
+        Skip_Long_Lines   On
+        Refresh_Interval  10
+
+    [INPUT]
+        Name              tail
+        Tag               kubernetes.dag.*
+        Path              /var/dag-logs/*.json
+        Parser            aios-dag
+        DB                /var/log/flb_dag.db
+        Mem_Buf_Limit     5MB
+        Skip_Long_Lines   On
+        Refresh_Interval  10
+    
+    [INPUT]
+        Name              tail
+        Tag               kubernetes.dag-blocks.*
+        Path              /var/dag-block-logs/*.json
+        Parser            aios-dag-blocks
+        DB                /var/log/flb_dag_blocks.db
+        Mem_Buf_Limit     5MB
+        Skip_Long_Lines   On
+        Refresh_Interval  10
+
+  filter-kubernetes.conf: |
+    
+
+  output-elasticsearch.conf: |
+    [OUTPUT]
+        Name            es
+        Match           *
+        Host            elastic-search-service.framedb-logging.svc.cluster.local
+        Port            9200
+        Logstash_Format On
+        Logstash_Prefix aios
+        Replace_Dots    On
+        Retry_Limit     False
+
+
+  parsers.conf: |
+    [PARSER]
+        Name   apache
+        Format regex
+        Regex  ^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+
+    [PARSER]
+        Name   apache2
+        Format regex
+        Regex  ^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^ ]*) +\S*)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+
+    [PARSER]
+        Name   apache_error
+        Format regex
+        Regex  ^\[[^ ]* (?<time>[^\]]*)\] \[(?<level>[^\]]*)\](?: \[pid (?<pid>[^\]]*)\])?( \[client (?<client>[^\]]*)\])? (?<message>.*)$
+
+    [PARSER]
+        Name   nginx
+        Format regex
+        Regex ^(?<remote>[^ ]*) (?<host>[^ ]*) (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+
+    [PARSER]
+        Name   json
+        Format json
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+
+    [PARSER]
+        Name        docker
+        Format      json
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep   On
+    
+    [PARSER]
+        Name       framedb
+        Format     json 
+        Time_Key   es_time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep   On
+
+    [PARSER]
+        Name          aios-dag
+        Format        json
+        Time_Key      es_time
+        Time_Format   %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep     On
+    
+
+    [PARSER]
+        Name          aios-dag-blocks
+        Format        json
+        Time_Key      es_time
+        Time_Format   %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep     On
+
+    [PARSER]
+        Name        syslog
+        Format      regex
+        Regex       ^\<(?<pri>[0-9]+)\>(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$
+        Time_Key    time
+        Time_Format %b %d %H:%M:%S

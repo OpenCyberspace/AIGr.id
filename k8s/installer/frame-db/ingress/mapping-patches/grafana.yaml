@@ -1,0 +1,10 @@
+metadata:
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind: Mapping
+      name: productpage_qa_mapping
+      prefix: /grafana-framedb/
+      rewrite: /
+      service: framedb-metrics-dashboard-grafana.framedb-monitoring.svc.cluster.local:3000

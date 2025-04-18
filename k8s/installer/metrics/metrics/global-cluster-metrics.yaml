@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: global-cluster-metrics
+  namespace: metrics-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: global-cluster-metrics
+  template:
+    metadata:
+      labels:
+        app: global-cluster-metrics
+    spec:
+      containers:
+        - name: global-cluster-metrics
+          image: aiosv1/global-cluster-metrics:v1
+          ports:
+            - containerPort: 8888
+          env:
+            - name: REDIS_HOST
+              value: "metrics-redis.utils.svc.cluster.local"
+            - name: MONGO_URL
+              value: "mongodb://metrics-db-0.metrics-system.svc.cluster.local:27017"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: global-cluster-metrics
+  namespace: metrics-system
+spec:
+  selector:
+    app: global-cluster-metrics
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+      nodePort: 30202
+  type: NodePort

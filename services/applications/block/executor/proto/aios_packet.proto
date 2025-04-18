@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+
+message AIOSPacket {
+    string session_id = 1;      
+    uint64 seq_no = 2;           // Sequence number
+    string data = 4;              // Data
+    double ts = 5;               // Timestamp  
+    string output_ptr = 6;       // JSON serialized string for output pointer
+    repeated FileInfo files = 7; // Array of file structures
+}
+
+message FileInfo {
+    string metadata = 1; // JSON serialized metadata
+    bytes file_data = 2; // File data
+}

@@ -1,0 +1,29 @@
+{
+    "componentId" : {
+        "name" : "yolo",
+        "version": "v0.0.2",
+        "release": "beta"
+    },
+    "componentType" : "node.algorithm.objdet",
+    "containerImage" : "cognitif.ai/detection-small:latest",
+    "requiresGPU" : true,
+    "componentConfig" : {
+        "requireFrames" : true,
+        "frameSize" : [
+            {"width": 416, "height": 416}
+        ]
+     },
+    "componentMetadata": {
+        "description": "A testing component used for testing",
+        "tags": ["testing", "development", "hello world"],
+        "license": "closed",
+        "author": {
+            "authorName": "prasanna",
+            "authorEmail": "prasanan@cognitif.ai",
+            "authorLinks": {
+                "linkName": "github",
+                "url": "https://github.com/Narasimha1997"
+            }
+        }
+    }
+}

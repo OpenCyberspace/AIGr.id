@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentinel-config
+  namespace: framedb-config
+  labels:
+    app: sentinel-config
+spec:
+  selector:
+    matchLabels:
+      app: sentinel-config
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sentinel-config
+    spec:
+      containers:
+      - name: sentinel-config
+        image: sentinel-config:latest
+        imagePullPolicy : Never
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        env:
+         - name : "DB_NAME"
+           value : "framedb"
+         - name : "FRAMEDB_HOST"
+           value : "framedb-config-db-mongodb:27017"
+         - name : "FRAMEDB_USER"
+           valueFrom :
+            secretKeyRef :
+             name : config-db-creds
+             key : username 
+         - name : "FRAMEDB_PASSWORD"
+           valueFrom :
+            secretKeyRef :
+             name : config-db-creds
+             key : password
+         - name : "LOGGING"
+           value : "Yes"
+         - name : "PYTHONUNBUFFERED"
+           value : "0"
+        volumeMounts:
+         - name : logging 
+           mountPath : /logs
+      volumes :
+        - name : logging
+          hostPath:
+            path: /home/ubuntu/framedb-logs
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: sentinel-config-svc
+  namespace: framedb-config
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind: Mapping
+      name: sentinel-config
+      prefix: /framedb-sentinel/
+      rewrite : /
+      service: sentinel-config-svc.framedb-config.svc.cluster.local:8000
+spec:
+  selector:
+    app: sentinel-config
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort : 32503
+  type: NodePort

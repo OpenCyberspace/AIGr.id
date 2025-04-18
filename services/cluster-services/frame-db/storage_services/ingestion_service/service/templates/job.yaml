@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ""
+  namespace : "framedb-storage"
+  labels:
+    jobType: "framedb-ingestion-job"
+    jobNode: ""
+    jobGroup: ""
+  
+spec:
+  template:
+    spec:
+      containers:
+      - name: "test"
+        image: ingestion-worker:latest
+        command: ["env"]
+      restartPolicy: Never
+#     nodeSelector: 
+#       framedb: ""
+
+  backoffLimit: 4

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: components-registry
+  namespace: registries
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: components-registry
+  template:
+    metadata:
+      labels:
+        app: components-registry
+    spec:
+      containers:
+        - name: components-registry
+          image: aiosv1/components-registry:v1
+          ports:
+            - containerPort: 4000
+          env:
+            - name: MONGO_URL
+              value: "mongodb://registry-0.registries.svc.cluster.local:27017"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: components-registry-svc
+  namespace: registries
+spec:
+  selector:
+    app: components-registry
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000
+      nodePort: 30112
+  type: NodePort

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: splits-runners-registry
+  namespace: registries
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: splits-runners-registry
+  template:
+    metadata:
+      labels:
+        app: splits-runners-registry
+    spec:
+      containers:
+        - name: splits-runners-registry
+          image: aiosv1/splits-runners-registry:v1
+          ports:
+            - containerPort: 8001
+          env:
+            - name: MONGO_URL
+              value: "mongodb://registry-0.registries.svc.cluster.local:27017"
+            - name: MODEL_LAYERS_REGISTRY_URL
+              value: "http://layers-registry-svc:8002"
+            - name: TASK_DB_STATUS_UPDATE_URL
+              value: ""
+            - name: BLOCKS_DB_URL
+              value: "http://blocks-db-svc:3001"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: splits-runners-registry-svc
+  namespace: registries
+spec:
+  selector:
+    app: splits-runners-registry
+  ports:
+    - protocol: TCP
+      port: 8001
+      targetPort: 8001
+      nodePort: 30111
+  type: NodePort

@@ -1,0 +1,512 @@
+type Query {
+  componentById(_id: MongoID!): Component
+  componentByIds(_ids: [MongoID!]!, limit: Int = 100, sort: SortFindByIdsComponentInput): [Component!]!
+  componentOne(
+    """Filter by fields"""
+    filter: FilterFindOneComponentInput
+    skip: Int
+    sort: SortFindOneComponentInput
+  ): Component
+  componentMany(
+    """Filter by fields"""
+    filter: FilterFindManyComponentInput
+    skip: Int
+    limit: Int = 100
+    sort: SortFindManyComponentInput
+  ): [Component!]!
+  componentCount(
+    """Filter by fields"""
+    filter: FilterCountComponentInput
+  ): Int
+  componentConnection(
+    """Forward pagination argument for returning at most first edges"""
+    first: Int
+
+    """Forward pagination argument for returning at most first edges"""
+    after: String
+
+    """Backward pagination argument for returning at most last edges"""
+    last: Int
+
+    """Backward pagination argument for returning at most last edges"""
+    before: String
+
+    """Filter by fields"""
+    filter: FilterFindManyComponentInput
+
+    """Sort argument for data ordering"""
+    sort: SortConnectionComponentEnum = _ID_DESC
+  ): ComponentConnection
+  componentPagination(
+    """Page number for displaying"""
+    page: Int
+
+    """"""
+    perPage: Int = 20
+
+    """Filter by fields"""
+    filter: FilterFindManyComponentInput
+    sort: SortFindManyComponentInput
+  ): ComponentPagination
+}
+
+type Component {
+  createdAt: Date
+  lastModifiedAt: Date
+  componentId: ComponentComponentId
+  componentType: String
+  componentURI: String!
+  containerImage: String!
+  requiresGPU: Boolean!
+  componentConfig: JSON
+  componentDefaultParameters: JSON
+  componentMetadata: ComponentComponentMetadata
+  _id: MongoID!
+}
+
+scalar Date
+
+type ComponentComponentId {
+  name: String
+  version: String!
+  release: String!
+  _id: MongoID
+}
+
+"""
+The `ID` scalar type represents a unique MongoDB identifier in collection. MongoDB by default use 12-byte ObjectId value (https://docs.mongodb.com/manual/reference/bson-types/#objectid). But MongoDB also may accepts string or integer as correct values for _id field.
+"""
+scalar MongoID
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+type ComponentComponentMetadata {
+  description: String
+  tags: [JSON]
+  license: String
+  author: ComponentComponentMetadataAuthor
+  links: ComponentComponentMetadataLinks
+  _id: MongoID
+}
+
+type ComponentComponentMetadataAuthor {
+  authorName: String
+  authorEmail: String
+  authorLinks: ComponentComponentMetadataAuthorAuthorLinks
+  _id: MongoID
+}
+
+type ComponentComponentMetadataAuthorAuthorLinks {
+  linkName: String
+  url: String
+  _id: MongoID
+}
+
+type ComponentComponentMetadataLinks {
+  linkName: String
+  url: String
+  _id: MongoID
+}
+
+enum SortFindByIdsComponentInput {
+  _ID_ASC
+  _ID_DESC
+  COMPONENTTYPE_ASC
+  COMPONENTTYPE_DESC
+  COMPONENTURI_ASC
+  COMPONENTURI_DESC
+}
+
+""""""
+input FilterFindOneComponentInput {
+  createdAt: Date
+  lastModifiedAt: Date
+  componentId: FilterFindOneComponentComponentIdInput
+  componentType: String
+  componentURI: String
+  containerImage: String
+  requiresGPU: Boolean
+  componentConfig: JSON
+  componentDefaultParameters: JSON
+  componentMetadata: FilterFindOneComponentComponentMetadataInput
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindOneComponentOperatorsInput
+  OR: [FilterFindOneComponentInput!]
+  AND: [FilterFindOneComponentInput!]
+}
+
+""""""
+input FilterFindOneComponentComponentIdInput {
+  name: String
+  version: String
+  release: String
+  _id: MongoID
+}
+
+""""""
+input FilterFindOneComponentComponentMetadataInput {
+  description: String
+  tags: [JSON]
+  license: String
+  author: FilterFindOneComponentComponentMetadataAuthorInput
+  links: FilterFindOneComponentComponentMetadataLinksInput
+  _id: MongoID
+}
+
+""""""
+input FilterFindOneComponentComponentMetadataAuthorInput {
+  authorName: String
+  authorEmail: String
+  authorLinks: FilterFindOneComponentComponentMetadataAuthorAuthorLinksInput
+  _id: MongoID
+}
+
+""""""
+input FilterFindOneComponentComponentMetadataAuthorAuthorLinksInput {
+  linkName: String
+  url: String
+  _id: MongoID
+}
+
+""""""
+input FilterFindOneComponentComponentMetadataLinksInput {
+  linkName: String
+  url: String
+  _id: MongoID
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindOneComponentOperatorsInput {
+  componentType: FilterFindOneComponentComponentTypeOperatorsInput
+  componentURI: FilterFindOneComponentComponentURIOperatorsInput
+  _id: FilterFindOneComponent_idOperatorsInput
+}
+
+input FilterFindOneComponentComponentTypeOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+"""
+The string representation of JavaScript regexp. You may provide it with flags "/^abc.*/i" or without flags like "^abc.*". More info about RegExp characters and flags: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+"""
+scalar RegExpAsString @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-262.pdf")
+
+input FilterFindOneComponentComponentURIOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterFindOneComponent_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+enum SortFindOneComponentInput {
+  _ID_ASC
+  _ID_DESC
+  COMPONENTTYPE_ASC
+  COMPONENTTYPE_DESC
+  COMPONENTURI_ASC
+  COMPONENTURI_DESC
+}
+
+""""""
+input FilterFindManyComponentInput {
+  createdAt: Date
+  lastModifiedAt: Date
+  componentId: FilterFindManyComponentComponentIdInput
+  componentType: String
+  componentURI: String
+  containerImage: String
+  requiresGPU: Boolean
+  componentConfig: JSON
+  componentDefaultParameters: JSON
+  componentMetadata: FilterFindManyComponentComponentMetadataInput
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindManyComponentOperatorsInput
+  OR: [FilterFindManyComponentInput!]
+  AND: [FilterFindManyComponentInput!]
+}
+
+""""""
+input FilterFindManyComponentComponentIdInput {
+  name: String
+  version: String
+  release: String
+  _id: MongoID
+}
+
+""""""
+input FilterFindManyComponentComponentMetadataInput {
+  description: String
+  tags: [JSON]
+  license: String
+  author: FilterFindManyComponentComponentMetadataAuthorInput
+  links: FilterFindManyComponentComponentMetadataLinksInput
+  _id: MongoID
+}
+
+""""""
+input FilterFindManyComponentComponentMetadataAuthorInput {
+  authorName: String
+  authorEmail: String
+  authorLinks: FilterFindManyComponentComponentMetadataAuthorAuthorLinksInput
+  _id: MongoID
+}
+
+""""""
+input FilterFindManyComponentComponentMetadataAuthorAuthorLinksInput {
+  linkName: String
+  url: String
+  _id: MongoID
+}
+
+""""""
+input FilterFindManyComponentComponentMetadataLinksInput {
+  linkName: String
+  url: String
+  _id: MongoID
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindManyComponentOperatorsInput {
+  componentType: FilterFindManyComponentComponentTypeOperatorsInput
+  componentURI: FilterFindManyComponentComponentURIOperatorsInput
+  _id: FilterFindManyComponent_idOperatorsInput
+}
+
+input FilterFindManyComponentComponentTypeOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterFindManyComponentComponentURIOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterFindManyComponent_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+enum SortFindManyComponentInput {
+  _ID_ASC
+  _ID_DESC
+  COMPONENTTYPE_ASC
+  COMPONENTTYPE_DESC
+  COMPONENTURI_ASC
+  COMPONENTURI_DESC
+}
+
+""""""
+input FilterCountComponentInput {
+  createdAt: Date
+  lastModifiedAt: Date
+  componentId: FilterCountComponentComponentIdInput
+  componentType: String
+  componentURI: String
+  containerImage: String
+  requiresGPU: Boolean
+  componentConfig: JSON
+  componentDefaultParameters: JSON
+  componentMetadata: FilterCountComponentComponentMetadataInput
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterCountComponentOperatorsInput
+  OR: [FilterCountComponentInput!]
+  AND: [FilterCountComponentInput!]
+}
+
+""""""
+input FilterCountComponentComponentIdInput {
+  name: String
+  version: String
+  release: String
+  _id: MongoID
+}
+
+""""""
+input FilterCountComponentComponentMetadataInput {
+  description: String
+  tags: [JSON]
+  license: String
+  author: FilterCountComponentComponentMetadataAuthorInput
+  links: FilterCountComponentComponentMetadataLinksInput
+  _id: MongoID
+}
+
+""""""
+input FilterCountComponentComponentMetadataAuthorInput {
+  authorName: String
+  authorEmail: String
+  authorLinks: FilterCountComponentComponentMetadataAuthorAuthorLinksInput
+  _id: MongoID
+}
+
+""""""
+input FilterCountComponentComponentMetadataAuthorAuthorLinksInput {
+  linkName: String
+  url: String
+  _id: MongoID
+}
+
+""""""
+input FilterCountComponentComponentMetadataLinksInput {
+  linkName: String
+  url: String
+  _id: MongoID
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterCountComponentOperatorsInput {
+  componentType: FilterCountComponentComponentTypeOperatorsInput
+  componentURI: FilterCountComponentComponentURIOperatorsInput
+  _id: FilterCountComponent_idOperatorsInput
+}
+
+input FilterCountComponentComponentTypeOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterCountComponentComponentURIOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterCountComponent_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+"""A connection to a list of items."""
+type ComponentConnection {
+  """Total object count."""
+  count: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Information to aid in pagination."""
+  edges: [ComponentEdge!]!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""An edge in a connection."""
+type ComponentEdge {
+  """The item at the end of the edge"""
+  node: Component!
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+enum SortConnectionComponentEnum {
+  _ID_DESC
+  _ID_ASC
+}
+
+"""List of items with pagination."""
+type ComponentPagination {
+  """Total object count."""
+  count: Int
+
+  """Array of objects."""
+  items: [Component!]
+
+  """Information to aid in pagination."""
+  pageInfo: PaginationInfo!
+}
+
+type PaginationInfo {
+  currentPage: Int!
+  perPage: Int!
+  pageCount: Int
+  itemCount: Int
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+}

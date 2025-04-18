@@ -1,0 +1,53 @@
+{
+    "id": "cluster-x2",
+    "regionId": "us-west-3",
+    "nodes": {
+        "count": 10,
+        "nodeData": [
+            {
+                "id": "node-1",
+                "status": "active"
+            },
+            {
+                "id": "node-2",
+                "status": "active"
+            },
+            {
+                "id": "node-3",
+                "status": "inactive"
+            }
+        ]
+    },
+    "gpus": {
+        "count": 4,
+        "memory": 16
+    },
+    "vcpus": {
+        "count": 32
+    },
+    "memory": 256,
+    "swap": 64,
+    "storage": {
+        "disks": 6,
+        "size": 2000
+    },
+    "network": {
+        "interfaces": 4,
+        "txBandwidth": 1000,
+        "rxBandwidth": 1000
+    },
+    "config": {
+        "os": "Linux",
+        "version": "1.0.0"
+    },
+    "tags": [
+        "production",
+        "high-availability"
+    ],
+    "clusterMetadata": {
+        "createdBy": "admin",
+        "createdAt": "2023-01-01T12:00:00Z",
+        "lastUpdated": "2023-06-30T12:00:00Z"
+    },
+    "reputation": 5
+}

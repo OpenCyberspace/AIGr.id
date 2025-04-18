@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blocks-db
+  namespace: registries
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blocks-db
+  template:
+    metadata:
+      labels:
+        app: blocks-db
+    spec:
+      containers:
+      - name: blocks-db
+        image: aiosv1/blocks-db:v1
+        env:
+        - name: MONGO_HOST_URL
+          value: "mongodb://registry-0.registries.svc.cluster.local:27017/blocks"
+        ports:
+        - containerPort: 3001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blocks-db-svc
+  namespace: registries
+spec:
+  selector:
+    app: blocks-db
+  ports:
+  - protocol: TCP
+    port: 3001
+    targetPort: 3001
+    nodePort: 30100
+  type: NodePort

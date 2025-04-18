@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: layers-registry
+  namespace: registries
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: layers-registry
+  template:
+    metadata:
+      labels:
+        app: layers-registry
+    spec:
+      containers:
+        - name: layers-registry
+          image: aiosv1/layers-registry:v1
+          ports:
+            - containerPort: 8002
+          env:
+            - name: MONGO_URL
+              value: "mongodb://registry-0.registries.svc.cluster.local:27017"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: layers-registry-svc
+  namespace: registries
+spec:
+  selector:
+    app: layers-registry
+  ports:
+    - protocol: TCP
+      port: 8002
+      targetPort: 8002
+      nodePort: 30110
+  type: NodePort

@@ -1,0 +1,6 @@
+pymongo==3.11.4
+redis==3.5.3
+fastapi[all]==0.65.2
+python-json-logger
+pymodm==0.4.3
+kubernetes==17.17.0

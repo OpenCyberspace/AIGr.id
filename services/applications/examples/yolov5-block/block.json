@@ -1,0 +1,124 @@
+{
+    "head": {
+        "templateUri": "Parser/V1",
+        "parameters": {}
+    },
+    "body": {
+        "spec": {
+            "values": {
+                "blockId": "detector-yolo-88",
+                "blockComponentURI": "model.object-detector:2.0.0-stable",
+                "minInstances": 1,
+                "maxInstances": 5,
+                "blockInitData": {
+                    "weights_path": "/models/yolov5s.pt",
+                    "device": "cuda"
+                },
+                "initSettings": {
+                    "batch_size": 4,
+                    "timeout_ms": 1000
+                },
+                "parameters": {
+                    "confidence_threshold": 0.5,
+                    "nms_threshold": 0.4
+                },
+                "policyRulesSpec": [
+                    {
+                        "values": {
+                            "name": "clusterAllocator",
+                            "policyRuleURI": "policy.clusterAllocator.yolo-cluster-selector:v1",
+                            "parameters": {
+                                "filter": {
+                                    "clusterMetricsQuery": {
+                                        "logicalOperator": "AND",
+                                        "conditions": [
+                                            {
+                                                "variable": "cluster.vcpu.load_15m",
+                                                "operator": "<",
+                                                "value": "10"
+                                            },
+                                            {
+                                                "variable": "cluster.gpu.totalFreeMem",
+                                                "operator": ">",
+                                                "value": "9000"
+                                            }
+                                        ]
+                                    },
+                                    "clusterQuery": {
+                                        "logicalOperator": "AND",
+                                        "conditions": [
+                                            {
+                                                "variable": "gpus.count",
+                                                "operator": ">",
+                                                "value": "5"
+                                            },
+                                            {
+                                                "variable": "clusterMetadata.vendor",
+                                                "operator": "==",
+                                                "value": "dma-bangalore"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "settings": {
+                                "max_candidates": 3
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "resourceAllocator",
+                            "policyRuleURI": "policy.resourceAllocator.yolo-gpu-scheduler:v0.0.1-beta",
+                            "parameters": {
+                                "gpus": 1,
+                                "max_gpu_utilization": 0.80,
+                                "min_gpu_free_memory": 5000
+                            },
+                            "settings": {
+                                "selection_mode": "greedy"
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "loadBalancer",
+                            "policyRuleURI": "policy.loadBalancer.roundrobin:v0.0.1",
+                            "parameters": {
+                                "cache_sessions": true
+                            },
+                            "settings": {
+                                "session_cache_size": 1000
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "stabilityChecker",
+                            "policyRuleURI": "policy.stabilityChecker.unhealthy-retry:v0.0.1",
+                            "parameters": {
+                                "unhealthy_threshold": 3
+                            },
+                            "settings": {
+                                "check_interval_sec": 15
+                            }
+                        }
+                    },
+                    {
+                        "values": {
+                            "name": "autoscaler",
+                            "policyRuleURI": "policy.autoscaler.gpu-based-autoscaler:v0.0.01",
+                            "parameters": {
+                                "target_cpu_utilization": 0.7
+                            },
+                            "settings": {
+                                "scale_up_cooldown": 60,
+                                "scale_down_cooldown": 120
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

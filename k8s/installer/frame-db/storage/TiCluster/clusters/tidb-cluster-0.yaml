@@ -1,0 +1,42 @@
+apiVersion: pingcap.com/v1alpha1
+kind: TidbCluster
+metadata:
+  name: framedb-0-storage
+spec:
+  version: v4.0.7
+  timezone: UTC
+  pvReclaimPolicy: Delete
+  enableDynamicConfiguration: true
+  configUpdateStrategy: RollingUpdate
+  discovery: {}
+  pd:
+    baseImage: registry.cn-beijing.aliyuncs.com/tidb/pd
+    replicas: {{REPLICAS}}
+    # if storageClassName is not set, the default Storage Class of the Kubernetes cluster will be used
+    storageClassName: local-storage
+    requests:
+      storage: "1Gi"
+    config: {}
+    nodeSelector:
+      framedb: "framedb-0"
+  tikv:
+    baseImage: registry.cn-beijing.aliyuncs.com/tidb/tikv
+    replicas: 1
+    # if storageClassName is not set, the default Storage Class of the Kubernetes cluster will be used
+    storageClassName: local-storage
+    requests:
+      storage: "1Gi"
+    config:
+      storage:
+        # In basic examples, we set this to avoid using too much storage.
+        reserve-space: "0MB"
+    nodeSelector:
+      framedb: "framedb-0"
+  tidb:
+    baseImage: registry.cn-beijing.aliyuncs.com/tidb/tidb
+    replicas: 1
+    service:
+      type: ClusterIP
+    config: {}
+    nodeSelector:
+      framedb: "framedb-0"

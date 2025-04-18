@@ -1,0 +1,5 @@
+{
+    "query": {
+        "storage.disks": {"$gte": 6}
+    }
+}
