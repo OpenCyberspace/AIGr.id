@@ -19,7 +19,7 @@ AIGrid represents a fundamental shift from siloed, monolithic AI to an **open, p
 
 
  📘 **Product Deep Dive**: Discover the philosophy, design, strategy, and purpose behind this platform in our in-depth write-up.  
-👉 [Read the full write-up](https://resources.aigr.id)
+👉 [Read the full write-up](https://aigridpaper.pages.dev)
 
 ---
 
@@ -37,7 +37,7 @@ OpenOS.AI enables:
 - ⚙️ **Dynamic orchestration of distributed AI agents and services**  
 - ☁️ **Optimized, cloud-native, and sovereign AI computing at scale**  
 - 🎛️ **Actor-controlled resource allocation across shared infrastructure**  
-- 🤝 **Shareable compute and data as digital commons** — enabling a gig-economy model for AI  
+- 🤝 **Shareable AI, compute and data as digital commons and gig-economy for AI** 
 - 🗂️ **Distributed data management and flow at massive scale**  
 - 🏛️ **Polycentric governance and programmable autonomy**  
 - 🌐 **Open, multiplayer AI production and distribution at a global scale**
@@ -130,6 +130,8 @@ OpenOS.AI enables:
 
 ## Getting started:
 
+**[Paper](https://resources.aigr.id)**
+
 **[Concepts](getting-started/concepts.md)**
 
 **[Architecture](arch.md)**
@@ -195,5 +197,13 @@ OpenOS.AI enables:
 4. **Platform Security and IAM**: Implementation of security measures for all platform services, including user IAM using decentralized identity protocols, role-based access control (RBAC), and integration with the policy system for fine-grained security actions – *To be announced*.
 
 5. **Model/Asset Security**: End-to-end security for models and assets, along with enhanced security for policy execution – *To be announced*.
+
+---
+
+## Communications:
+
+1. Email: [community@opencyberspace.org](mailto:community@opencyberspace.org)
+2. Discord: [OpenCyberspace](https://discord.gg/W24vZFNB)
+3. Twitter: [@opencyberspace](https://x.com/opencyberspace)
 
 ---
