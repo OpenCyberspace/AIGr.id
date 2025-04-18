@@ -1,2 +1,2 @@
-# OpenOS.ai
-An Operating System for AI Networks
+# AIGr.id
+
