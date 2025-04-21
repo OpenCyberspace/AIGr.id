@@ -1,6 +1,5 @@
 # 🧠 AIGrid: An Open, Plural, and Polycentric AI Network
 
-
 AIGrid represents a fundamental shift from siloed, monolithic AI to an **open, plural, and networked AI ecosystem**.
 
 🌐 **AIGr.id** is a polycentric network of independent, plural AI components that coordinate to perform tasks, exchange data, and compose into higher-level intelligence — broader and greater than the sum of its parts.
@@ -17,14 +16,12 @@ AIGrid represents a fundamental shift from siloed, monolithic AI to an **open, p
 
 ---
 
-
- 📘 **Product Deep Dive**: Discover the philosophy, design, strategy, and purpose behind this platform in our in-depth write-up.  
+📘 **Product Deep Dive**: Discover the philosophy, design, strategy, and purpose behind this platform in our in-depth write-up.  
 👉 [Read the full write-up](https://aigridpaper.pages.dev)
 
 ---
 
-
-> **Disclaimer**: The modules of this component have been unit tested, and integration tests between services have been completed. However, this project is still in beta and is not recommended for production use at this time. The testnet is tentatively scheduled for release in the first week of May 2025. For information on upcoming events and roadmap tasks, [refer to this section](#upcoming-activities).
+> **Disclaimer**: The modules of this component have been unit tested, and integration tests between services have been completed. However, this project is still in beta and is not recommended for production use at this time. The testnet is tentatively scheduled for release in the first week of May 2025. For information on upcoming events and roadmap tasks, [refer to this section](https://docs.aigr.id#upcoming-activities).
 
 ---
 
@@ -132,56 +129,55 @@ OpenOS.AI enables:
 
 **[Paper](https://resources.aigr.id)**
 
-**[Concepts](getting-started/concepts.md)**
+**[Concepts](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/getting-started/concepts.md)**
 
-**[Architecture](arch.md)**
+**[Architecture](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/arch.md)**
 
 **Guides based on user flow:**
 
-  - [Network Creator and Admin flow](getting-started/userflow-network.md)
+  - [Network Creator and Admin flow](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/getting-started/userflow-network.md)
 
-  - [Cluster Contributor and Cluster admin flow](getting-started/userflow-cluster.md)
+  - [Cluster Contributor and Cluster admin flow](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/getting-started/userflow-cluster.md)
 
-  - [Node Contributor flow](getting-started/useflow-node.md)
+  - [Node Contributor flow](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/getting-started/useflow-node.md)
 
-  - [Block Creator flow](getting-started/userflow-block.md)
+  - [Block Creator flow](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/getting-started/userflow-block.md)
 
-  - [vDAG Creator flow](getting-started/useflow-vdag.md)
+  - [vDAG Creator flow](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/getting-started/useflow-vdag.md)
 
-  - [End user (inference task submitter) flow](getting-started/userflow-inference.md)
+  - [End user (inference task submitter) flow](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/getting-started/userflow-inference.md)
 
 **Installation:**
 
-  - [Network Creation](installation/installation.md)
+  - [Network Creation](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/installation/installation.md)
 
-  - [Onboarding Cluster](onboarding-notes/onboarding-cluster.md)
+  - [Onboarding Cluster](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/onboarding-notes/onboarding-cluster.md)
   
-  - [Onboarding Node to a cluster](onboarding-notes/onboarding-node.md)
-
+  - [Onboarding Node to a cluster](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/onboarding-notes/onboarding-node.md)
 
 ---
 
 ## Quickstart tutorial:
 
-[The quickstart tutorial](tutorial/tutorial.md) explains how to:
+[The quickstart tutorial](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md) explains how to:
 
-1. [Creating a network ](tutorial/tutorial.md#creating-a-new-network)
+1. [Creating a network](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#creating-a-new-network)
 
-2. [Joining a cluster to an existing network](tutorial/tutorial.md#joining-a-cluster-to-an-existing-network)
+2. [Joining a cluster to an existing network](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#joining-a-cluster-to-an-existing-network)
 
-3. [Joining a node to an already existing cluster](tutorial/tutorial.md#joining-a-node-to-an-already-existing-cluster)
+3. [Joining a node to an already existing cluster](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#joining-a-node-to-an-already-existing-cluster)
 
-4. [Simple block deployment across multiple GPUs (Reference model considered: Mistral7B LLM)](tutorial/tutorial.md#simple-block-deployment-across-multiple-gpus-reference-model-considered-mistral7b-llm)
+4. [Simple block deployment across multiple GPUs (Reference model considered: Mistral7B LLM)](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#simple-block-deployment-across-multiple-gpus-reference-model-considered-mistral7b-llm)
 
-5. [Simple block deployment on a single GPU (Sample model considered: YOLOv5](tutorial/tutorial.md#simple-block-deployment-on-a-single-gpu-sample-model-considered-yolov5)
+5. [Simple block deployment on a single GPU (Sample model considered: YOLOv5)](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#simple-block-deployment-on-a-single-gpu-sample-model-considered-yolov5)
 
-6. [Linking an externally deployed vLLM system to the block for serving](tutorial/tutorial.md#deploying-a-vdag-and-submitting-inference-tasks-to-the-vdag)
+6. [Linking an externally deployed vLLM system to the block for serving](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#deploying-a-vdag-and-submitting-inference-tasks-to-the-vdag)
 
-7. [Deploying a vDAG and submitting inference tasks to the vDAG](tutorial/tutorial.md#deploying-a-vdag-and-submitting-inference-tasks-to-the-vdag)
+7. [Deploying a vDAG and submitting inference tasks to the vDAG](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#deploying-a-vdag-and-submitting-inference-tasks-to-the-vdag)
 
-8. [Deploying external system along with the block using init containers](tutorial/tutorial.md#deploying-external-system-along-with-the-block-using-init-containers)
+8. [Deploying external system along with the block using init containers](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#deploying-external-system-along-with-the-block-using-init-containers)
 
-9. [Splitting LLMs and deploying them across the network as a vDAG](tutorial/tutorial.md#splitting-llms-and-deploying-them-across-the-network-as-a-vdag)
+9. [Splitting LLMs and deploying them across the network as a vDAG](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#splitting-llms-and-deploying-them-across-the-network-as-a-vdag)
 
 ---
 
@@ -202,8 +198,8 @@ OpenOS.AI enables:
 
 ## Communications:
 
-1. Email: [community@opencyberspace.org](mailto:community@opencyberspace.org)
-2. Discord: [OpenCyberspace](https://discord.gg/W24vZFNB)
+1. Email: [community@opencyberspace.org](mailto:community@opencyberspace.org)  
+2. Discord: [OpenCyberspace](https://discord.gg/W24vZFNB)  
 3. Twitter: [@opencyberspace](https://x.com/opencyberspace)
 
----
+--- 
