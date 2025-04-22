@@ -1,6 +1,5 @@
 # 🧠 **AIGr.id: An Open, Plural, and Polycentric AI Network**
 
-
 AIGrid represents a fundamental shift from siloed, monolithic AI to an **open, plural, and networked AI ecosystem**.
 
 🌐 **AIGr.id** is a polycentric network of independent, plural AI components that coordinate to perform tasks, exchange data, and compose into higher-level intelligence — broader and greater than the sum of its parts.
@@ -31,7 +30,7 @@ AIGrid represents a fundamental shift from siloed, monolithic AI to an **open, p
 
 <div style="background-color: #f8f9fa; color: #212529; padding: 12px 16px; border: 1px solid #ced4da; border-radius: 6px; font-size: 90%;">
   <strong>Heads-up:</strong> Testnet is tentatively scheduled for release in the first week of May 2025.  
-  For information on upcoming events and roadmap tasks, <a href="#upcoming-activities" style="color: #212529; text-decoration: underline;">refer to this section</a>.
+  For information on upcoming events and roadmap tasks, <a href="https://github.com/OpenCyberspace/AIGr.id?tab=readme-ov-file#-upcoming-activities" style="color: #212529; text-decoration: underline;">refer to this section</a>.
 </div>
 
 <br>
