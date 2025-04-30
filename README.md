@@ -5,7 +5,7 @@ AIGrid represents a fundamental shift from siloed, monolithic AI to an **open, d
 Instead of building big, closed AI systems, OpenOS connects smaller, independent AI clusters into a Global AI Network.
  
  
-🌐 **AIGr.id** is a decentralized network of interconnected AI components that coordinate to share data, perform tasks, and compose into higher-level collective intelligence.
+🌐 **AIGr.id** is a decentralized network of interconnected AI that coordinate or orchestrate to perform tasks, share resources and compose into higher-level collective intelligence.
  
 ---
  
