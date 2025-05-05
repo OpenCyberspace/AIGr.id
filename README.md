@@ -80,6 +80,12 @@ For the detailed breakdown of features [visit this link](https://docs.aigr.id/#b
 
 ---
 
+## Architecture
+
+![arch](./arch.png)
+
+---
+
 ## 📌 Usecases
 
 1. 🌐 **Internet of Intelligence**  
