@@ -1,17 +1,12 @@
-# 🧠 **AIGr.id: An Open, Plural, and Polycentric AI Network**
-
-AIGrid represents a fundamental shift from siloed, monolithic AI to an **open, plural, and networked AI ecosystem**.
-
-🌐 **AIGr.id** is a polycentric network of independent, plural AI components that coordinate to perform tasks, exchange data, and compose into higher-level intelligence — broader and greater than the sum of its parts.
-
-🧩 Designed as **global public infrastructure for AI**, AIGrid is not owned or controlled by any single entity. It is contributed to and accessed as a digital commons — intelligence built by many, for all.
-
-⚙️ **Powered by [OpenOS.AI (AIOS)](https://openos.ai)** — **A distributed AI Operating System** for open, plural and poly-centric AI networks.
-
-
-
-**OpenOS.AI is 100% open source and community-driven.**
-
+# 🧠 **AIGr.id: Internet of Intelligence**
+ 
+AIGrid represents a fundamental shift from siloed, monolithic AI to an **open, decentralized, and networked AI** paradigm.
+ 
+Instead of building big, closed AI systems, OpenOS connects smaller, independent AI clusters into a Global AI Network.
+ 
+ 
+🌐 **AIGr.id** is a decentralized network of interconnected AI that coordinate or orchestrate to perform tasks, share resources and compose into higher-level collective intelligence.
+ 
 ---
 
  📘 **Product Deep Dive**: Discover the philosophy, design, strategy, and purpose behind this platform in our in-depth write-up.  
@@ -23,10 +18,12 @@ AIGrid represents a fundamental shift from siloed, monolithic AI to an **open, p
   <strong>Disclaimer:</strong> The project remains in <strong>beta</strong> and is <strong>not recommended for production use at this time</strong>.
 </div>
 
+> ⚠️ **Beta Alert**  
+This project is still in **beta** and **not ready for production use**.  
 
-> While a variant of AIGr.id has been running in production at nearly **500k inferences per second** on bare metal infrastructure in federated setting for close to a year—supporting real-time, sustainable Vision AI workloads—the released version includes significant upgrades to support broader goals, including LLM integration. Although unit and integration tested, this version has **not yet been validated at similar scale or duration**. As such, the project remains in **beta** and is **not recommended for production use at this time**.
+**Testnet** is expected in **First week of May 2025**.
 
-<br>
+**Meanwhile welcome your feedback!**
 
 <div style="background-color: #f8f9fa; color: #212529; padding: 12px 16px; border: 1px solid #ced4da; border-radius: 6px; font-size: 90%;">
   <strong>Heads-up:</strong> Testnet is tentatively scheduled for release in the first week of May 2025.  
@@ -37,101 +34,45 @@ AIGrid represents a fundamental shift from siloed, monolithic AI to an **open, p
 
 ---
 
-**OpenOS.AI** provides full stack AI operations, globally distributed and optimized AI compute scale platform, and data management for decentralized AI networks.
+## 🔗 Links:
 
-OpenOS.AI enables:
- 
-- 🧠 **Creation and coordination of multiple cognitive architectures**  
-- 🔗 **Composition of modular, networked AI systems**  
-- ⚙️ **Dynamic orchestration of distributed AI agents and services**  
-- ☁️ **Optimized, cloud-native, and sovereign AI computing at scale**  
-- 🎛️ **Actor-controlled resource allocation across shared infrastructure**  
-- 🤝 **Shareable AI, compute and data as digital commons and gig-economy for AI** 
-- 🗂️ **Distributed data management and flow at massive scale**  
-- 🏛️ **Polycentric governance and programmable autonomy**  
-- 🌐 **Open, multiplayer AI production and distribution at a global scale**
-- 📊 **System-wide observability, behavior tracing, and telemetry**
+1. 🌐 [Website](https://aigr.id)
+2. 📚 [Complete documentation](https://docs.aigr.id)
+3. 📝 [Paper vision and future work](https://resources.aigr.id)
 
 ---
 
-## 🚀 **Core Features Overview**
+## ✨ What Can You Do with OpenOS?
 
+- Connect Kubernetes clusters into a **global compute network**
+- Deploy your AI models (like LLMs or vision models) as reusable **Blocks**
+- Deploy **multiple blocks on same GPU** to save resources
+- Define workflows using **vDAGs** (virtual Directed Acyclic Graphs)
+- Share and re-use **models, data, blocks and compute infrastructure**
+- Use **Python policies** to control how the network behaves
+- Extend your Blocks with third-party tools via init containers
+- Collect and use **metrics** to make smart decisions and observe the network
 
-
-| 💡 **Feature** | 📘 **Description** |
-|----------------|--------------------|
-| 🔗 **Unified Network-Level, Multi-Cluster Resource Pooling** | Seamlessly connect Kubernetes clusters from different locations to form a unified resource pool for running any kind of computational workload. |
-| ⚙️ **Flexible Resource allocation & Scheduling** | Schedule AI models (LLMs), general compute logic, or custom Blocks on any cluster. Includes customizable scaling, load balancing, and health checks. |
-| 🛡️ **Policy-Driven Infrastructure and Job Management** | Govern infrastructure and workloads using Python-based policies for full control over network, cluster, and job behavior. |
-| 🔄 **Distributed Graph Execution (vDAGs)** | Define complex workflows as DAGs of Blocks, allowing distributed execution across nodes and clusters. |
-| 🧠 **Model Splitting and Distributed Inference** | Break large models (like LLMs) into smaller splits, deploy them as vDAGs across infrastructure, framework-agnostic. |
-| 🧰 **Developer-Friendly SDKs** | Use SDKs to easily write and deploy AI model servers or compute logic across the distributed network. |
-| 🧩 **Third-Party Framework Integration** | Bring your own stack—wrap existing frameworks and libraries as Blocks using init containers. |
-| 🧪 **Multiple Instance Execution / GPU Sharing** | Run multiple Block instances on the same node; a single GPU can be time-shared across multiple instances for maximum efficiency. |
-| 📝 **Customizable Parser-Based Workload Definitions** | Define workloads using flexible, pluggable parsers to support different input formats and metadata structures. |
-| 📊 **Policy-Based Load Balancing and Health Checks** | Use policy logic to drive runtime decisions for load balancing, instance health, and failover handling. |
 
 ---
 
+## 🧰 Key Features
 
-## 🧩 **Breakdown of Features**
+| Feature             | What It Means                                     |
+|---------------------|---------------------------------------------------|
+| 🌍 Global Clustering | Connect clusters into a unified network           |
+| ⚙️ Smart Scheduling  | Run AI tasks where resources are available        |
+| 🛠️ Python Policies   | Use Python scripts to control the system          |
+| 🧱 Modular Blocks     | Reusable building blocks for AI                   |
+| 🧠 Split LLMs        | Run parts of a model across machines              |
+| 🧪 GPU Sharing       | Run multiple jobs on the same GPU                 |
+| 🔗 Distributed Graphs | Define workflows across blocks and clusters |
+| 📦 Plug in Tools     | Bring your own frameworks, models, or services    |
+| 📡 Send Tasks Easily  | Submit tasks through gRPC APIs                   |
+| 🔍 Observe Everything| Track system performance with metrics             |
 
-1. **Global Cluster Networking**  
-   Easily connect Kubernetes clusters across regions, forming a globally distributed, policy-governed compute mesh.
 
-2. **Node Onboarding**  
-   Add VMs or bare-metal nodes to any cluster within the network, enabling flexible infrastructure expansion.
-
-3. **Custom Rule-Based Orchestration**  
-   Write Python policies to control how clusters and networks are formed and how workloads are scheduled, tailored to your specific operational needs.
-
-4. **Python-Native Policy Engine**  
-   Policies are written in Python, offering high expressiveness and support for external libraries, enabling complex logic and integration.
-
-5. **Flexible Policy Deployment Modes**  
-   Deploy policies as standalone services, ad hoc jobs, or policy graphs, depending on the use case.
-
-6. **Decentralized Registries**  
-   Set up and register your own asset or container registries on any cluster. These registries are globally discoverable and shareable within the network.
-
-7. **Block and vDAG Specification via SDKs**  
-   Define compute workloads (e.g., LLM inference, object detection, etc.) using the Python SDK. Compose them into vDAGs to form cross-node or cross-cluster workflows. Blocks can be reused across multiple vDAGs.
-
-8. **Sidecar Extensions for Blocks**  
-   Extend the functionality of Blocks through customizable sidecar containers.
-
-9. **Resource-Aware Scheduling**  
-   Use policies to control resource allocation, auto-scaling, and load balancing. Blocks can scale across nodes and utilize multiple GPUs as needed.
-
-10. **GPU Sharing Across Blocks**  
-   Schedule multiple Block instances on the same GPU for efficient resource utilization.
-
-11. **End-to-End Metrics Collection**  
-   Collect metrics from Blocks, vDAGs, and nodes. Use them in policy logic for decision-making or define custom metrics as needed.
-
-12. **Policy-Based Auditing and Quotas**  
-   Apply policies for vDAG-level audit logging, access controls, and quota management.
-
-13. **Custom Health Checks**  
-   Define health check logic using policies for fine-grained monitoring.
-
-14. **gRPC-Based Inference APIs**  
-   Submit tasks to Blocks or vDAGs via gRPC-based inference servers.
-
-15. **Multi-Gateway Inference Support**  
-   Any user or administrator can deploy their own inference server and register it in a public directory. Each server can enforce its own policies for quotas and access control.
-
-16. **Customizable Specification Format**  
-   Define and extend the specification format for onboarding clusters, nodes, Blocks, and vDAGs. Use policies to build custom specification parsers.
-
-17. **Reusable Specification Store**  
-   Browse, search, and reuse predefined or customized specifications to quickly deploy Blocks and vDAGs.
-
-18. **Third-Party System Integration**  
-   Seamlessly extend Blocks with third-party services or tools, either deployed alongside or externally, automated via init containers.
-
-19. **LLM Splitting and Reusability**  
-   Split large LLMs into modular components and distribute them as vDAGs. Each model chunk can be reused across multiple vDAGs, enabling scalable and efficient deployments.
+For the detailed breakdown of features [visit this link](https://docs.aigr.id/#breakdown-of-features)
 
 ---
 
@@ -159,13 +100,15 @@ OpenOS.AI enables:
 
 ---
 
-## 🧪 **Quickstart Tutorial**:
-
-[The quickstart tutorial](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md) explains how to:
+## 🚀 Quickstart
 
 1. [Creating a network ](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#creating-a-new-network)
 
-2. [Joining a cluster to an existing network](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#joining-a-cluster-to-an-existing-network)
+- [Create your own network](tutorial/tutorial.md#creating-a-new-network)
+- [Add clusters and nodes](tutorial/tutorial.md#joining-a-cluster-to-an-existing-network)
+- [Deploy AI models](tutorial/tutorial.md#steps-to-deploy-a-block)
+- [Connect external systems](tutorial/tutorial.md#deploying-external-system-along-with-the-block-using-init-containers)
+- [Split and run large models across multiple GPUs](tutorial/tutorial.md#splitting-llms-and-deploying-them-across-the-network-as-a-vdag)
 
 3. [Joining a node to an already existing cluster](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#joining-a-node-to-an-already-existing-cluster)
 
@@ -177,24 +120,36 @@ OpenOS.AI enables:
 
 7. [Deploying a vDAG and submitting inference tasks to the vDAG](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#deploying-a-vdag-and-submitting-inference-tasks-to-the-vdag)
 
-8. [Deploying external system along with the block using init containers](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#deploying-external-system-along-with-the-block-using-init-containers)
+## 📚 Learn More
 
-9. [Splitting LLMs and deploying them across the network as a vDAG](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/tutorial/tutorial.md#splitting-llms-and-deploying-them-across-the-network-as-a-vdag)
+| Section | Link |
+|--------|------|
+| 📄 Concept Overview | [Concepts](getting-started/concepts.md) |
+| 🧭 How It Works | [Architecture](arch.md) |
+| 🛠️ Setup Instructions | [Installation Guide](installation/installation.md) |
+| 🧪 Tutorials | [Quickstart](tutorial/tutorial.md) |
+| 🗂️ User Guides | [User Flows](getting-started/userflow-network.md) |
 
 ---
 
-## 📅 **Upcoming Activities**
+## 🎯 Our Objectives
 
-1. **Comparison Document**: A detailed comparison between AIOSv1 and Ray/AnyScale – *To be announced*.
+At OpenOS, we’re building more than just a platform — we’re designing the foundation for a **plural, sovereign AI future**. Our mission is to create AI infrastructure that is:
 
-2. **Benchmarking and Performance Analysis**: Evaluation of system services, cluster services, block components, and end-to-end benchmarking of popular LLM and non-LLM models on the platform.  
-   *(To submit or suggest a model for benchmarking, please open an issue.)* – *To be announced*.
+- **Open** — accessible, inspectable, and modifiable by anyone  
+- **Decentralized** — not controlled by any single company, cloud, or country  
+- **Composable** — built from reusable, modular components called **Blocks**  
+- **Governable** — enforceable policies built in as first-class citizens  
+- **Interoperable** — works with your own models, data, and systems  
+- **Collaborative** — made by and for a global community of contributors  
 
-3. **Mainnet Release**: Launch of the mainnet, supporting both public and private deployments – *To be announced*.
+We want to make it easy to:
 
-4. **Platform Security and IAM**: Implementation of security measures for all platform services, including user IAM using decentralized identity protocols, role-based access control (RBAC), and integration with the policy system for fine-grained security actions – *To be announced*.
-
-5. **Model/Asset Security**: End-to-end security for models and assets, along with enhanced security for policy execution – *To be announced*.
+- Run large AI models (like LLMs and Vision AI) across many machines  
+- Share AI, compute and data infra across organizations  
+- Define custom behaviors through simple Python policies  
+- Enable new forms of AI collaboration — cross-team, cross-cloud, and cross-border  
+- Build networks that anyone can join, contribute to, and benefit from
 
 ---
 
@@ -206,52 +161,21 @@ OpenOS.AI enables:
 
 ---
 
-## 🙋‍♀️ Call for Contributors
- 
-**AIGrid** is an **open, collaborative project** — and we’re actively looking for contributors who resonate with the mission of building **open, plural, networked AI infrastructure**.
+## 🤝 Join Us!
 
----
- 
-### 🧠 We Welcome:
- 
-- **Systems thinkers** & **protocol designers**  
-  Help refine the architecture of **polycentric networks**
- 
-- **Distributed systems engineers**  
-  Build and scale the **open execution layer**
- 
-- **AI/ML developers**  
-  Create **interoperable cognitive modules** and **agent topologies**
- 
-- **Researchers in ethics, governance, trust, alignment, guardrails, incentives, economics**  
-  Design and evolve the **policy layers**
- 
-- **Writers & communicators**  
-  Help document, narrate, and **amplify the vision**
- 
-- **Hackers, tinkerers, visionaries**  
-  If this speaks to you — you’re already one of us
+OpenOS is **community-driven** — anyone can contribute.
 
----
+We’re looking for:
 
-### 🚀 Whether you want to:
- 
-- Co-design **AI primitives**
-- Propose a **new kind of network**
-- Experiment with **governance models**
-- Help run a **sovereign AIGrid node, cluster, or network**
- 
-We’d **love to hear from you.**
- 
----
- 
-### 🔗 Join the Collective  
+- Designers and Developers
+- Engineers
+- Content Creators
+- Policy, governance, and ethics researchers
+- Builders of all kinds
 
-[**Join our Discord**](https://discord.gg/W24vZFNB)
- 
-### 📧 Reach Out [community@opencyberspace.org](mailto:community@opencyberspace.org)
- 
+### Get Involved
 
-**Let’s co-create an open & networked AI future — plural, sovereign, and evolving.**
+- 💬 [Join our Discord](https://discord.gg/W24vZFNB)  
+- 📧 Email us: [community@opencyberspace.org](mailto:community@opencyberspace.org)
 
 ---
