@@ -31,13 +31,12 @@ class LocalCodeExecutor:
 
     def download(self):
         # Check if the path is a local file or directory
-        self.temp_dir.mkdir(parents=True, exist_ok=True)
         target_path = Path(self.download_url)
 
         print(target_path, target_path.exists())
 
         if target_path.exists():
-            if target_path.is_file() and (target_path.suffix in [".gz", ".zip", ".xz"] or target_path.suffixes[-2:] == [".tar", ".gz"]):
+            if target_path.is_file() and (target_path.suffix in [".gz", ".zip"] or target_path.suffixes[-2:] == [".tar", ".gz"]):
                 logging.info(f"Using local archive: {target_path}")
                 return target_path
             elif target_path.is_dir():
@@ -122,6 +121,14 @@ class LocalCodeExecutor:
         except (AttributeError, FileNotFoundError) as e:
             logging.error(f"Error initializing function: {e}")
             raise
+
+    def mgmt(self, action, mgmt_data):
+        try:
+
+            return self.function_class.management(action, mgmt_data)
+
+        except Exception as e:
+            raise e
 
     def evaluate(self, input_data):
         try:

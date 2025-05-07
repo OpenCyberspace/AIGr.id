@@ -4,14 +4,10 @@ from .code_executor import LocalCodeExecutor
 import logging
 import os
 import logging
-import requests
-
-import os
-
-import logging
-import os
-import requests
 import json
+import requests
+
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -150,3 +146,14 @@ class PolicyFunctionExecutor:
                 raise
         else:
             raise RuntimeError("No executor or custom class is initialized")
+
+    def execute_mgmt_command(self, action, mgmt_data):
+        try:
+
+            if self.custom_function:
+                return self.custom_function.management(action, mgmt_data)
+            else:
+                return self.executor.mgmt(action, mgmt_data)
+
+        except Exception as e:
+            raise e
