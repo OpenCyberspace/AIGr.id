@@ -1,4 +1,0 @@
-redis
-sqlalchemy
-PyMySQL
-sqlalchemy_utils

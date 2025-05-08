@@ -1,7 +1,0 @@
-python-json-logger
-kubernetes
-redis
-sqlalchemy
-PyMySQL
-sqlalchemy_utils
-kafka-python

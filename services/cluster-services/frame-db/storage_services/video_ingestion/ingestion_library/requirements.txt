@@ -1,3 +1,0 @@
-sqlalchemy
-PyMySQL
-sqlalchemy_utils

@@ -1,5 +1,0 @@
-python-json-logger
-kubernetes==11.0.0
-pymodm
-pymongo
-fastapi
