@@ -14,10 +14,6 @@ Instead of building big, closed AI systems, OpenOS connects smaller, independent
 
 ---
 
-<div style="background-color: #f8d7da; color: #721c24; padding: 12px; border-left: 5px solid #f5c6cb; border-radius: 4px; font-size: 90%;">
-  <strong>Disclaimer:</strong> The project remains in <strong>beta</strong> and is <strong>not recommended for production use at this time</strong>.
-</div>
-
 > ⚠️ **Beta Alert**  
 This project is still in **beta** and **not ready for production use**.  
 
