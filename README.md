@@ -17,7 +17,7 @@ Instead of building big, closed AI systems, OpenOS connects smaller, independent
 > ⚠️ **Beta Alert**  
 This project is still in **beta** and **not ready for production use**.  
 
-**Testnet** is expected in **First week of May 2025**.
+**Testnet** is expected in **May 2025**.
 
 **Meanwhile welcome your feedback!**
 
