@@ -45,7 +45,7 @@ they interconnect into a **globally coordinated intelligence network**.
 ---
 
 AIGrid is not a monolithic or singular AI.  
-**🧠 🕸️  AIGrid is a Decentralized Global AI Brain — plural, compositional, and alive.**
+**🧠 🕸️  AIGrid is a Decentralized Global AI Brain — collective, plural and compositional.**
 
 ---
 
