@@ -127,6 +127,8 @@ Each **opMode** represents a distinct configuration of how AIs and agents **coll
 
 ---
 
+<br>
+
 ## 🌐 AIGrid – Mission & Principles
 
 | **Principle**      | **Brief** |
@@ -167,7 +169,7 @@ Each **opMode** represents a distinct configuration of how AIs and agents **coll
 
 ## 🤝 Join Us!
 
-AIGrid is **community-driven** — anyone can contribute.
+AIGrid is **community-driven**. Theory, Protocol, implementations - All contributions are welcome.
 ### Get Involved
 
 - 💬 [Join our Discord](https://discord.gg/W24vZFNB)  
