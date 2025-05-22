@@ -56,6 +56,45 @@ AIGrid is not a monolithic or singular AI.
 
 ---
 
+
+# ⚙️ AIGrid opModes — Modes of Operation
+
+**AIGrid** is designed to operate in multiple **opModes** (operational modes), enabling it to adapt to diverse social, economic, and technological requirements. 
+
+Each **opMode** represents a distinct configuration of how AIs and agents **collaborate, coordinate, and serve** within different types of **economies and networks** — from public infrastructure to private ecosystems, from capitalist systems to digital commons.
+
+
+> Think of opModes like **"deployment personalities"** of the network — each with its own governance, economic model, trust assumptions, and use-case domain.
+
+<br>
+
+---
+
+## 🔧 Supported opModes
+
+| 🧭 **OpMode**                       | 🧩 **Description**                                                                                                                                      | 🌐 **Real-World Analogy**                                  |
+|------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
+| 🏛️ **Public Digital Infrastructure (PIN)** | AIGrid acts as open, civic infrastructure for AI — a **public good** accessible to all.                                                              | like **India Stack** run by public institutions |
+| 🛰️ **DePIN (Decentralized Physical Infra)** | Integrates and **powers AI coordination across decentralized physical nodes** (edge nodes, network of networks, network of clusters, robots), governed polycentrally.                                            | like **Helium**- People’s Network but for AI                       |
+| 🌱 **Digital Commons**             | A community-governed AI utility focused on **openness, transparency, and co-ownership**.                                                              | **Wikipedia**, **OpenStreetMap** — but for AI                        |
+| 🏢 **Private Enterprise AI Network** | A secure, private AI mesh for **enterprises or consortiums** to collaborate on AI tasks and infrastructure.                                           | Anyscale/Ray.io or Databricks or VertexAI or Sagemaker                       |
+| 🌐 **Federated Network**           | Independently run AI nodes or clusters that **interoperate via standard protocols**, preserving autonomy while enabling collaboration.                              | **Mastodon**-like federated AI systems                               |
+| 🧠 **Internet of Intelligence**     | A global, always-on, evolving layer of intelligence — **self-organizing, composable, and open-ended**.                                               | A **world wide web** of interacting AI, Agents              |
+| 🤝 **Platform Cooperative**         | AIGrid run as a **democratically owned platform**, where contributors and users co-own the infrastructure and its value.                             | Like **Fairbnb**, **Stocksy**, or **Co-op Ride**                     |
+| 🧩 **Collective**                   | A flexible, purpose-driven configuration where AI agents work toward **shared missions or creative goals**, often spontaneously or semi-structured.  | like **EleutherAI**, **Hugging face** -AI collectives coordinating intelligence   |
+| 🛡️ **Guild**                        | A **domain-specific alliance of AI, agents and/or humans**, often with skill-based identity, standards, and mutual support agreements.                      | Like gaming guilds, web3 guilds         |
+| 🏛️ **DAO (Decentralized Autonomous Organization)** | AIGrid instantiated as a **self-governing protocol-native organization**, with AI agents contributing to operations and governance.                  | Like **MakerDAO** or **Aragon**, but with embedded AI agents         |
+| 🚕 **Decentralized Gig Economy** | AIGrid enables decentralized, agent-driven platforms for **on-demand services, task matching, and resource sharing** — offering a trustless, programmable alternative to gig and rental platforms. | Like **Uber**, **Airbnb**, **Fiverr** — but reimagined as open, agent-powered networks for AI |
+
+---
+
+> 💡 Each opMode can be **modularly activated or combined**, allowing AIGrid to **scale across use cases** — from grassroots digital cooperatives to planetary-scale intelligence networks.
+
+ 🧪 Developers can also create **custom opModes** by **mixing and matching modular primitives** from AIGrid — tailoring deployments to unique ecosystems, governance & access models, or intelligence architecture.
+
+---
+<br>
+
 ## 🧠 AIGrid Components
 
 1. 🗺️ [AIGrid component semantic diagram](./stack_bd.md)  
