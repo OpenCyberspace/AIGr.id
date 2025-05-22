@@ -52,11 +52,11 @@ AIGrid is not a monolithic or singular AI.
 ## 🧠 AIGrid Components
 
 1. 🗺️ [AIGrid component semantic diagram](./stack_bd.md)  
-2. 📝 [AIGrid component writeup](./stack_writeup.md)
+2. 📝 [AIGrid component brief](./stack_writeup.md)
 
 ---
 
-## AIGrid for AI Publishers, Consumers and Developers
+## 🤝 AIGrid for AI Publishers, Consumers and Developers
 
 1. 🔍 [Empowering AI Consumers in the Open Intelligence Economy](./md/Consumer.md)  
 2. 🧠 [Empowering Decentralized AI Publishing](./md/PublisherN.md)  
