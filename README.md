@@ -8,7 +8,7 @@
 
 ## 🌐 AIGrid
 
-**AIGrid** is a collection of open protocols & implementations for **global decentralized network** of **interconnected AIs** that enables:
+**AIGrid** is a **global decentralized network** of **interconnected AIs** that enables:
 
 - 🤝 **Inter AI Communications**
 - 🛰️ **Decentralized discovery, matchmaking, routing and democratized access of AIs**
