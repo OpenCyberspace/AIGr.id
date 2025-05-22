@@ -55,7 +55,7 @@ AIGrid is not a monolithic or singular AI.
 **🧠 🕸️  AIGrid is a Decentralized Global AI Brain — collective, plural, compositional and inclusive.**
 
 ---
-
+<br>
 
 # ⚙️ AIGrid opModes — Modes of Operation
 
@@ -72,7 +72,7 @@ Each **opMode** represents a distinct configuration of how AIs and agents **coll
 
 ## 🔧 Supported opModes
 
-| 🧭 **OpMode**                       | 🧩 **Description**                                                                                                                                      | 🌐 **Real-World Analogy**                                  |
+|  **OpMode**                       |  **Description**                                                                                                                                      |  **Real-World Analogy**                                  |
 |------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
 | 🏛️ **Public Digital Infrastructure (PIN)** | AIGrid acts as open, civic infrastructure for AI — a **public good** accessible to all.                                                              | like **India Stack** run by public institutions |
 | 🛰️ **DePIN (Decentralized Physical Infra)** | Integrates and **powers AI coordination across decentralized physical nodes** (edge nodes, network of networks, network of clusters, robots), governed polycentrally.                                            | like **Helium**- People’s Network but for AI                       |
