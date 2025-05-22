@@ -24,7 +24,12 @@ All powered by **standardized protocols** via **AIOS** (AI Operating System).
 AIGrid represents a fundamental shift from centralized, siloed, monolithic AI to an **open, decentralized, and networked AI** paradigm.
 
 ---
+<br>
+AIGrid is not a monolithic or singular AI.  
+**🧠 🕸️  AIGrid is a Decentralized Global AI Brain  - where all of world's AI is hyperlinked, live and ready to summon.**
+It is collective, plural, compositional and inclusive
 
+<br>
 ## 🌐 From Fragmented AI to Networked Intelligence Grids
 
 
@@ -48,10 +53,6 @@ Each cluster remains:
 Yet through **shared protocols**, **AI-native standards**,  
 **decentralized infrastructure**, and **polycentric governance**,  
 they interconnect into a **globally coordinated intelligence network**.
-<br>
-
-AIGrid is not a monolithic or singular AI.  
-**🧠 🕸️  AIGrid is a Decentralized Global AI Brain — collective, plural, compositional and inclusive.**
 
 ---
 <br>
