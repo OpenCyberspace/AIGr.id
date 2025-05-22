@@ -1,5 +1,5 @@
-![Beta](https://img.shields.io/badge/STATUS-BETA-yellow.svg)
 # 🧠 **AIGr.id: Open Intelligence Web**
+![AIOS](https://img.shields.io/badge/%20Powered%20by-AIOS:_AI_Operating_System-blueviolet?style=for-the-badge) ![Beta](https://img.shields.io/badge/STATUS-BETA-yellow.svg)
 
 ## 🌐 AIGrid
 
@@ -77,8 +77,8 @@ AIGrid is not a monolithic or singular AI.
 
 ## 📝 Blog Articles:
 
-1. 🌐 [Anyscale, Ray.io Comparison](./md/anyscale-ray.md)
-2. 🧠 [NVIDIA Dynamo inference server Comparison](./md/nvidia-dynamo.md)
+1. 🌐 [AIOS x Anyscale| Ray.io Comparison](./md/anyscale-ray.md)
+2. 🧠 [AIOS x NVIDIA Dynamo inference server Comparison](./md/nvidia-dynamo.md)
 
 ---
 
