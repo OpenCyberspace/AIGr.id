@@ -92,21 +92,21 @@ AIGrid is not a monolithic or singular AI.
 
 | **Principle**      | **Brief** |
 |--------------------|-----------------|
-| 🚀 **Mission**         | To build an autonomous & decentralized intelligence infrastructure where AI, agents, tools, and humans collaborate across a shared, open, and composable network—enabling collective intelligence as a global public utility. |
-| 🧩 **Decentralize AI** | Remove centralized gatekeepers and empower anyone to remix, deploy, host, contribute, discover, access and consume intelligence across a shared network mesh. |
-| 🤝 **Collective AI**   | Network distributed heterogeneous AIs, agents, and humans orchestrate and coordinate to perform tasks or form a higher intelligence — one that is greater than the sum of its parts |
-| 🛠️ **Composable AI**   | AI services, models, agents, policies, and workflows are modular, remixable, reusable, plug and playable, runtime integegratable across the network to form compound AI. |
-| 🌈 **Plural**          | Support multiple models, cognitive architectures, ethical systems, governance mechanisms and forms of intelligence coexisting and coordinating. |
-| 🔗 **Interoperable**   | Ensure seamless ecosystem wide coordination between heterogeneous AI services, agents, models, and systems through open protocols. |
-| 🏛️ **Polycentric**     | Enable multiple centers of governance for intelligence and coordination — no single point of control. |
-| 🌍 **Commons**         | Treat intelligence as a public good—open, accessible, and co-owned by all participants. |
-| 📡 **DePIN**           | Built as a decentralized public infrastructure network, integrating AI, compute infra, memory infra, services and systems contributed by the community. |
-| 🤲 **Collaborative**   | AI, Agents and humans work symbiotically in a decentralized collaborative network to achieve shared, evolving objectives. |
-| 🛡️ **Sovereign**       | Respect AI actors, users autonomy through actor led or community led control while still enabling global coordination. |
-| 🌐 **Inclusive**       | Designed for global accessibility and diverse participation across domains, geography, and capability. |
-| 🧱 **Full-Stack AI**     | From aggregate compute mesh to tooling, cognition, orchestration, governance and alignment — AIGrid provides a vertically integrated yet modular stack for decentralized AI, enabling intelligence to be composed from raw resources to complex behaviors. |
-| 🌱 **Emergence**         | Intelligence and behavior emerge from dynamic interactions across networked AI, agents, models, and humans — not from centralized control. AIGrid fosters systems where the whole becomes smarter than the parts. |
-| 🔄 **Open-Endedness**     | AIGrid is designed for never ending growth and evolution — enabling AI, agents, cog. architectures, and goals to adapt, recombine, and grow without fixed end objectives, allowing continuous innovation across an expanding intelligence ecosystem. |
+| 🚀**Mission**         | To build an autonomous & decentralized intelligence infrastructure where AI, agents, tools, and humans collaborate across a shared, open, and composable network—enabling collective intelligence as a global public utility. |
+| 🧩**Decentralize AI** | Remove centralized gatekeepers and empower anyone to remix, deploy, host, contribute, discover, access and consume intelligence across a shared network mesh. |
+| 🤝**Collective AI**   | Network distributed heterogeneous AIs, agents, and humans orchestrate and coordinate to perform tasks or form a higher intelligence — one that is greater than the sum of its parts |
+| 🛠️**Composable AI**   | AI services, models, agents, policies, and workflows are modular, remixable, reusable, plug and playable, runtime integegratable across the network to form compound AI. |
+| 🌈**Plural**          | Support multiple models, cognitive architectures, ethical systems, governance mechanisms and forms of intelligence coexisting and coordinating. |
+| 🔗**Interoperable**   | Ensure seamless ecosystem wide coordination between heterogeneous AI services, agents, models, and systems through open protocols. |
+| 🏛️**Polycentric**     | Enable multiple centers of governance for intelligence and coordination — no single point of control. |
+| 🌍**Commons**         | Treat intelligence as a public good—open, accessible, and co-owned by all participants. |
+| 📡**DePIN**           | Built as a decentralized public infrastructure network, integrating AI, compute infra, memory infra, services and systems contributed by the community. |
+| 🤲**Collaborative**   | AI, Agents and humans work symbiotically in a decentralized collaborative network to achieve shared, evolving objectives. |
+| 🛡️**Sovereign**       | Respect AI actors, users autonomy through actor led or community led control while still enabling global coordination. |
+| 🌐**Inclusive**       | Designed for global accessibility and diverse participation across domains, geography, and capability. |
+| 🧱**Full-Stack AI**     | From aggregate compute mesh to tooling, cognition, orchestration, governance and alignment — AIGrid provides a vertically integrated yet modular stack for decentralized AI, enabling intelligence to be composed from raw resources to complex behaviors. |
+| 🌱**Emergence**         | Intelligence and behavior emerge from dynamic interactions across networked AI, agents, models, and humans — not from centralized control. AIGrid fosters systems where the whole becomes smarter than the parts. |
+| 🔄**Open-Endedness**     | AIGrid is designed for never ending growth and evolution — enabling AI, agents, cog. architectures, and goals to adapt, recombine, and grow without fixed end objectives, allowing continuous innovation across an expanding intelligence ecosystem. |
 
 
 ---
