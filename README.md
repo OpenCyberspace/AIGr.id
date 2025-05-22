@@ -128,16 +128,7 @@ AIGrid is not a monolithic or singular AI.
 
 ## 🤝 Join Us!
 
-OpenOS is **community-driven** — anyone can contribute.
-
-We’re looking for:
-
-- Designers and Developers
-- Engineers
-- Content Creators
-- Policy, governance, and ethics researchers
-- Builders of all kinds
-
+AIGrid is **community-driven** — anyone can contribute.
 ### Get Involved
 
 - 💬 [Join our Discord](https://discord.gg/W24vZFNB)  
