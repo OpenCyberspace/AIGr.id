@@ -1,7 +1,8 @@
 # 🧠 **AIGr.id: Open Intelligence Web**
-![Beta](https://img.shields.io/badge/STATUS-BETA-yellow.svg) &nbsp;&nbsp;
+![Beta](https://img.shields.io/badge/STATUS-BETA-yellow.svg?style=for-the-badge) &nbsp;&nbsp;
 ![AIOS](https://img.shields.io/badge/%20Powered%20by-AIOS:_AI_Operating_System-blueviolet?style=for-the-badge) &nbsp;&nbsp;
-![Repo Lines of Code](https://img.shields.io/badge/Repo.%20lines%20of%20code-149.1k-blue?style=for-the-badge)
+![Repo Size](https://img.shields.io/badge/Repo%20Size-Large%20•%20149.1k%20LOC-blue?style=for-the-badge)
+
 
 
 
@@ -9,10 +10,11 @@
 
 **AIGrid** is a **global decentralized network** of **interconnected AIs** that enables:
 
-- 🤝 **Inter AI Communications**  
+- 🤝 **Inter AI Communications**
+- 🛰️ **Decentralized discovery, matchmaking, routing and democratized access of AIs**
 - 🕸️ **Multiple AI to Share network resources**  
 - 🤖 **Autonomously Coordinate with other AI's to perform tasks**  
-- 🧠 **Self organize or compose into higher-level collective intelligence**
+- 🧠 **Self organize and composition into higher-level collective intelligence**
 
 All powered by **standardized protocols** via **AIOS** (AI Operating System).
 
