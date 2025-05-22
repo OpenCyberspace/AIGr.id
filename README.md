@@ -146,7 +146,7 @@ Each **opMode** represents a distinct configuration of how AIs and agents **coll
 | 🌐**Inclusive**       | Designed for global accessibility and diverse participation across domains, geography, and capability. |
 | 🧱**Full-Stack AI**     | From aggregate compute mesh to tooling, cognition, orchestration, governance and alignment — AIGrid provides a vertically integrated yet modular stack for decentralized AI, enabling intelligence to be composed from raw resources to complex behaviors. |
 | 🌱**Emergence**         | Intelligence and behavior emerge from dynamic interactions across networked AI, agents, models, and humans — not from centralized control. AIGrid fosters systems where the whole becomes smarter than the parts. |
-| 🔄**Open-Endedness**     | AIGrid is designed for never ending growth and evolution — enabling AI, agents, cog. architectures, and goals to adapt, recombine, and grow without fixed end objectives, allowing continuous innovation across an expanding intelligence ecosystem. |
+| 🔄**Open-Endedness**     | AIGrid is designed for never ending growth and evolution — enabling AI, agents, cog.architectures, and goals to explore, adapt, mutate, reconfigure, and grow without fixed end objectives, allowing continuous innovation across an expanding intelligence ecosystem. |
 
 
 ---
