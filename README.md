@@ -27,11 +27,10 @@ AIGrid represents a fundamental shift from centralized, siloed, monolithic AI to
 
 <br>
 
-<div style="background-color:#e6f7ff; padding:16px; border-radius:8px; font-size:1.1em;">
-  <strong>🧠 🕸️ AIGrid is a Decentralized Global AI Brain — where all of the world’s AI is hyperlinked, live, and ready to summon.</strong>
+<div align="center">
+  <strong style="font-size:1.4em;">🧠 🕸️ AIGrid is a Decentralized Global AI Brain</strong><br>
+  <strong style="font-size:1.4em;">Where all of the world’s AI is hyperlinked, live, and ready to summon.</strong>
 </div>
-
-AIGrid is not a monolithic or singular AI. It is collective, plural, compositional and inclusive
 
 <br>
 
