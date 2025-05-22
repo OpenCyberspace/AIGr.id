@@ -48,8 +48,7 @@ Each cluster remains:
 Yet through **shared protocols**, **AI-native standards**,  
 **decentralized infrastructure**, and **polycentric governance**,  
 they interconnect into a **globally coordinated intelligence network**.
-
----
+<br>
 
 AIGrid is not a monolithic or singular AI.  
 **🧠 🕸️  AIGrid is a Decentralized Global AI Brain — collective, plural, compositional and inclusive.**
