@@ -1,3 +1,4 @@
+![Beta](https://img.shields.io/badge/STATUS-BETA-yellow.svg)
 # 🧠 **AIGr.id: Open Intelligence Web**
 
 ## 🌐 AIGrid
@@ -99,6 +100,13 @@ We want to make it easy to:
 - Define custom behaviors through simple Python policies  
 - Enable new forms of AI collaboration — cross-team, cross-cloud, and cross-border  
 - Build networks that anyone can join, contribute to, and benefit from
+
+---
+
+ 🚧 **Beta Notice**  
+> This project is currently in **beta** and not ready for production deployment.  
+> 🧪 A **Testnet** is expected to launch in **June 2025**.  
+> 💬 In the meantime, we **welcome your feedback** and contributions!
 
 ---
 
