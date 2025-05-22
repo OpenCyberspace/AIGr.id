@@ -1,7 +1,8 @@
 # 🧠 **AIGr.id: Open Intelligence Web**
-![AIOS](https://img.shields.io/badge/%20Powered%20by-AIOS:_AI_Operating_System-blueviolet?style=for-the-badge) &nbsp;&nbsp;
 ![Beta](https://img.shields.io/badge/STATUS-BETA-yellow.svg) &nbsp;&nbsp;
-![Lines of Code](https://tokei.rs/b1/github/OpenCyberspace/AIGr.id)
+![AIOS](https://img.shields.io/badge/%20Powered%20by-AIOS:_AI_Operating_System-blueviolet?style=for-the-badge) &nbsp;&nbsp;
+![Repo Lines of Code](https://img.shields.io/badge/Repo.%20lines%20of%20code-149.1k-blue?style=for-the-badge)
+
 
 
 ## 🌐 AIGrid
