@@ -28,7 +28,7 @@ AIGrid **connects fragmented independent clusters of intelligence into a shared 
 ### These clusters include:
 
 - 🧪 **Open research labs** training frontier models  
-- 🌱 **Community-run AI compute collectives**  
+- 🌱 **Community-run AI, compute collectives**  
 - 🧠 **Decentralized agent networks**  
 - 🎯 **Purpose-driven AI ecosystems**
 - 🏢 **Centralized AI Hubs**
