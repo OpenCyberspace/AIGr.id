@@ -115,7 +115,7 @@ Each **opMode** represents a distinct configuration of how AIs and agents **coll
 1. 🔍 [Empowering AI Consumers in the Open Intelligence Economy](./md/Consumer.md)  
 2. 🧠 [Empowering Decentralized AI Publishing](./md/PublisherN.md)  
 3. 🔁 [What AIGrid Replaces or Complements](./md/Replaces.md)
-4. 👨‍💻 [AIGrid for Developer and Creators](./md/for-dev.md)
+4. 👨‍💻 [AIGrid for Network Creators and Developers](./md/for-dev.md)
 
 
 ---
