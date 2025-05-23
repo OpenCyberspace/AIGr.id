@@ -29,14 +29,28 @@ AIGrid represents a fundamental shift from centralized, siloed, monolithic AI to
 
 <div align="center">
   <strong style="font-size:1.8em;">🧠 🕸️ AIGrid is a Decentralized Global AI Brain</strong><br>
-  <strong style="font-size:1.8em;">Where all of the world’s AI is hyperlinked, live, and ready to summon.</strong>
+  <strong style="font-size:1.8em;">Where all of the world’s AI is hyperlinked, coordinating and ready to summon.</strong>
 </div>
 
 <br>
 
+AIGrid provides open protocols and full stack foundational AI infra that enables people to build or participate in global AI brain + collective intelligence.
+Think of it as the “Linux + Internet stack” – for AI
 ---
 
 <br>
+
+### AIGr.id’s Open Protocols Enable:
+
+- 🧩 **People to build and operate polycenters of networked intelligence**
+
+- 🌍 **Overlays that connect independent, smaller AI clusters into a global, decentralized intelligence network**
+
+- 🧠 **The emergence of distributed collective intelligence**  from independent, plural AI clusters coordinating to perform tasks, exchange data, and compose into higher-level intelligence - **broader and greater than the sum of its parts**
+
+
+<br>
+
 
 ## 🌐 From Fragmented AI to Networked Intelligence Grids
 
