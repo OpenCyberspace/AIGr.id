@@ -38,12 +38,14 @@ AIGrid represents a fundamental shift from centralized, siloed, monolithic AI to
 
 <br>
 
+## Think “Linux + Internet stack” – for AI
+
 AIGrid provides open protocols and full stack foundational AI infra that enables people to build or participate in global AI brain + collective intelligence.
 Think of it as the “Linux + Internet stack” – for AI
 
 <br>
 
-### AIGr.id’s Open Protocols Enable:
+## 🌐 AIGr.id’s Open Protocols Enable:
 
 - 🧩 **People to build and operate polycenters of networked intelligence**
 
