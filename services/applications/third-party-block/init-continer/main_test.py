@@ -1,5 +1,5 @@
 from init_container import execute_init_container
-from init_container.k8s import HelmManager, HelmSubprocess, K8sUtils
+from kubernetes import client, config
 
 class SampleContainerClass:
     def __init__(self, envs, block_data, cluster_data, k8s, operating_mode="create"):
@@ -11,15 +11,15 @@ class SampleContainerClass:
 
     def begin(self):
         # Perform initialization logic here
-        return True, "Initialization successful."
+        return True, {}
 
     def main(self):
         # Perform main execution logic here
-        return True, "Main execution successful."
+        return True, {}
 
     def finish(self):
         # Perform finalization logic here
-        return True, "Finalization successful."
+        return True, {}
 
 
 if __name__ == "__main__":

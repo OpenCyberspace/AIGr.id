@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import requests
 from .processor import ServiceManager
 
 
@@ -15,9 +16,30 @@ def manage_service():
         service_type = data.get("service")
         mgmt_action = data.get("mgmt_action")
         mgmt_data = data.get("mgmt_data", {})
+        instance_id = data.get("instance_id")
 
         if block_id == "" and service_type == "stability_checker":
-            pass
+            response = requests.post(
+                url="http://localhost:5000",
+                json={
+                    "mgmt_data": mgmt_data,
+                    "mgmt_action": mgmt_action
+                }
+            )
+
+            return jsonify(response.json())
+        
+        if block_id != "" and instance_id != "":
+            url = f"http://{block_id}-{instance_id}-svc.blocks.svc.cluster.local:18001/mgmt"
+            response = requests.post(
+                url=url,
+                json={
+                    "mgmt_data": mgmt_data,
+                    "mgmt_action": mgmt_action
+                }
+            )
+
+            return jsonify(response.json())
 
         if not service_type or not mgmt_action:
             return jsonify({"success": False, "message": "Missing required fields"}), 400

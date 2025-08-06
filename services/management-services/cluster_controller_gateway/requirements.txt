@@ -1,3 +1,4 @@
 requests
 flask
 kubernetes
+websockets

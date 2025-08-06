@@ -15,11 +15,11 @@ spec:
     spec:
       containers:
         - name: components-registry
-          image: aiosv1/components-registry:v1
+          image: 34.58.1.86:31280/registries/components-registry:latest
           ports:
             - containerPort: 4000
           env:
-            - name: MONGO_URL
+            - name: MONGO_HOST_URL
               value: "mongodb://registry-0.registries.svc.cluster.local:27017"
 ---
 apiVersion: v1

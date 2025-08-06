@@ -13,7 +13,7 @@ class PolicyFunctionExecutor:
         self.policy_db = PolicyDBClient(os.getenv("POLICY_DB_URL"))
 
         logging.info(f"Fetching policy data for URI: {policy_rule_uri}")
-        policy_data = self.policy_db.read(policy_rule_uri)
+        policy_data = self.policy_db.read_policy(policy_rule_uri)
         if not policy_data:
             raise ValueError(
                 f"Policy rule with URI '{policy_rule_uri}' not found.")
@@ -31,6 +31,9 @@ class PolicyFunctionExecutor:
                 settings=policy_data.policy_settings,
                 parameters=parameters,
             )
+
+            self.executor.init()
+
         except Exception as e:
             raise e
 
@@ -38,7 +41,7 @@ class PolicyFunctionExecutor:
 
         try:
 
-            result = self.executor.execute(input_data)
+            result = self.executor.evaluate(input_data)
             return result
 
         except Exception as e:

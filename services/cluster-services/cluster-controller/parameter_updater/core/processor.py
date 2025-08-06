@@ -13,7 +13,8 @@ class ServiceManager:
             "instances": 18001,
             "executor": 18001,
             "autoscaler": 10000,
-            "health": 19001
+            "health": 19001,
+            "stability": 5000
         }
 
     def execute_mgmt_command(self, block_id, service_type, mgmt_action, mgmt_data=None):
@@ -47,7 +48,7 @@ class ServiceManager:
 
     def _execute_service_mgmt_command(self, block_id, service_type, mgmt_action, mgmt_data=None):
         port = self.service_ports[service_type]
-        url = f"http://{block_id}-{service_type}-svc.blocks.svc.cluster.local:{port}/mgmt"
+        url = f"http://{block_id}-executor-svc.blocks.svc.cluster.local:{port}/mgmt"
 
         payload = {
             "mgmt_action": mgmt_action,

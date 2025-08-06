@@ -15,12 +15,15 @@ spec:
     spec:
       containers:
         - name: failure-notifier
-          image: aiosv1/failure-notifier:v1
+          image: 34.58.1.86:31280/mgmt/failure-notifier:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           env:
-            - name: POLICY_EXECUTOR_API_URL
-              value: "http://policies-system.registries.svc.cluster.local:10000"  
+            - name: POLICY_SYSTEM_EXECUTOR_ID
+              value: "executor-001"
+            - name: POLICY_EXECUTOR_HOST_URL
+              value: "http://policies-system.registries.svc.cluster.local:10000"
             - name: POLICY_DB_URL
               value: "http://policies-system.registries.svc.cluster.local:10000"
 ---
@@ -36,4 +39,4 @@ spec:
     - protocol: TCP
       port: 5000
       targetPort: 5000
-  type: ClusterIP
+  type: NodePort

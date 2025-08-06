@@ -68,7 +68,7 @@ class BlocksClient:
     def query_blocks(self, query: Dict[str, Any]) -> Union[List[Dict[str, Any]], str]:
         try:
             response = requests.post(
-                f'{self.BASE_URL}/blocks/query', json=query, timeout=10)
+                f'{self.BASE_URL}/blocks/query', json={"query": query}, timeout=10)
             return self._handle_response(response)
         except requests.exceptions.RequestException as e:
             return {'error': str(e)}

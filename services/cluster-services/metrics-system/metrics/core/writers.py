@@ -7,13 +7,12 @@ logging.basicConfig(level=logging.INFO)
 
 
 class ClusterMetricsWriter:
-    def __init__(self, redis_host="localhost", redis_port=6379, redis_queue="CLUSTER_METRICS"):
+    def __init__(self, redis_host="localhost", redis_queue="CLUSTER_METRICS"):
         try:
             self.redis_host = redis_host
-            self.redis_port = redis_port
             self.redis_queue = redis_queue
-            self.redis_conn = redis.Redis(host=self.redis_host, port=self.redis_port)
-            logger.info(f"Connected to Redis on {self.redis_host}:{self.redis_port}")
+            self.redis_conn = redis.Redis.from_url(redis_host)
+            logger.info(f"Connected to Redis on {self.redis_host}")
         except Exception as e:
             logger.error(f"Error connecting to Redis: {e}")
             raise
@@ -32,13 +31,12 @@ class ClusterMetricsWriter:
 
 
 class vDAGMetricsWriter:
-    def __init__(self, redis_host="localhost", redis_port=6379, redis_queue="vDAG_METRICS"):
+    def __init__(self, redis_host="localhost", redis_queue="vDAG_METRICS"):
         try:
             self.redis_host = redis_host
-            self.redis_port = redis_port
             self.redis_queue = redis_queue
-            self.redis_conn = redis.Redis(host=self.redis_host, port=self.redis_port)
-            logger.info(f"Connected to Redis on {self.redis_host}:{self.redis_port}")
+            self.redis_conn = redis.Redis.from_url(redis_host)
+            logger.info(f"Connected to Redis on {self.redis_host}")
         except Exception as e:
             logger.error(f"Error connecting to Redis: {e}")
             raise
@@ -59,10 +57,9 @@ class BlockMetricsWriter:
     def __init__(self, redis_host="localhost", redis_port=6379, redis_queue="BLOCK_METRICS"):
         try:
             self.redis_host = redis_host
-            self.redis_port = redis_port
             self.redis_queue = redis_queue
-            self.redis_conn = redis.Redis(host=self.redis_host, port=self.redis_port)
-            logger.info(f"Connected to Redis on {self.redis_host}:{self.redis_port}")
+            self.redis_conn = redis.Redis.from_url(redis_host)
+            logger.info(f"Connected to Redis on {self.redis_host}")
         except Exception as e:
             logger.error(f"Error connecting to Redis: {e}")
             raise

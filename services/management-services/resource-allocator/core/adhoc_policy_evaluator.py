@@ -26,13 +26,15 @@ class AdhocResourceAllocator:
         )
 
     def _execute_search(self, input_data):
-        if 'filter' in input_data:
-            results = self.search_client.filter_data(input_data)
+        if 'filter' in input_data and input_data['filter']:
+            results = self.search_client.filter_data(input_data['filter'])
             ids = [data['id'] for data in results]
             return ids
 
-        if 'search' in input_data:
-            results = self.search_client.similarity_search(input_data)
+        if 'search' in input_data and input_data['search']:
+            results = self.search_client.similarity_search(input_data['search'])
+            if type(results) == dict:
+                results = [results]
             ids = [data['id'] for data in results]
             return ids
 
@@ -52,7 +54,7 @@ class AdhocResourceAllocator:
                 "clusterId": {"$in": clusters}
             })
 
-            cluster_data = cluster_db.execute_query({
+            _, cluster_data = cluster_db.execute_query({
                 "id": {"$in": clusters}
             })
 

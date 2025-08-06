@@ -38,7 +38,6 @@ def update_vdag(vdag_id):
         logger.error(f"Error in update_vdag: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
-
 @app.route('/vdag/<vdag_id>', methods=['DELETE'])
 def delete_vdag(vdag_id):
     try:
@@ -86,8 +85,22 @@ def query_vdags():
         return jsonify({"success": False, "error": str(e)}), 500
 
 
+@app.route('/block/aggregate', methods=['POST'])
+def query_blocks():
+    try:
+        vdag_metrics = VDAGMetrics()
+        query_filter = request.get_json()
+        success, result = vdag_metrics.aggregate(query_filter)
+        if success:
+            return jsonify({"success": True, "data": result}), 200
+        else:
+            return jsonify({"success": False, "error": result}), 400
+    except Exception as e:
+        logger.error(f"Error in query_blocks: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
 def main():
     vdag_listener = VDAGMetricsListener()
     vdag_listener.start_listener()
 
-    app.run(debug=True, port=8890)
+    app.run(host='0.0.0.0', port=8890)

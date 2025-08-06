@@ -23,7 +23,7 @@ class ClusterControllerExecutor:
         payload['action'] = action
         payload['cluster_id'] = os.getenv("CLUSTER_ID")
 
-        print('sending payload', payload)
+        logging.info('sending payload: data={} to={}'.format(payload, url))
 
         headers = {'Content-Type': 'application/json'}
         try:
@@ -84,6 +84,8 @@ def get_cluster_controller_connection(cluster_id):
         urlMap = config['urlMap']
         service_url = urlMap.get("controllerService")
 
+        logging.info("cluster url: {}".format(service_url))
+
         return ClusterControllerExecutor(base_url=service_url)
 
     except Exception as e:
@@ -137,7 +139,6 @@ def get_cluster_mgmt_connection_url(cluster_id):
 def get_cluster_controller_connection_from_doc(cluster):
     try:
 
-        print('passed cluster', cluster)
 
         config = cluster["config"]
 
@@ -147,7 +148,30 @@ def get_cluster_controller_connection_from_doc(cluster):
         urlMap = config['urlMap']
         controller_url = urlMap.get("controllerService")
 
-        print('controller url', controller_url)
+        logging.info('controller url: {}'.format(controller_url))
+
+        return controller_url
+
+    except Exception as e:
+        raise e
+
+
+def get_cluster_membership_connection_url(cluster_id):
+    try:
+
+        cluster_client = ClusterClient()
+        ret, resp = cluster_client.read_cluster(cluster_id)
+
+        if not ret:
+            raise Exception(resp)
+
+        config = resp["config"]
+
+        if not 'urlMap' in config:
+            raise Exception("config did not provide URL MAP")
+
+        urlMap = config['urlMap']
+        controller_url = urlMap.get("membershipServer")
 
         return controller_url
 

@@ -81,6 +81,8 @@ For the detailed breakdown of features [visit this link](https://docs.aigr.id/#b
 
 | 🧩 **Essentials**          |
 |---------------------------|
+| [AIGrid component semantic diagram](./stack_bd.md) |
+| [AIGrid component writeup](./stack_writeup.md) |
 | [Paper](https://resources.aigr.id)  |
 | [Concepts](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/getting-started/concepts.md)  |
 | [Architecture](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/arch.md)  |
@@ -160,6 +162,8 @@ We want to make it easy to:
 3. 🐦 X (Twitter): [@opencyberspace](https://x.com/opencyberspace)
 
 ---
+
+## 
 
 ## 🤝 Join Us!
 

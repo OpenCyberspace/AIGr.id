@@ -12,12 +12,12 @@ fi
 
 echo "🚀 Deploying $REPLICAS MongoDB metrics replica nodes with $STORAGE storage each in namespace '$NAMESPACE'..."
 
-kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+kubectl --insecure-skip-tls-verify create namespace $NAMESPACE --dry-run=client -o yaml | kubectl --insecure-skip-tls-verify apply -f -
 
 for i in $(seq 0 $((REPLICAS - 1))); do
   echo "🔧 Setting up metrics-db-$i..."
 
-  cat <<EOF | kubectl apply -f -
+  cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -43,7 +43,7 @@ spec:
                 - "yes"
 EOF
 
-  cat <<EOF | kubectl apply -f -
+  cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -59,7 +59,7 @@ spec:
       storage: $STORAGE
 EOF
 
-  cat <<EOF | kubectl apply -f -
+  cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -94,7 +94,7 @@ spec:
             claimName: metrics-db-pvc-$i
 EOF
 
-  cat <<EOF | kubectl apply -f -
+  cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: v1
 kind: Service
 metadata:
@@ -110,7 +110,7 @@ EOF
 
 done
 
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -128,7 +128,7 @@ done)
     });
 EOF
 
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -165,4 +165,4 @@ spec:
         name: metrics-db-init
 EOF
 
-echo "✅ Metrics DB deployment complete. Run: kubectl get pods -n $NAMESPACE"
+echo "✅ Metrics DB deployment complete. Run: kubectl --insecure-skip-tls-verify get pods -n $NAMESPACE"

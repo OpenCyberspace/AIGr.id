@@ -54,7 +54,7 @@ class DryRunExecutor:
             self.remote_evaluator = self._initialize_remote_executor()
 
     def _load_if_local(self, uri: str):
-        return LocalPolicyEvaluator(uri, self.settings, self.parameters, custom_class=DefaultClusterResourceAllocatorPolicy)
+        return LocalPolicyEvaluator(uri, self.parameters, self.settings, custom_class=None)
 
     def _initialize_remote_executor(self):
         if not self.remote_url:
@@ -95,6 +95,9 @@ class DryRunExecutor:
 
     def execute_for_scale(self, payload: dict):
         return self.execute(payload, "scale")
+    
+    def execute_for_init_container(self, payload: dict):
+        return self.execute(payload, "third_party_allocate")
     
     def execute_for_reassignment(self, payload: dict):
         return self.execute(payload, "reassignment")

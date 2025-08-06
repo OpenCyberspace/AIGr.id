@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: default-ns
+subjects:
+  - kind: ServiceAccount
+    name: default                  # or your custom service account name
+    namespace: default        # change to the namespace your app runs in
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin              # grants full access to all resources
+  apiGroup: rbac.authorization.k8s.io

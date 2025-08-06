@@ -15,12 +15,13 @@ spec:
     spec:
       containers:
         - name: global-cluster-metrics
-          image: aiosv1/global-cluster-metrics:v1
+          image: 34.58.1.86:31280/metrics/global-clusters:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8888
           env:
             - name: REDIS_HOST
-              value: "metrics-redis.utils.svc.cluster.local"
+              value: "metrics-redis.metrics-system.svc.cluster.local"
             - name: MONGO_URL
               value: "mongodb://metrics-db-0.metrics-system.svc.cluster.local:27017"
 ---

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-server
+  labels:
+    app: static-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: static-server
+  template:
+    metadata:
+      labels:
+        app: static-server
+    spec:
+      containers:
+      - name: static-server
+        image: python:3.9-slim
+        command: ["python3", "-m", "http.server", "8000"]
+        workingDir: /data
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: static-content
+          mountPath: /data
+      volumes:
+      - name: static-content
+        hostPath:
+          path: /home/prasanna/policies
+          type: DirectoryOrCreate
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: static-server-service
+spec:
+  type: NodePort
+  selector:
+    app: static-server
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+    nodePort: 32555  # Optional: exposes service on node IP:30080

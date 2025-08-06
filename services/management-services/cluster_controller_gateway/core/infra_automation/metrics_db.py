@@ -51,7 +51,7 @@ class MetricsDBCreator:
                 metadata=client.V1ObjectMeta(name=self.service_name),
                 spec=client.V1ServiceSpec(
                     selector={"app": self.deployment_name},
-                    ports=[client.V1ServicePort(
+                    ports=[client.V1ServicePort(name="db",
                         port=27017, target_port=27017)],
                     type="ClusterIP"
                 )

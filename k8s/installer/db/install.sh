@@ -13,14 +13,14 @@ fi
 echo "Deploying $REPLICAS MongoDB replica nodes with $STORAGE storage each in namespace '$NAMESPACE'..."
 
 # Create namespace
-kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+kubectl --insecure-skip-tls-verify create namespace $NAMESPACE --dry-run=client -o yaml | kubectl --insecure-skip-tls-verify apply -f -
 
 # Step 1: Create PVs, PVCs, Deployments, and Services per replica
 for i in $(seq 0 $((REPLICAS - 1))); do
   echo "🔧 Setting up registry-$i..."
 
   # Create PersistentVolume
-  cat <<EOF | kubectl apply -f -
+  cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -47,7 +47,7 @@ spec:
 EOF
 
   # Create PersistentVolumeClaim
-  cat <<EOF | kubectl apply -f -
+  cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -64,7 +64,7 @@ spec:
 EOF
 
   # Create Deployment
-  cat <<EOF | kubectl apply -f -
+  cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -109,7 +109,7 @@ spec:
 EOF
 
   # Create Service for each pod to expose DNS endpoint
-  cat <<EOF | kubectl apply -f -
+  cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: v1
 kind: Service
 metadata:
@@ -126,7 +126,7 @@ EOF
 done
 
 # Step 2: ConfigMap to initialize the replica set
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -145,7 +145,7 @@ done)
 EOF
 
 # Step 3: Init client pod
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl --insecure-skip-tls-verify apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -182,4 +182,4 @@ spec:
         name: registry-init
 EOF
 
-echo "Deployment complete. Use: kubectl get pods -n $NAMESPACE"
+echo "Deployment complete. Use: kubectl --insecure-skip-tls-verify get pods -n $NAMESPACE"

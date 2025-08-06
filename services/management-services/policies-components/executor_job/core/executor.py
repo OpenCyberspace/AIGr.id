@@ -9,14 +9,12 @@ class JobInit:
     def __init__(self) -> None:
         self.pusher = OutputPusher(
             redis_host=os.getenv("JOB_OUTPUT_REDIS_HOST", "localhost"),
-            redis_queue=os.getenv("DB_API_URL", "JOB_OUTPUTS")
+            redis_queue="JOB_OUTPUTS"
         )
 
         self.policy_function = PolicyFunctionExecutor(
             policy_rule_uri=os.getenv("POLICY_RULE_URI"),
             parameters=json.loads(os.getenv("POLICY_RULE_PARAMETERS", "{}")),
-            settings=None,
-            custom_class=None
         )
 
         self.job_id = os.getenv("JOB_ID", "")

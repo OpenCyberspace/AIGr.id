@@ -212,7 +212,17 @@ class MetricsCollector:
         self.redis_client = None
         self.app = Flask(__name__)
 
-        self.node_id = detect_node_id()
+        self.node_id = None
+
+        while True:
+            self.node_id = detect_node_id()
+            if self.node_id == "" or not self.node_id:
+                logging.info("[MetricsCollector] Failed to detect node ID, retrying after 5 seconds...")
+                time.sleep(5)
+                continue
+            else:
+                break
+
         self.gpu = GPUManager()
 
         self.connect_to_redis()

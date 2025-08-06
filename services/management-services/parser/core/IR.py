@@ -3,11 +3,23 @@ import logging
 import string
 import random
 
+from .webhooks.blocks import BlocksClient
 from .parser_v1 import V1Parser
 from .utils import get_component_details
 
 from .webhooks.component_registry import ComponentRegistry
 from .webhooks.vdag_template_store import TemplateAPIClient
+
+import re
+
+def is_valid_k8s_name(name: str) -> bool:
+    if not name:
+        return False
+    if len(name) > 253:
+        return False
+    # Kubernetes DNS label regex: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+    pattern = r'^[a-z0-9]([-a-z0-9]*[a-z0-9])?$'
+    return re.match(pattern, name) is not None
 
 
 def get_component_by_uri(component_uri):
@@ -87,6 +99,15 @@ def block_create_IR(json_doc):
         logging.info("Parsing or generating blockId")
         block_id = block_data.get('blockId') or generate_block_id()
 
+        if not is_valid_k8s_name(block_id):
+            raise Exception("block ID must be less than 255 characters and should not contain special symbols")
+
+
+        # check if block ID exists
+        bd = BlocksClient().get_block_by_id(block_id)
+        if 'error' not in bd:
+            raise Exception("block with same ID already exists")
+
         logging.info("Validating minInstances and maxInstances")
         min_instances = block_data.get('minInstances')
         max_instances = block_data.get('maxInstances')
@@ -126,6 +147,7 @@ def block_create_IR(json_doc):
 
         block_doc = {
             "id": block_id,
+            "api_mode": block_data.get("mode", "dry_run"),
             "componentUri": component_uri,
             "component": component,
             "blockUri": component_uri,
@@ -170,6 +192,7 @@ def mgmt_function_IR(json_doc):
         service = mgmt_data.get('service')
 
         cluster_id = mgmt_data.get('clusterId', "")
+        instance_id = mgmt_data.get('instanceId', "")
 
         logging.info("Parsing mgmtCommand field")
         mgmt_command = mgmt_data.get('mgmtCommand')
@@ -186,12 +209,20 @@ def mgmt_function_IR(json_doc):
         if not mgmt_command:
             raise ValueError("Missing mgmtCommand in the payload")
 
+        # handle pre-checks:
+        if cluster_id != "" and service != "stability_checker":
+            raise ValueError("only service 'stability_checker' is supported when cluster ID is specified")
+
+        if instance_id != "" and block_id == "":
+            raise ValueError("block ID has to be specified when instance ID is specified")
+
         mgmt_dict = {
             "clusterId": cluster_id,
             "blockId": block_id,
             "service": service,
             "mgmtCommand": mgmt_command,
             "mgmtData": mgmt_payload,
+            "instanceId": instance_id
         }
 
         logging.info("Parsed management function request successfully")
@@ -273,10 +304,7 @@ def search_IR(json_doc):
                 "policyRuleURI": policy_rule_uri,
                 # "policyCodePath": ranking_policy_rule.get('policyCodePath'),
                 "settings": settings,
-                "parameters": {
-                    "filterRule": parameters.get('filterRule', {}),
-                    "return": parameters.get('return', 0)
-                }
+                "parameters": parameters
             }
         }
 
@@ -341,7 +369,7 @@ def create_vdag_IR(json_doc):
                 "outputProtocol": spec.get('outputProtocol', {}),
                 "inputProtocol": spec.get('inputProtocol', {}),
                 "IOMap": io_map,
-                "manualBlockId": spec.get('manualBlockId', {})
+                "manualBlockId": spec.get('manualBlockId', "")
             }
 
             nodes.append(node_dict)

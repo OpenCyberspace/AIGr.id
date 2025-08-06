@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: parser
-          image: aiosv1/parser:v1
+          image: 34.58.1.86:31280/mgmt/parser
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           env:
@@ -30,13 +31,13 @@ spec:
             - name: POLICY_DB_URL
               value: "http://policies-system.registries.svc.cluster.local:10000"
             - name: MAX_WORKER_POOL_SIZE
-              value: ""
+              value: "10"
             - name: GLOBAL_CLUSTER_METRICS_URL
               value: "http://global-cluster-metrics.metrics-system.svc.cluster.local:8888"
             - name: POLICY_RULE_REMOTE_URL
-              value: ""
+              value: "http://policies-system.registries.svc.cluster.local:10000"
             - name: COMPONENT_REGISTRY_API
-              value: "http://components-registry-svc.registries.svc.cluster.local:4000"
+              value: "http://components-registry-svc.registries.svc.cluster.local:4000/api"
             - name: CLUSTER_SERVICE_URL
               value: "http://clusters-db-service.registries.svc.cluster.local:3000"
             - name: PARSER_SVC_API
@@ -44,13 +45,13 @@ spec:
             - name: LLM_PLANNER_TASK_API
               value: ""
             - name: VDAG_SYSTEM_URL
-              value: "http://vdag-db-svc.registries.svc.cluster.local:10501"
+              value: "http://vdag-processor.utils.svc.cluster.local:10500"
             - name: ENABLE_TASK_DB
               value: "false"
             - name: SPEC_STORE_API_URL
               value: "http://spec-registry-svc.registries.svc.cluster.local:8000"
             - name: CLUSTER_CONTROLLER_GATEWAY_URL
-              value: "http://cluster-controller-gateway.cluster-controller-gateway.svc.cluster.local:5000"
+              value: "http://cluster-controller-gateway.services.svc.cluster.local:5000"
             - name: LLM_LAYERS_API
               value: "http://layers-registry-svc.registries.svc.cluster.local:8002"
             - name: SEARCH_SERVER_API_URL
@@ -72,5 +73,5 @@ spec:
     - protocol: TCP
       port: 8000
       targetPort: 8000
-      nodePort: 30500
+      nodePort: 30501
   type: NodePort

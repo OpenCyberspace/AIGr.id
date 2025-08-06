@@ -138,7 +138,7 @@ const valuesValidator = (originalRules, supplied) => {
 class ComponentsController {
 
     createURI(componentId, componentType) {
-        const suffix = `${componentId.name}:${componentId.version}-${componentId.release}`
+        const suffix = `${componentId.name}:${componentId.version}-${componentId.releaseTag}`
         return `${componentType}.${suffix}`
     }
 

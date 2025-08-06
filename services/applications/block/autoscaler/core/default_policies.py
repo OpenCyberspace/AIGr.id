@@ -1,4 +1,4 @@
-
+import logging
 
 class DefaultAutoscalerPolicy:
 
@@ -14,11 +14,13 @@ class DefaultAutoscalerPolicy:
 
         try:
 
-            print(self.settings["get_metrics"]())
+            logging.info("input", input)
+            metrics = self.settings["get_metrics"]()
+            logging.info("got metrics: {}".format(metrics))
 
             return {
-                "skip": False,
-                "operation": "scale"
+                "skip": True,
+                "operation": ""
             }
 
         except Exception as e:

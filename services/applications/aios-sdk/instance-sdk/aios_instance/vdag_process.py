@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Dict, Any
+import logging
 import requests
 import os
 
@@ -139,57 +140,93 @@ class vDAGProcessor:
 
     def __init__(self, block_id: str, block_data: dict) -> None:
         self.vdag_db = vDAGDBClient()
+        self.vdag_data_cache: Dict[str, vDAGObject] = {}
         self.pre_policies_cache: Dict[str, LocalPolicyEvaluator] = {}
         self.post_policies_cache: Dict[str, LocalPolicyEvaluator] = {}
         self.block_id = block_id
         self.block_data = block_data
+        self.logger = logging.getLogger(__name__)
 
-    def get_preprocessor(self, vdag_uri):
+    def _get_policy_evaluator(self, vdag_uri, cache, policy_key, default_class):
         try:
-            if vdag_uri not in self.policies_cache:
+            if vdag_uri in cache:
+                return cache[vdag_uri]
 
-                # add a new policy:
+            vdag: vDAGObject = None
+
+            # cache the vDAG data:
+            if vdag_uri not in self.vdag_data_cache:
                 vdag = self.vdag_db.get_vdag(vdag_uri)
-                rev_mapping = vdag.compiled_graph_data['rev_mapping']
-
-                node_label = rev_mapping.get(self.block_id)
-                if not node_label:
-                    return None
-
-                policy = None
-
-                # get the node with the given label:
-                for node in vdag.nodes:
-                    if node.nodeLabel == node_label:
-                        policy = node.preprocessingPolicyRule
-                        break
-                else:
-                    return None
-
-                if policy is None or len(policy) == 0:
-                    return None
-
-                policy_rule_uri = policy.get('policyRuleURI', None)
-                if policy_rule_uri is None:
-                    raise Exception("policy rule not specified")
-
-                parameters = policy.get('parameters', {})
-
-                settings = {"vdag": vdag.to_dict(), "block": self.block_data, "block_id": self.block_id, "node_label": node_label}
-
-                # load the policy rule
-                local_policy = LocalPolicyEvaluator(
-                    policy_rule_uri, settings=settings, parameters=parameters, custom_class=DefaultPreprocessingPolicy)
-                self.pre_policies_cache[vdag_uri] = local_policy
+                self.vdag_data_cache[vdag_uri] = vdag
             else:
-                return self.policies_cache[vdag_uri]
+                vdag = self.vdag_data_cache[vdag_uri]
+
+            rev_mapping = vdag.compiled_graph_data.get("rev_mapping", {})
+            node_label = rev_mapping.get(self.block_id)
+
+            if not node_label:
+                self.logger.warning(f"No node label found for block ID {self.block_id} in vDAG {vdag_uri}")
+                return None
+
+            node = next((n for n in vdag.nodes if n.nodeLabel == node_label), None)
+            if not node:
+                self.logger.warning(f"No node found with label {node_label} in vDAG {vdag_uri}")
+                return None
+
+            policy = getattr(node, policy_key, None)
+            if not isinstance(policy, dict) or not policy:
+                return None
+
+            policy_rule_uri = policy.get("policyRuleURI")
+            if not policy_rule_uri:
+                raise Exception("Policy rule URI not specified")
+
+            parameters = policy.get("parameters", {})
+            settings = {
+                "vdag": vdag.to_dict(),
+                "modelParameters": node.modelParameters,
+                "block": self.block_data,
+                "block_id": self.block_id,
+                "node_label": node_label,
+                "node": node.to_dict(),
+                "graph": vdag.compiled_graph_data['t2_graph'],
+                "connections": vdag.compiled_graph_data['t3_graph'],
+                "assignment_info": vdag.assignment_info,
+                "rev_mapping": vdag.compiled_graph_data['rev_mapping']
+            }
+
+            evaluator = LocalPolicyEvaluator(
+                policy_rule_uri,
+                settings=settings,
+                parameters=parameters,
+                custom_class=None
+            )
+
+            cache[vdag_uri] = evaluator
+            return evaluator
 
         except Exception as e:
-            raise e
+            self.logger.error(f"Failed to initialize policy evaluator for vDAG {vdag_uri}: {e}")
+            raise
+
+    def get_preprocessor(self, vdag_uri):
+        return self._get_policy_evaluator(
+            vdag_uri,
+            self.pre_policies_cache,
+            'preprocessingPolicyRule',
+            DefaultPreprocessingPolicy
+        )
+
+    def get_post_processor(self, vdag_uri):
+        return self._get_policy_evaluator(
+            vdag_uri,
+            self.post_policies_cache,
+            'postprocessingPolicyRule',
+            DefaultPostprocessingPolicy
+        )
 
     def execute_pre_process_policy_rule_if_present(self, vdag_uri: str, packet):
         try:
-
             policy_rule = self.get_preprocessor(vdag_uri)
             if not policy_rule:
                 return packet
@@ -197,54 +234,11 @@ class vDAGProcessor:
             response = policy_rule.execute_policy_rule({
                 "packet": packet
             })
-
             return response['packet']
 
         except Exception as e:
-            raise e
-
-    def get_post_processor(self, vdag_uri):
-        try:
-            if vdag_uri not in self.policies_cache:
-
-                # add a new policy:
-                vdag = self.vdag_db.get_vdag(vdag_uri)
-                rev_mapping = vdag.compiled_graph_data['rev_mapping']
-
-                node_label = rev_mapping.get(self.block_id)
-                if not node_label:
-                    return None
-
-                policy = None
-
-                # get the node with the given label:
-                for node in vdag.nodes:
-                    if node.nodeLabel == node_label:
-                        policy = node.postprocessingPolicyRule
-                        break
-                else:
-                    return None
-
-                if policy is None or len(policy) == 0:
-                    return None
-
-                policy_rule_uri = policy.get('policyRuleURI', None)
-                if policy_rule_uri is None:
-                    raise Exception("policy rule not specified")
-
-                parameters = policy.get('parameters', {})
-
-                settings = {"vdag": vdag.to_dict(), "block": self.block_data, "block_id": self.block_id, "node_label": node_label}
-
-                # load the policy rule
-                local_policy = LocalPolicyEvaluator(
-                    policy_rule_uri, settings=settings, parameters=parameters, custom_class=DefaultPostprocessingPolicy)
-                self.post_policies_cache[vdag_uri] = local_policy
-            else:
-                return self.policies_cache[vdag_uri]
-
-        except Exception as e:
-            raise e
+            self.logger.error(f"Error executing pre-process policy for vDAG {vdag_uri}: {e}")
+            return packet
 
     def execute_post_process_policy_rule_if_present(self, vdag_uri: str, packet):
         try:
@@ -255,8 +249,8 @@ class vDAGProcessor:
             response = policy_rule.execute_policy_rule({
                 "packet": packet
             })
-
             return response['packet']
 
         except Exception as e:
-            raise e
+            self.logger.error(f"Error executing post-process policy for vDAG {vdag_uri}: {e}")
+            return packet

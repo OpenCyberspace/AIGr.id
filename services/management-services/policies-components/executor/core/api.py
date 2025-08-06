@@ -64,6 +64,7 @@ def create_deployment():
         policy_rule_parameters = data.get('policy_rule_parameters', None)
         replicas = data.get('replicas', 1)
         autoscaling = data.get('autoscaling', None)
+        node_selector = data.get('node_selector', {})
 
         PolicyFunctionInfra().create_deployment(
             name=name,
@@ -71,7 +72,7 @@ def create_deployment():
             policy_rule_parameters=policy_rule_parameters,
             replicas=replicas,
             autoscaling=autoscaling,
-            node_id=None
+            node_selector=node_selector
         )
 
         return jsonify({"success": True, "message": f"Deployment '{name}' created successfully."}), 200
@@ -201,6 +202,19 @@ def create_job_endpoint():
         logging.error(f"Error in create_job endpoint: {e}")
         return jsonify({"success": False, "message": str(e)}), 500
 
+@app.route('/get_function_logs/<name>', methods=['GET'])
+def get_function_logs(name):
+    try:
+        tail = request.args.get('tail', default=None, type=int)
+
+        infra = PolicyFunctionInfra()
+        logs = infra.get_logs(name=name, tail=tail)
+
+        return jsonify({"success": True, "data": logs}), 200
+
+    except Exception as e:
+        logging.error(f"Error fetching logs for function '{name}': {e}")
+        return jsonify({"success": False, "message": str(e)}), 500
 
 @app.route('/create_job_with_estimate', methods=['POST'])
 def create_job_with_estimate():

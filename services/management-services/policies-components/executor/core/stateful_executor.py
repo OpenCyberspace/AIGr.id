@@ -1,5 +1,5 @@
 import os
-from .db import PolicyDBClient
+from .client import PolicyDBClient
 from .code_executor import LocalCodeExecutor
 import logging
 import os

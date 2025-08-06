@@ -14,18 +14,10 @@ const loggingPath = (parseInt(process.env.CONTAINER) !== 1) ? "./log_config.json
 const logging = new logger.AiosLogger('index.js', loggingPath)
 
 const connectToDB = (url) => {
-    mongoose.connect(url, {
-        useNewUrlParser : true, 
-        useUnifiedTopology : true,
-        autoIndex: true,
-        reconnectTries: parseInt(process.env.MAX_RETRIES) || 10,
-        reconnectInterval: parseInt(process.env.RECONNECT_INTERVAL) || 500,
-        bufferMaxEntries: parseInt(process.env.BUFFER_MAX_RETRIES) || 0,
-        poolSize: parseInt(process.env.POOL_SIZE) || 10,
-        keepAlive: parseInt(process.env.KEEP_ALIVE_TIME) || 120
-    })
 
-    mongoose.set('useCreateIndex', true);
+    console.log("connecting to URL: ", url)
+
+    mongoose.connect(url, {})
 
     const db = mongoose.connection
     
@@ -36,8 +28,8 @@ const connectToDB = (url) => {
 }
 
 const prepareMongoURL = () => {
-    if (process.env.DB_URL) {
-        return process.env.MONGO_URL
+    if (process.env.MONGO_HOST_URL) {
+        return process.env.MONGO_HOST_URL
     }
 
     // get username and password
@@ -45,7 +37,7 @@ const prepareMongoURL = () => {
     const password = process.env.MONGO_PASSWORD
 
     if ((!username) || (!password)) {
-        return process.env.MONF
+        return process.env.MONGO_HOST_URL
     } else {
         return `mongodb://${username}:${password}@${process.env.MONGO_HOST}/admin?authSource=admin`
     }
@@ -60,8 +52,6 @@ if (parseInt(process.env.CONTAINER) !== 1) {
 
 //connect to mongodb
 connectToDB(prepareMongoURL())
-
-const ql_router = require('./gql_router').ql_router
 
 //REST PORT
 const REST_API_PORT = process.env.REST_API_PORT || 4000
@@ -95,7 +85,7 @@ app.get("/health", (req, resp) => {
 app.use("/api", routes.componentRouter)
 
 //register graphQL router
-app.use("/gql", ql_router)
+// app.use("/gql", ql_router)
 
 //run the server
 app.listen(REST_API_PORT, '0.0.0.0', (err) => {

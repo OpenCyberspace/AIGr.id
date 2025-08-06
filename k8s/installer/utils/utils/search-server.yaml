@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: search-server
-          image: aiosv1/search-server:v1
+          image: 34.58.1.86:31280/mgmt/search-server:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 12000
           env:
@@ -26,13 +27,13 @@ spec:
             - name: VDAG_SERVICE_URL
               value: "http://vdag-db-svc.registries.svc.cluster.local:10501"
             - name: GLOBAL_CLUSTER_METRICS_URL
-              value: ""
+              value: "http://global-cluster-metrics.metrics-system.svc.cluster.local:8888"
             - name: VDAG_METRICS_SERVER_URL
-              value: ""
+              value: "http://global-vdag-metrics.metrics-system.svc.cluster.local:8890"
             - name: POLICY_EXECUTION_MODE
-              value: ""
+              value: "remote"
             - name: GLOBAL_BLOCK_METRICS_URL
-              value: ""
+              value: "http://global-block-metrics.metrics-system.svc.cluster.local:8889"
             - name: CLUSTER_SERVICE_URL
               value: "http://clusters-db-service.registries.svc.cluster.local:3000"
             - name: POLICIES_SERVER_URL
@@ -40,9 +41,9 @@ spec:
             - name: vDAG_TEMPLATE_STORE_API_URL
               value: "http://templates-registry-svc.registries.svc.cluster.local:9000"
             - name: POLICY_SYSTEM_EXECUTOR_ID
-              value: ""
+              value: "executor-001"
             - name: POLICY_EXECUTOR_HOST_URL
-              value: ""
+              value: "http://policies-system.registries.svc.cluster.local:10000"
             - name: CLUSTER_ID
               value: ""
             - name: COMPONENT_REGISTRY_API

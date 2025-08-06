@@ -4,6 +4,7 @@ import json
 
 from .drivers import Router
 
+from .k8s_inface import KubernetesInterface
 from .cluster_actions import ClusterActions
 from .vdag_k8s import vDAGInfraManager
 from .vdag_controller import VDAGControllerClient
@@ -60,6 +61,35 @@ def remove_node(node_id):
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
+@app.route("/cluster-actions/k8s-objects/create", methods=['POST'])
+def k8s_create():
+    try:
+
+        data = request.get_json()
+
+        k8s_iface = KubernetesInterface()
+        k8s_iface.create_resources(data['objects'])
+
+        return jsonify({"success": True, "message": "created objects"}), 200
+        
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+@app.route("/cluster-actions/k8s-objects/remove", methods=['POST'])
+def k8s_remove():
+    try:
+
+        data = request.get_json()
+
+        k8s_iface = KubernetesInterface()
+        k8s_iface.delete_resources(data['objects'])
+
+        return jsonify({"success": True, "message": "created objects"}), 200
+        
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
 
 @app.route("/cluster-actions/get-cluster", methods=["GET"])
 def get_cluster():
@@ -94,8 +124,7 @@ def vdag_controller():
 
     action = data["action"]
     payload = data.get("payload", {})
-
-    controller_id = payload.get('vdag_controller_id')
+    controller_id = payload.get("vdag_controller_id")
     deployment_name = controller_id
     vdag_uri = payload.get("vdag_uri", "")
 
@@ -106,7 +135,6 @@ def vdag_controller():
         manager = vDAGInfraManager(deployment_name, "", "")
         manager.remove_controller()
 
-        # remove from DB:
         vdag_controller_db = VDAGControllerClient()
         vdag_controller_db.delete_vdag_controller(deployment_name)
 
@@ -117,18 +145,15 @@ def vdag_controller():
         controllers = manager.list_deployments()
         return jsonify({"success": True, "data": controllers})
 
+    config = payload.get('config', {})
+    policy_execution_mode = config.get("policy_execution_mode", "local")
+
     if not deployment_name or not vdag_uri or not policy_execution_mode:
         return jsonify({"success": False, "message": "Missing required parameters"}), 400
 
-    config = payload.get('config')
-    policy_execution_mode = config.get("policy_execution_mode", "local")
-
-    manager = vDAGInfraManager(
-        deployment_name, vdag_uri, policy_execution_mode)
+    manager = vDAGInfraManager(deployment_name, vdag_uri, policy_execution_mode)
 
     if action == "create_controller":
-        replicas = config.get("replicas", 1)
-        manager.create_controller(replicas)
 
         cluster_id = os.getenv("CLUSTER_ID")
         payload['cluster_id'] = cluster_id
@@ -137,10 +162,38 @@ def vdag_controller():
         if not ret:
             raise Exception("cluster not found")
 
-        config = cluster_data['config']
-        urlMap = config['urlMap']
+        public_url = cluster_data.get('config', {}).get('publicHostname', '')
+        if public_url == "":
+            raise Exception("failed to determine the public URL for the cluster")
 
-        payload['public_url'] = f"{urlMap['publicGateway']}/{deployment_name}"
+        replicas = config.get("replicas", 1)
+        custom_data = config.get("custom_data", None)
+        autoscaler_config = config.get('autoscaler', None)
+
+        adhoc_inference_server_url = config.get("inference_server_url")
+
+        if not adhoc_inference_server_url:
+            adhoc_inference_server_url = manager.discover_inference_servers()
+            if not adhoc_inference_server_url:
+                return jsonify({"success": False, "message": "No available inference server found"}), 500
+
+        manager.enable_redis = config.get('enable_redis', False)
+        manager.inference_server = adhoc_inference_server_url
+
+        svc_ports = manager.create_controller(replicas, custom_data, autoscaler_config)
+
+        rpc_url = f"{public_url}:{svc_ports.get('grpc')}"
+        rest_url = f"http://{public_url}:{svc_ports.get('http')}"
+        api_url = f"http://{public_url}:{svc_ports.get('api')}"
+
+        payload['public_url'] = rpc_url
+
+        payload['config'].update({
+            "rpc_url": rpc_url,
+            "rest_url": rest_url,
+            "api_url": api_url
+        })
+        # Missing: ClusterClient().update_cluster(cluster_id, cluster_data['config'])
 
         vdag_controller_db = VDAGControllerClient()
         vdag_controller_db.create_vdag_controller(payload)
@@ -152,7 +205,9 @@ def vdag_controller():
         if replicas is None:
             return jsonify({"success": False, "message": "Missing replicas parameter for scale_controller"}), 400
 
+        manager = vDAGInfraManager(deployment_name, vdag_uri, policy_execution_mode)
         manager.set_scale(replicas)
+
         vdag_controller_db = VDAGControllerClient()
         vdag_controller_db.update_vdag_controller(deployment_name, {
             "config.replicas": replicas
@@ -161,6 +216,7 @@ def vdag_controller():
         return jsonify({"success": True, "data": f"Controller scaled to {replicas} replicas successfully"})
 
     return jsonify({"success": False, "message": "Invalid action"}), 400
+
 
 
 def run_app():

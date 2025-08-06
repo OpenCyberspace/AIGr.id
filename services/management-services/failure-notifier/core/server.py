@@ -9,10 +9,6 @@ app = Flask(__name__)
 @app.post("/executeFailurePolicy")
 def execute_failure_policy():
     try:
-        api_url = os.getenv("POLICY_EXECUTOR_API_URL")
-        if not api_url:
-            logging.error("POLICY_EXECUTOR_API_URL environment variable not set.")
-            return jsonify({"success": False, "message": "API URL not configured"}), 500
 
         data = request.get_json()
         failure_policy_id = data.get("failure_policy_id")

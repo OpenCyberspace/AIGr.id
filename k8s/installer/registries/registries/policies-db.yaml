@@ -4,7 +4,7 @@ metadata:
   name: policies-system
   namespace: registries
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: policies-system
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: policies-system
-          image: aiosv1/policies-system:v1
+          image: 34.58.1.86:31280/policies/system:latest
           ports:
             - containerPort: 10000
           env:
@@ -23,6 +23,19 @@ spec:
               value: "http://resource-allocator.services.svc.cluster.local:3000"
             - name: DB_URL
               value: "mongodb://registry-0.registries.svc.cluster.local:27017/policies"
+            - name: POLICY_DB_URL
+              value: "http://34.58.1.86:30102"
+            - name: PUBLIC_DB_URL
+              value: "mongodb://registry-0.registries.svc.cluster.local:27017/policies"
+            - name: EXECUTOR_CONTAINER_IMAGE_NAME
+              value: "34.58.1.86:31280/policies/executor:latest"
+            - name: DEFAULT_POLICY_CONTAINER_IMAGE
+              value: "34.58.1.86:31280/policies/functions-server:latest"
+            - name: DEFAULT_POLICY_JOB_CONTAINER_IMAGE_NAME
+              value: "34.58.1.86:31280/policies/jobs-runner:latest"
+            - name: DB_API_URL
+              value: "http://34.58.1.86:30102"
+    
 ---
 
 apiVersion: v1

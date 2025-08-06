@@ -1,0 +1,27 @@
+# pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: loki-pv
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /home/prasanna/loki-data 
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: loki-pvc
+  namespace: logging
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  volumeName: loki-pv

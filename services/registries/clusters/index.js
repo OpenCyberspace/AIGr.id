@@ -13,20 +13,13 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // Construct MongoDB URI
-const mongoUrl = process.env.MONGO_URL;
+const mongoHostUrl = process.env.MONGO_HOST_URL || "mongodb://localhost:27017/blocks";
+const mongoUrl = mongoHostUrl
 const mongoUser = process.env.MONGO_USER;
 const mongoPass = process.env.MONGO_PASS;
 
 // Options for mongoose connect
 const mongoOptions = {};
-
-// Add user and password to options if provided
-if (mongoUser && mongoPass) {
-    mongoOptions.auth = {
-        user: mongoUser,
-        password: mongoPass,
-    };
-}
 
 // Connect to the MongoDB database
 mongoose.connect(mongoUrl, mongoOptions)

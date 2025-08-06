@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+
+
+message vDAGFileInfo {
+    string metadata = 1; 
+    bytes file_data = 2; 
+}
+
+// Define the message structure
+message vDAGInferencePacket {
+    string session_id = 3;      
+    uint64 seq_no = 4;           
+    bytes frame_ptr = 5;       
+    string data = 6;             
+    double ts = 8;
+    repeated vDAGFileInfo files = 9;
+}
+
+// Define the gRPC service
+service vDAGInferenceService {
+    rpc infer(vDAGInferencePacket) returns (vDAGInferencePacket);
+}

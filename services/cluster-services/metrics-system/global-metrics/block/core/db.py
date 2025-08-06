@@ -79,6 +79,25 @@ class BlockMetrics:
         except errors.PyMongoError as e:
             logger.error(f"Error querying documents: {e}")
             return False, str(e)
+    
+    def aggregate(self, pipeline):
+        try:
+            result = self.collection.aggregate(pipeline)
+            documents = list(result)
+            logger.info(f"Aggregation successful, returned {len(documents)} documents")
+
+            # Optionally clean _id
+            for doc in documents:
+                doc.pop("_id", None)
+
+            return True, documents
+        except errors.PyMongoError as e:
+            logger.error(f"Error running aggregation: {e}")
+            return False, str(e)
+
+
+    
+
 
 
 logger = logging.getLogger(__name__)
@@ -96,14 +115,26 @@ class BlockMetricsListener:
         self.mongo_conn = None
         self.block_metrics = None
 
-    def connect_to_redis(self):
-        try:
-            self.redis_conn = redis.Redis(
-                host=self.redis_host, port=self.redis_port)
-            logger.info("Connected to Redis")
-        except Exception as e:
-            logger.error(f"Error connecting to Redis: {e}")
-            self.redis_conn = None
+    def connect_to_redis(self, max_retries=100, base_delay=3):
+        retry_count = 0
+        while retry_count < max_retries:
+            try:
+                self.redis_conn = redis.Redis(
+                    host=self.redis_host,
+                    port=self.redis_port,
+                )
+    
+                # Check connection
+                self.redis_conn.ping()
+                logger.info("Connected to Redis")
+                return True
+            except Exception as e:
+                logger.warning(f"Redis connection attempt {retry_count+1} failed: {e}")
+                retry_count += 1
+                time.sleep(base_delay * retry_count)
+        logger.error("Max Redis connection attempts exceeded. Giving up.")
+        self.redis_conn = None
+        return False
 
     def connect_to_mongo(self):
         try:
@@ -133,26 +164,25 @@ class BlockMetricsListener:
             logger.error(f"Error upserting document: {e}")
 
     def listen_for_metrics(self):
-        self.connect_to_redis()
         self.connect_to_mongo()
+        self.connect_to_redis()
 
         while True:
-            try:
-                if not self.redis_conn:
-                    self.connect_to_redis()
+            if not self.redis_conn and not self.connect_to_redis():
+                logger.error("Redis connection not available, retrying in 5 seconds")
+                time.sleep(5)
+                continue
 
-                if self.redis_conn:
-                    _, message = self.redis_conn.brpop(self.redis_queue)
-                    if message:
-                        metrics = json.loads(message)
-                        self.upsert_block_metrics(metrics)
-            except redis.exceptions.RedisError as e:
-                logger.error(f"Redis error: {e}")
+            try:
+                _, message = self.redis_conn.brpop(self.redis_queue)
+                if message:
+                    metrics = json.loads(message)
+                    self.upsert_block_metrics(metrics)
+            except Exception as e:
+                logger.warning(f"Lost Redis connection: {e}")
                 self.redis_conn = None
                 time.sleep(5)
-            except Exception as e:
-                logger.error(f"Unexpected error: {e}")
-                time.sleep(5)
+           
 
     def start_listener(self):
         listener_thread = threading.Thread(target=self.listen_for_metrics)

@@ -1,6 +1,7 @@
 import redis
 import json
 import logging
+import time
 from threading import Thread
 from typing import Dict
 
@@ -8,16 +9,34 @@ from .jobs_db import PolicyJobs, PolicyJobsDB
 
 
 class OutputListener:
-    def __init__(self, redis_host="localhost", redis_port=6379, redis_queue="JOB_OUTPUTS"):
-        try:
-            self.redis_client = redis.StrictRedis(
-                host=redis_host, port=redis_port, decode_responses=True)
-            self.redis_queue = redis_queue
-            self.db = PolicyJobsDB()
-            logging.basicConfig(level=logging.INFO)
-        except Exception as e:
-            logging.error(f"Failed to initialize OutputListener: {e}")
-            raise RuntimeError(f"Failed to initialize OutputListener: {e}")
+    def __init__(self, redis_host="localhost", redis_port=6379, redis_queue="JOB_OUTPUTS", max_retries=10):
+        self.redis_host = redis_host
+        self.redis_port = redis_port
+        self.redis_queue = redis_queue
+        self.max_retries = max_retries
+        self.db = PolicyJobsDB()
+
+        logging.basicConfig(level=logging.INFO)
+        self._connect_to_redis()
+
+    def _connect_to_redis(self):
+        retries = 0
+        while retries < self.max_retries:
+            try:
+                self.redis_client = redis.StrictRedis(
+                    host=self.redis_host, port=self.redis_port, decode_responses=True
+                )
+                # Test the connection
+                self.redis_client.ping()
+                logging.info("Connected to Redis.")
+                return
+            except Exception as e:
+                retries += 1
+                wait = min(2 ** retries, 30)
+                logging.warning(f"Redis connection failed (attempt {retries}): {e}. Retrying in {wait} seconds...")
+                time.sleep(wait)
+
+        raise RuntimeError("Failed to connect to Redis after multiple retries.")
 
     def _process_message(self, message: Dict):
         try:
@@ -27,13 +46,8 @@ class OutputListener:
             node_id = message.get("node_id")
             job_policy_rule_uri = message.get("job_policy_rule_uri")
 
-            if not all([job_id, job_output_data, job_status, node_id, job_policy_rule_uri]):
-                logging.warning(f"Invalid message received: {message}")
-                return
-
             existing_job = self.db.read(job_id)
             if existing_job:
-                # Update existing job
                 existing_job.job_output_data = job_output_data
                 existing_job.job_status = job_status
                 existing_job.node_id = node_id
@@ -41,7 +55,6 @@ class OutputListener:
                 updated = self.db.update(job_id, existing_job)
                 logging.info(f"Job '{job_id}' updated: {updated}")
             else:
-                # Create new job entry
                 new_job = PolicyJobs(
                     job_id=job_id,
                     job_output_data=job_output_data,
@@ -56,9 +69,9 @@ class OutputListener:
             logging.error(f"Error processing message: {e}")
 
     def listen(self):
-        try:
-            logging.info("Listening for job outputs...")
-            while True:
+        logging.info("Listening for job outputs...")
+        while True:
+            try:
                 message = self.redis_client.blpop(self.redis_queue)
                 if message:
                     queue_name, job_output = message
@@ -66,10 +79,13 @@ class OutputListener:
                         job_data = json.loads(job_output)
                         self._process_message(job_data)
                     except json.JSONDecodeError as e:
-                        logging.error(
-                            f"Failed to decode message: {job_output}, error: {e}")
-        except Exception as e:
-            logging.error(f"Error in listener: {e}")
+                        logging.error(f"Failed to decode message: {job_output}, error: {e}")
+            except redis.exceptions.ConnectionError as e:
+                logging.error(f"Redis connection error during listen: {e}")
+                self._connect_to_redis()
+            except Exception as e:
+                logging.error(f"Unexpected error in listener: {e}")
+                time.sleep(5)
 
     def start(self):
         listener_thread = Thread(target=self.listen, daemon=True)
@@ -78,12 +94,9 @@ class OutputListener:
 
 
 def start_output_listener(redis_host="localhost", redis_port=6379, redis_queue="JOB_OUTPUTS"):
-
     try:
-        listener = OutputListener(
-            redis_host=redis_host, redis_port=redis_port, redis_queue=redis_queue)
-        listener_thread = Thread(target=listener.listen, daemon=True)
-        listener_thread.start()
+        listener = OutputListener(redis_host=redis_host, redis_port=redis_port, redis_queue=redis_queue)
+        listener.start()
         logging.info("OutputListener started in the background.")
         return listener
     except Exception as e:

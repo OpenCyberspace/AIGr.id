@@ -68,7 +68,7 @@ class PolicyJobInfra:
 
             container = client.V1Container(
                 name=name,
-                image="aiosv1/policy-container-job:latest",
+                image=os.getenv("DEFAULT_POLICY_JOB_CONTAINER_IMAGE_NAME"),
                 env=container_env,
                 ports=[client.V1ContainerPort(container_port=5000)]
             )

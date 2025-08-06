@@ -1,4 +1,5 @@
 from kubernetes import client, config
+import os
 from kubernetes.client.rest import ApiException
 import time
 import json
@@ -128,18 +129,28 @@ class ClusterControllerInfra:
                                 self._create_container(
                                     "redis", "redis:latest", []),
                                 self._create_container(
-                                    "infra", "aiosv1/infra:v1", self._infra_env_vars(),
+                                    "infra", os.getenv("INFRA_CONTAINER_IMAGE_NAME"), self._infra_env_vars(),
                                     ports=[4000]
                                 ),
                                 self._create_container(
-                                    "block-transactions", "aiosv1/block-transactions:v1",
+                                    "block-transactions", os.getenv("BLOCK_TRANSACTIONS_CONTAINER_IMAGE_NAME"),
                                     self._block_transactions_env_vars(),
-                                    ports=[8000]
+                                    ports=[7500]
                                 ),
                                 self._create_container(
-                                    "parameter-updater", "aiosv1/dyn:v1",
+                                    "parameter-updater", os.getenv("PARAMETER_UPDATER_CONTAINER_IMAGE_NAME"),
                                     self._block_transactions_env_vars(),
-                                    ports=[8000]
+                                    ports=[10000]
+                                ),
+                                self._create_container(
+                                    "monitor", os.getenv("CLUSTER_MONITOR_CONTAINER_IMAGE_NAME"),
+                                    self._infra_env_vars(),
+                                    ports=[8500]
+                                ),
+                                self._create_container(
+                                    "health", os.getenv("HEALTH_CHECKER_CONTAINER_IMAGE_NAME"),
+                                    self._infra_env_vars(),
+                                    ports=[5555]
                                 )
                             ]
                         )
@@ -215,11 +226,19 @@ class ClusterControllerInfra:
             annotations = {}
             service_ports.extend([
                 client.V1ServicePort(
-                    port=4000, target_port=4000, node_port=32300),
+                    name="infra", port=4000, target_port=4000, node_port=32300),
                 client.V1ServicePort(
-                    port=8000, target_port=8000, node_port=32302),
+                    name="bt",
+                    port=7500, target_port=7500, node_port=32302),
                 client.V1ServicePort(
-                    port=10000, target_port=10000, node_port=32303)
+                    name="pu",
+                    port=10000, target_port=10000, node_port=32303),
+                client.V1ServicePort(
+                    name="mon",
+                    port=8500, target_port=8500, node_port=32304),
+                client.V1ServicePort(
+                    name="health",
+                    port=5555, target_port=5555, node_port=32305),
             ])
 
         service = client.V1Service(
@@ -238,6 +257,7 @@ class ClusterControllerInfra:
         return client.V1Container(
             name=name,
             image=image,
+            image_pull_policy="Always",
             env=env_vars,
             ports=[client.V1ContainerPort(container_port=p)
                    for p in ports] if ports else None
@@ -245,14 +265,15 @@ class ClusterControllerInfra:
 
     def _infra_env_vars(self):
 
-        policy_executor_id, policy_execution_mode = self.parse_cluster_policy_config()
+        policy_executor_id, policy_execution_mode , _ = self.parse_cluster_policy_config()
         policy_db_service_url = self.globals['policy_db_url']
         blocks_db_url = self.globals['blocks_db_url']
         cluster_db_url = self.globals['cluster_db_url']
-        vdag_controller_image_name = self.globals['vdag_controller_image_name']
-        vdag_adhoc_inference_service_url = self.globals['vdag_adhoc_inference_server_url']
+        vdag_controller_image_name = self.globals.get("vdag_controller_image_name", "")
+        vdag_adhoc_inference_service_url = self.globals.get('vdag_adhoc_inference_server_url', "")
         vdag_db_url = self.globals['vdag_db_url']
         vdag_controller_db_url = self.globals['vdag_controller_db_url']
+        
 
         cluster_actions = self.get_cluster_actions_map()
 

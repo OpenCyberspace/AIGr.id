@@ -125,7 +125,7 @@ def update_block_type(block_id):
         return jsonify(response), 500
 
 @app.route("/block/update/<block_id>", methods=["PUT"])
-def update_block_type(block_id):
+def update_block(block_id):
     try:
         update_data = request.json
         updated_block_data = BlockUpdater().update_block(block_id, update_data)

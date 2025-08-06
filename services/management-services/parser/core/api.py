@@ -91,7 +91,7 @@ def handle_action(action):
 
 
 @app.route('/api/with-spec/<action>', methods=['POST'])
-def handle_action(action):
+def handle_action_with_spec(action):
     try:
 
         spec_client = SpecAPIClient()
@@ -274,4 +274,4 @@ def generic_query():
 
 
 def run_app():
-    app.run(port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)

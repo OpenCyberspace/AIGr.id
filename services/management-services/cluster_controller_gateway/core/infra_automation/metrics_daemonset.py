@@ -1,5 +1,6 @@
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
+import os
 import time
 
 class MetricsCollectorManager:
@@ -38,11 +39,11 @@ class MetricsCollectorManager:
                     template=client.V1PodTemplateSpec(
                         metadata=client.V1ObjectMeta(labels={"app": self.daemonset_name}),
                         spec=client.V1PodSpec(
-                            host_network=True,
                             containers=[
                                 client.V1Container(
                                     name="metrics-collector",
-                                    image="aiosv1/metrics-collector:v1",
+                                    image_pull_policy="Always",
+                                    image=os.getenv("METRICS_DAEMONSET_IMAGE_NAME"),
                                     env=[
                                         client.V1EnvVar(name="CLUSTER_ID", value=self.cluster_id),
                                         client.V1EnvVar(name="COLLECT_INTERVAL", value=metrics_collect_interval),

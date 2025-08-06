@@ -1,6 +1,9 @@
 import requests
 import json
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 class SearchClient:
@@ -9,6 +12,8 @@ class SearchClient:
 
     def filter_data(self, input_data):
         try:
+            logging.info("filter input =  {}".format(input_data))
+
             response = requests.post(
                 f"{self.base_url}/api/filter-data", json=input_data)
             response_data = response.json()
@@ -24,6 +29,7 @@ class SearchClient:
 
     def similarity_search(self, input_data):
         try:
+            logging.info("search input =  {}".format(input_data))
             response = requests.post(
                 f"{self.base_url}/api/similarity-search", json=input_data)
             response_data = response.json()

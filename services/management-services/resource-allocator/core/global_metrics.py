@@ -55,7 +55,7 @@ class GlobalClusterMetricsClient:
 
     def query_clusters(self, query_params=None):
         url = f"{self.base_url}/cluster/query"
-        response = requests.get(url, params=query_params)
+        response = requests.post(url, json=query_params)
         return self._handle_response(response)
 
 

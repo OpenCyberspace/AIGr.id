@@ -38,6 +38,12 @@ def prepare_policy_rule_input_for_alloc(block_data):
             os.getenv("CLUSTER_METRICS_SERVICE_URL", "http://localhost:5000"))
         cluster_metrics = metrics_collector.get_cluster_metrics()
 
+        if 'cluster' not in block_data:
+            ret, resp = ClusterClient().read_cluster(os.getenv("CLUSTER_ID"))
+            if not ret:
+                raise Exception("cluster data not found")
+            block_data['cluster'] = resp
+
         cluster_data = block_data['cluster']
 
         # get all healthy nodes:
@@ -113,8 +119,8 @@ def create_block(message):
 
         block_data['cluster'] = resp
 
-        block_id = "blk-" + generate_unique_alphanumeric_string(8)
-        block_data['id'] = block_id
+        block_id = block_data['id']
+        # block_data['id'] = block_id
 
         db.create_block(block_data)
         time.sleep(5)
@@ -122,15 +128,23 @@ def create_block(message):
         # check if it's a init container:
         if InitContainerManager.check_is_init_container(block_data):
             # create init block:
-            ret, resp = InitContainerManager.create_init_container()
+            ret, resp = InitContainerManager.create_init_container(block_data)
             if not ret:
                 raise Exception(str(resp))
         else:
-            create_executor(block_id, namespace="blocks")
-            create_instance(block_data)
+            node_port = create_executor(block_id, namespace="blocks")
+
+            # update node port to DB:
+            updated_block = BlocksClient().update_block_by_id(block_id, {
+                "$set": {
+                    "blockInitData.external_port": node_port
+                }
+            })
+
+            create_instance(updated_block)
 
             time.sleep(5)
-            register_health_checker(block_id, block_data)
+            register_health_checker(block_id, updated_block)
 
     except Exception as e:
         logger.error(f"Error creating block: {e}")
@@ -165,14 +179,12 @@ def get_node_id_and_gpus(block_data, mode="allocate"):
 
         result = {}
         if mode == "allocate":
-            policy_input = prepare_policy_rule_input_for_alloc(
-                block_data['id'], block_data)
+            policy_input = prepare_policy_rule_input_for_alloc(block_data)
             result = dry_runner.execute_resource_alloc(policy_input)
-        if mode == "scale":
+        elif mode == "scale":
             policy_input = prepare_policy_rule_input_for_scale(
                 block_data['id'], block_data)
             result = dry_runner.execute_for_scale(policy_input)
-
         else:
             raise Exception(f"invalid mode {mode}")
 
@@ -244,8 +256,7 @@ def create_instance(message):
 
         container_image = response['component']['containerRegistryInfo']['containerImage']
 
-        create_single_instance(block_id, instance_id,
-                               container_image, node_id, gpus=gpus)
+        create_single_instance(block_id, instance_id, container_image, node_id, gpus=gpus)
     except Exception as e:
         logger.error(f"Error creating instance for block: {e}")
         raise
@@ -266,24 +277,21 @@ def remove_block(message):
     try:
         block_id = message['block_id']
 
-        remove_executor(block_id)
+        # remove_executor(block_id)
         time.sleep(5)
 
         response = BlocksClient().get_block_by_id(block_id)
         if 'error' in response:
             raise Exception(response['error'])
 
-        # single_instance_handler = SingleInstanceBlockHandler(response)
-        # ret, resp = single_instance_handler.create_remove_container()
-
-        # if not ret:
-         #    raise Exception(resp)
-
-        # if resp == "skip":
-        #    BlocksClient().delete_block_by_id(block_id)
-
-        # remove block:
-        remove_deployments_with_blockID(block_id)
+        if InitContainerManager.check_is_init_container(response):
+            # create init block:
+            ret, resp = InitContainerManager.create_init_container_remove_mode(response)
+            if not ret:
+                raise Exception(str(resp))
+        else:
+            remove_deployments_with_blockID(block_id)
+            BlocksClient().delete_block_by_id(block_id)
 
     except Exception as e:
         logger.error(f"Error removing block {block_id}: {e}")
@@ -294,6 +302,8 @@ def scale_instance(message):
     try:
 
         block_id = message['block_id']
+
+        init_data = message['init_data']
 
         response = BlocksClient().get_block_by_id(block_id)
         if 'error' in response:
@@ -308,12 +318,11 @@ def scale_instance(message):
             gpus = message['scale_data']['gpu_ids']
 
         else:
-            node_id, gpus = get_node_id_and_gpus(message, mode="scale")
+            node_id, gpus = get_node_id_and_gpus(response, mode="scale")
 
         container_image = response['component']['containerRegistryInfo']['containerImage']
 
-        create_single_instance(block_id, instance_id,
-                               container_image, node_id, gpus)
+        create_single_instance(block_id, instance_id, container_image, node_id, gpus=gpus, init_data=init_data)
 
     except Exception as e:
         logger.error(f"Error scaling block: {e}")
@@ -370,7 +379,7 @@ def handle_reassign_instance(message):
             create_single_instance(block_id, instance_id,
                                    container_image, node_id, gpus=gpus)
 
-    except Ellipsis as e:
+    except Exception as e:
         logger.error(f"Error scaling bloc: {e}")
         raise
 
@@ -413,16 +422,22 @@ def handle_scale_event(payload):
         if payload['operation'] == 'scale':
 
             custom_alloc_data = payload.get('allocation_data', [])
+            extra_configs = payload.get('init_data', [])
 
-            for idx in range in range(payload['instances_count']):
+            for idx in range(payload['instances_count']):
 
                 scale_data = None
+                extra_config = {}
                 if len(custom_alloc_data) > 0:
                     scale_data = custom_alloc_data[idx]
+
+                if len(extra_configs) > 0:
+                    extra_config = extra_configs[idx]
 
                 scale_instance({
                     "block_id": payload['block_id'],
                     "scale_data": scale_data,
+                    "init_data": extra_config
                 })
 
         elif payload['operation'] == "downscale":
@@ -493,7 +508,15 @@ def handle_init_container_status(status_data):
 
             # create a new executor and single instance:
             block_data = updated_block
-            create_executor(block_id, namespace="blocks")
+            node_port = create_executor(block_id, namespace="blocks")
+
+            updated_block = BlocksClient().update_block_by_id(block_id, {
+                "$set": {
+                    "blockInitData.external_port": node_port
+                }
+            })
+
+            # min instances:
             create_instance(block_data)
 
             time.sleep(5)
@@ -512,16 +535,49 @@ def handle_init_container_status(status_data):
         return False, str(e)
 
 
+def handle_init_remove_container_status(status_data):
+    try:
+        block_id = status_data.get("block_id")
+        status = status_data.get("stage", "unknown")
+        data = status_data.get("status_data", {})
+
+        # If status is not "success", set stage to "failed"
+        if status_data.get("status") != "success":
+            status = "failed"
+
+        # Call InitContainerManager to update the container status
+        complete, _ = InitContainerManager.act_on_init_container_status(
+            block_id, status, data)
+        if complete:
+
+            # init block removal:
+            remove_deployments_with_blockID(block_id)
+            BlocksClient().delete_block_by_id(block_id)
+
+            # remove init container:
+            InitContainerManager.remove_init_container(block_id)
+
+        else:
+            return "status updated"
+
+    except Exception as e:
+        logger.error(f"Error handling init container status: {str(e)}")
+        return False, str(e)
+
+
 def run_handle_reassign_instance_in_thread(message):
     try:
         message_copy = copy.deepcopy(message)
         thread = threading.Thread(
             target=handle_reassign_instance, args=(message_copy,))
         thread.start()
-        return "started re-assignment"  # Optional: return the thread in case you want to join/wait
+        # Optional: return the thread in case you want to join/wait
+        return "started re-assignment"
     except Exception as e:
-        logger.error(f"Failed to start thread for handle_reassign_instance: {e}")
+        logger.error(
+            f"Failed to start thread for handle_reassign_instance: {e}")
         raise
+
 
 class Router:
     def __init__(self, message):
@@ -547,9 +603,11 @@ class Router:
                 return remove_instance(self.message)
             elif action == "init_create_status_update":
                 return handle_init_container_status(self.message)
+            elif action == "init_remove_status_update":
+                return handle_init_remove_container_status(self.message)
             elif action == "query_init_container_data":
                 return handle_init_container_status_query(self.message)
-            elif action == "reassignment":
+            elif action == "failed_pods":
                 return run_handle_reassign_instance_in_thread(self.message)
             else:
                 raise Exception(f"Unknown action: {action}")

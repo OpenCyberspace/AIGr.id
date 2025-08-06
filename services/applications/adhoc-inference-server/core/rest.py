@@ -210,11 +210,12 @@ def discover_public_url(block_id):
     try:
 
         discovery = DiscoveryCache()
-        public_url = discovery.discover(block_id, instance_id="")
+        public_url, port = discovery.discover(block_id, instance_id="")
 
         return jsonify({
             "success": True,
-            "queue_url": public_url
+            "queue_url": public_url,
+            "port": port
         }), 200
 
     except Exception as e:

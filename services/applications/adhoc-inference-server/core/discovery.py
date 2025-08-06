@@ -2,6 +2,7 @@ import requests
 import os
 import redis
 import json
+import logging
 
 from .search import map_block_to_search
 
@@ -148,12 +149,13 @@ class DiscoveryCache:
     def __init__(self) -> None:
         self.entries = {}
         self.discovery_mode = os.getenv("DISCOVERY_MODE", "gateway")
+        self.cluster_id = os.getenv("CLUSTER_ID", "default-cluster")
 
     def __discover(self, block_id):
         try:
 
             block_db = BlocksDB(
-                os.getenv("BLOCKS_DB_URL", "http://localhost:3001"))
+                os.getenv("BLOCKS_DB_URL", "c"))
             ret, block = block_db.get_block_by_id(block_id)
 
             if not ret:
@@ -167,14 +169,22 @@ class DiscoveryCache:
 
             cluster_data = block['cluster']
 
+            cluster_id = cluster_data['id']
+
             config = cluster_data['config']['urlMap']
             public_gateway_url = config.get('publicGateway', '')
-            if public_gateway_url != '':
+
+            if type(public_gateway_url) == list and len(public_gateway_url) > 0:
+                public_gateway_url = public_gateway_url[0]
+
+            if public_gateway_url == '':
                 raise Exception(
                     f"cluster did not define the public gateway url: {public_gateway_url}"
                 )
 
-            return public_gateway_url
+            logging.info(f"block_id:{block_id} --> cluster:{cluster_id},gateway:{public_gateway_url}")
+
+            return public_gateway_url, cluster_id
 
         except Exception as e:
             raise e
@@ -190,20 +200,25 @@ class DiscoveryCache:
 
             # discover from the cache:
             if key in self.entries:
-                access_address = self.entries[key]
-                return access_address
+                access_address, port = self.entries[key]
+                return access_address, port
 
             if self.discovery_mode == "gateway":
                 # discover internally:
-                public_url = self.__discover(block_id)
-                public_url = f"{public_url}/{block_id}/queue"
-                self.entries[key] = public_url
-                return public_url
+                public_url, cluster_id = self.__discover(block_id)
+
+                if self.cluster_id == cluster_id:
+                    local_url = f"{block_id}-executor-svc.blocks.svc.cluster.local"
+                    self.entries[key] = (local_url, 6379)
+                    return local_url, 6379
+
+                self.entries[key] = (public_url, 0)
+                return public_url, 0
             else:
                 if instance_id == "":
-                    return os.getenv("QUEUE_DEFAULT_URL", "localhost:50051")
+                    return os.getenv("QUEUE_DEFAULT_URL", "localhost:50051"), None
                 else:
-                    return os.getenv("QUEUE_DEFAULT_URL", "localhost:50051")
+                    return os.getenv("QUEUE_DEFAULT_URL", "localhost:50051"), None
 
         except Exception as e:
             raise e
@@ -214,7 +229,7 @@ class GraphCache:
     def __init__(self) -> None:
         self.items = {}
         self.block_db = BlocksDB(
-            os.getenv("BLOCKS_URL", "http://localhost:3001"))
+            os.getenv("BLOCKS_DB_URL", "http://localhost:3001"))
 
     def get(self, block_id: str):
         try:
@@ -230,11 +245,13 @@ class GraphCache:
             config = cluster.get('config', {}).get('urlMap', {})
 
             public_url = config.get('publicGateway', '')
-            if public_url == "":
-                raise Exception(
-                    f"public URL not defined for cluster: {cluster['id']}")
 
-            public_url = public_url + f"/{block_id}/rpc"
+            if len(public_url) == 0:
+                raise Exception("Public gateway URL not defined")
+
+            if type(public_url) == list and len(public_url) > 0:
+                public_url = public_url[0]
+            
 
             local_url = f"{block_id}-executor-svc.blocks.svc.cluster.local"
             item = {
@@ -268,7 +285,8 @@ class GraphCache:
                 blk_output["outputs"].append({
                     "host": child['local'] if is_same_cluster else child['public'],
                     "port": 6379 if is_same_cluster else 0,
-                    "queue_name": f"{blk_id}_inputs"
+                    "queue_name": "EXECUTOR_INPUTS",
+                    "block_id": blk_id
                 })
 
             return blk_output

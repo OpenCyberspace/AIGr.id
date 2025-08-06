@@ -15,7 +15,7 @@ output=$(/usr/bin/nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
                  | map({modelName: .[0], memory: (.[1] | tonumber)})')
 
 # Get the node name from the host's hostname
-node_name=$(cat /host/etc/hostname)
+node_name=$HOSTNAME
 
 echo "Annotating node: $node_name"
 echo "GPU Info: $output"

@@ -38,10 +38,20 @@ def aggregate_metrics(metrics):
                         aggregated_metrics[key], value)
 
         def process_metrics(metrics_dict, parent_key=""):
+            if isinstance(metrics_dict, list):
+                # If it's a list, recursively process each item with an index key or just skip
+                for i, item in enumerate(metrics_dict):
+                    process_metrics(item, parent_key=f"{parent_key}[{i}]")
+                return
+
             for key, value in metrics_dict.items():
                 full_key = f"{parent_key}.{key}" if parent_key else key
                 if isinstance(value, dict):
                     process_metrics(value, parent_key=full_key)
+                elif isinstance(value, list):
+                    # Optionally flatten list of dicts or skip
+                    for i, item in enumerate(value):
+                        process_metrics(item, parent_key=f"{full_key}[{i}]")
                 else:
                     if 'averageUtil' in full_key or 'load1m' in full_key or 'load5m' in full_key or 'load15m' in full_key:
                         add_to_aggregate(full_key, value, operation='average')
@@ -51,6 +61,7 @@ def aggregate_metrics(metrics):
                         add_to_aggregate(full_key, value, operation='min')
                     else:
                         add_to_aggregate(full_key, value, operation='sum')
+
 
         for node_metrics in node_metrics_list:
             process_metrics(node_metrics)
@@ -316,7 +327,6 @@ class MetricsListener:
         try:
             node_id = metrics.get("nodeId")
             if node_id:
-
                 result = self.node_metrics.update_one(
                     {"nodeId": node_id},
                     {"$set": metrics},
@@ -336,7 +346,24 @@ class MetricsListener:
             block_id = metrics.get("blockId")
 
             if instance_id == "executor":
-                self.block_metrics_writer.write(metrics)
+
+                all_block_metrics = list(self.app_metrics.find({"blockId": block_id}))
+
+                processed = []
+
+                for m in all_block_metrics:
+                    if '_id' in m:
+                        del m['_id']
+                        processed.append(m)
+
+                logger.info("writing all block metrics: {}".format(processed))
+
+                metrics_data = {
+                    "blockId": block_id,
+                    "instances": processed
+                }
+
+                self.block_metrics_writer.write(metrics_data)
 
             if instance_id:
                 result = self.app_metrics.update_one(
@@ -444,7 +471,7 @@ class ClusterMetricsWriterThread:
                 data = {
                     "clusterId": self.cluster_id,
                     "cluster": metrics['cluster_metrics'],
-                    "node": metrics['node_metrics']
+                    "nodes": metrics['node_metrics']
                 }
 
                 self.writer.write(data)
@@ -453,3 +480,50 @@ class ClusterMetricsWriterThread:
             except Exception as e:
                 logger.error(f"Error in ClusterMetricsWriterThread loop: {e}")
             time.sleep(self.interval)
+
+class BlockMetricsDeleteThread:
+    def __init__(self, interval=None):
+        try:
+            self.mongo_uri = os.getenv("MONGO_URL", "mongodb://localhost:27017/")
+            self.mongo_db = os.getenv("MONGO_DB", "metrics")
+            self.mongo_conn = MongoClient(self.mongo_uri)
+            db = self.mongo_conn[self.mongo_db]
+            self.node_metrics = db['node_metrics']
+            self.app_metrics = db['app_metrics']
+            self.interval = interval or int(os.getenv("BLOCK_METRICS_DELETE_INTERVAL", 180))
+            self.thread = threading.Thread(target=self._run, daemon=True)
+            self.stop_event = threading.Event()
+            logger.info("BlockMetricsDeleteThread connected to MongoDB")
+        except errors.ConnectionFailure as e:
+            logger.error(f"Error connecting to MongoDB: {e}")
+            self.mongo_conn = None
+        except Exception as e:
+            logger.error(f"Error initializing BlockMetricsDeleteThread: {e}")
+            raise
+
+    def start(self):
+        try:
+            self.stop_event.clear()
+            self.thread.start()
+            logger.info("BlockMetricsDeleteThread started")
+        except Exception as e:
+            logger.error(f"Error starting BlockMetricsDeleteThread: {e}")
+            raise
+
+    def stop(self):
+        try:
+            self.stop_event.set()
+            self.thread.join()
+            logger.info("BlockMetricsDeleteThread stopped")
+        except Exception as e:
+            logger.error(f"Error stopping BlockMetricsDeleteThread: {e}")
+
+    def _run(self):
+        while not self.stop_event.is_set():
+            try:
+                self.app_metrics.delete_many({})
+                logger.info("BlockMetricsDeleteThread delete() called")
+            except Exception as e:
+                logger.error(f"Error in BlockMetricsDeleteThread loop: {e}")
+            time.sleep(1800)
+

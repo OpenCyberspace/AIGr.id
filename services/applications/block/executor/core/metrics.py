@@ -12,6 +12,7 @@ class AIOSMetrics:
     def __init__(self, block_id=None):
         self.block_id = block_id or os.getenv('BLOCK_ID', 'test-block')
         self.instance_id = "executor"
+        self.start_time = time.time()
 
         # Initialize Prometheus metrics
         self.metrics = {}
@@ -81,17 +82,27 @@ class AIOSMetrics:
     def write_to_redis(self):
         def _write_metrics():
             while not self.stop_event.is_set():
+
+                current_time = time.time()
+
+                delta = current_time - self.start_time
+                delta_minutes = delta / 60
+                delta_hours = delta_minutes / 60
+
                 metrics_data = {}
                 for name, metric in self.metrics.items():
                     samples = metric.collect()[0].samples
                     metrics_data[name] = {
                         sample.name: sample.value for sample in samples}
 
-                    metrics_data.update({
-                        "blockId": self.block_id,
-                        "instanceId": self.instance_id,
-                        "type": "app"
-                    })
+                metrics_data.update({
+                    "blockId": self.block_id,
+                    "instanceId": self.instance_id,
+                    "type": "app",
+                    "uptime": delta,
+                    "uptime_minutes": delta_minutes,
+                    "uptime_hours": delta_hours
+                })
 
                 json_data = json.dumps(metrics_data)
                 self.redis_client.lpush(

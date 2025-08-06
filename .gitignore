@@ -8,6 +8,7 @@ package-lock.json
 yarn.lock
 dist/
 build/
+tests/
 
 # Optional: dotenv and local config
 .env

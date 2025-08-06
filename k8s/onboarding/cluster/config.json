@@ -1,18 +1,20 @@
 {
-    "id": "cluster-west-vision-001",
-    "regionId": "us-west-2",
+    "id": "gcp-cluster-2",
+    "regionId": "us-central-1",
     "status": "live",
-    "nodes": {},
+    "nodes": {
+        "nodesData": []
+    },
     "config": {
-        "policyExecutorId": "",
+        "policyExecutorId": "executor-001",
         "policyExecutionMode": "local",
         "customPolicySystem": {},
-        "publicHostname": "cluster-west-vision-001.company.net",
-        "useGateway": true,
-        "actionsPolicyMap": {
-            "onScaleUp": "evaluate-gpu-availability",
-            "onFailure": "notify-admin"
-        }
+        "publicHostname": "35.247.86.57",
+        "useGateway": false,
+        "stabilityChecker": {
+            "policyRuleURI": "stability-check:1.0-stable"
+        },
+        "actionsPolicyMap": {}
     },
     "tags": [
         "gpu",
@@ -22,8 +24,8 @@
         "us-west"
     ],
     "clusterMetadata": {
-        "name": "Sample cluster",
-        "description": "Dedicated to serving large-scale computer vision models in production.",
+        "name": "GCP cluster 2",
+        "description": "GCP cluster 1 with 3 nodes, 1 master and 2 worker",
         "owner": "AI Infrastructure Team",
         "email": "ai-infra@company.net",
         "countries": [
@@ -35,10 +37,10 @@
             "slack": "#ml-infra"
         },
         "additionalInfo": {
-            "kubeadmVersion": "v28.0.1",
-            "kubectlVersion": "v28.0.01",
+            "kubeadmVersion": "v29.0.1",
+            "kubectlVersion": "v29.0.1",
             "joinCommand": ""
         }
     },
-    "reputation": 94
+    "reputation": 10
 }

@@ -34,8 +34,9 @@ class RedisListener:
         logging.info("Listening for jobs on Redis queue: %s", self.queue_name)
         while True:
             try:
-                st = time.time()
                 _, job_data = self.redis_client.brpop(self.queue_name)
+
+                st = time.time()
 
                 packet = AIOSPacket()
                 packet.ParseFromString(job_data)
@@ -48,6 +49,7 @@ class RedisListener:
                     "packet": packet,
                     "raw": job_data
                 })
+    
                 et = time.time()
 
                 self.metrics.set_gauge("latency", et - st)
@@ -58,8 +60,6 @@ class RedisListener:
                 self.redis_cache.remove(self.redis_host, self.redis_port)
                 self.redis_client = self.redis_cache.get(
                     self.redis_host, self.redis_port)
-
-
 
 
 

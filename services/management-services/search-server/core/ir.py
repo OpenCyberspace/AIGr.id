@@ -34,10 +34,7 @@ def search_IR(json_doc):
                 "policyRuleURI": policy_rule_uri,
                 "policyCodePath": ranking_policy_rule.get('policyCodePath'),
                 "settings": settings,
-                "parameters": {
-                    "filterRule": parameters.get('filterRule', {}),
-                    "return": parameters.get('return', 0)
-                }
+                "parameters": parameters
             }
         }
 

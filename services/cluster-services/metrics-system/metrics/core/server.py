@@ -3,7 +3,7 @@ import logging
 import os
 
 from .db import Cluster, MetricsListener, BlockMetrics
-from .db import ClusterMetricsWriterThread
+from .db import ClusterMetricsWriterThread, BlockMetricsDeleteThread
 
 app = Flask(__name__)
 
@@ -182,8 +182,13 @@ def run():
         listener = MetricsListener()
         listener.start_listener()
 
+        logger.info("started listener")
+
         writer = ClusterMetricsWriterThread(30)
         writer.start()
+
+        deleter = BlockMetricsDeleteThread()
+        deleter.start()
 
         logger.info("started metrics listener in background")
 

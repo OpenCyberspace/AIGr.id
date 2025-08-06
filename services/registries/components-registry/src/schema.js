@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const gqlComposer = require('graphql-compose-mongoose')
 
 // Sub-schema for componentId
 const componentIdSchema = new mongoose.Schema({
@@ -52,4 +51,3 @@ const componentSchema = new mongoose.Schema({
 const Component = mongoose.model("Component", componentSchema)
 
 module.exports.Component = Component
-module.exports.ComponentTC = gqlComposer.composeMongoose(Component)

@@ -18,6 +18,8 @@ def api_filter_data():
 
         result = filter_data(input_data)
 
+        logging.info(f"filter search output: {result}")
+
         # Success response
         return jsonify({"success": True, "data": result}), 200
 
@@ -34,6 +36,8 @@ def api_similarity_search():
             raise ValueError("Missing or invalid JSON body")
 
         result = similarity_search(input_data)
+
+        logging.info(f"similarity search output: {result}")
 
         # Success response
         return jsonify({"success": True, "data": result}), 200
@@ -53,6 +57,8 @@ def api_similarity_search_no_ir():
         search = SimilaritySearch(input_data)
         result = search.execute()
 
+        logging.info(f"similarity search output: {result}")
+
         # Success response
         return jsonify({"success": True, "data": result}), 200
 
@@ -70,6 +76,8 @@ def api_filter_search_no_ir():
 
         search = FilterSearch(input_data)
         result = search.execute()
+
+        logging.info(f"filter search output: {result}")
 
         # Success response
         return jsonify({"success": True, "data": result}), 200

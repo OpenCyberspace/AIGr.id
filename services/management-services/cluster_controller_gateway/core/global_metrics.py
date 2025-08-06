@@ -102,5 +102,5 @@ class GlobalBlocksMetricsClient:
 
     def query_blocks(self, query_params=None):
         url = f"{self.base_url}/block/query"
-        response = requests.get(url, params=query_params)
+        response = requests.post(url, json=query_params)
         return self._handle_response(response)

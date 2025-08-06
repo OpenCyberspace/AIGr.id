@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: adhoc-serviers-registry
-          image: aiosv1/adhoc-serviers-registry:v1
+          image: 34.58.1.86:31280/registries/inference-servers
+          imagePullPolicy: Always
           ports:
             - containerPort: 6000
           env:

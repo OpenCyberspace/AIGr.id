@@ -53,10 +53,11 @@ class ClusterStabilityCheckerPolicyExecutor:
                 logger.warning("policyRuleURI is empty")
                 return None
 
+            stability_checker_parameters = stability_checker.get('parameters', {})
+
             logger.info(
                 f"Loading policy rule from URI: {stability_checker_policy_rule_uri}")
-            policy_rule = LocalPolicyEvaluator(
-                stability_checker_policy_rule_uri)
+            policy_rule = LocalPolicyEvaluator(stability_checker_policy_rule_uri, parameters=stability_checker_parameters)
             return policy_rule
 
         except Exception as e:

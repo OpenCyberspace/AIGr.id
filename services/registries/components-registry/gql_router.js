@@ -1,4 +1,4 @@
-const buildSchema = require('graphql').buildASTSchema
+/* const buildSchema = require('graphql').buildASTSchema
 const gql_express = require('express-graphql')
 const express = require('express')
 const path = require('path')
@@ -25,4 +25,4 @@ ql_router.use("/", gql_express.graphqlHTTP({
     rootValue: queryResolvers
 }))
 
-module.exports.ql_router = ql_router
+module.exports.ql_router = ql_router */

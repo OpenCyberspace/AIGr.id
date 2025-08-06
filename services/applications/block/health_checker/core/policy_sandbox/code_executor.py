@@ -151,3 +151,9 @@ class LocalCodeExecutor:
         except Exception as e:
             logging.error(f"Execution failed: {e}")
             raise
+    
+    def mgmt(self, action, mgmt_data):
+        try:
+            return self.function_class.management(action, mgmt_data)
+        except Exception as e:
+            raise e

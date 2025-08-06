@@ -17,14 +17,20 @@ logging.basicConfig(level=logging.INFO)
 class PayloadPusher:
     def __init__(self, hosts):
         self.hosts = hosts
-        self.route = os.getenv("CLUSTER_CONTROLLER_ROUTE", "/executeAction")
+        self.route = "/executeAction"
         self.results = []
         self.lock = threading.Lock()
 
     def _post_payload(self, host, payload):
         url = f"{host}{self.route}"
         try:
+
+            logging.info("executing cluster request for URL: {}".format(url))
+
             response = requests.post(url, json=payload, timeout=None)
+
+            logging.info("cluster controller response for {}: {}".format(url, response.text))
+
             response.raise_for_status()
             with self.lock:
 
@@ -92,7 +98,7 @@ class DryRunExecutor:
             )
         else:
             self.local_evaluator = LocalPolicyEvaluator(
-                block_policy_uri, self.settings, self.parameters, custom_class=ClusterSelectorPolicyRule
+                block_policy_uri, self.settings, self.parameters
             )
 
     def execute(self, parameters, block_data):
@@ -101,9 +107,14 @@ class DryRunExecutor:
             filter_logic = self.parameters.get("filter", {})
             search = SearchServerAPI()
 
+            logging.info("filter inputs: {}".format(filter_logic))
+
             filter_result = search.filter_search(filter_type, filter_logic)
 
-            print(f'filter result {filter_result}')
+            if not filter_result:
+                filter_result = []
+
+            logging.info("filter result: {}".format(filter_logic))
 
             input_data = {"filter_result": filter_result,
                           "block_data": block_data}
@@ -174,6 +185,8 @@ class PostDryRunEvaluator:
     def __init__(self, input_data):
         self.input_data = input_data
         self.cluster_db = ClusterClient()
+
+        logging.info("post dry run input data: {}".format(input_data))
 
         self.ranking_policy_rule = input_data.get("rankingPolicyRule", "")
         self.settings = input_data.get("settings", {})
@@ -270,12 +283,10 @@ class BlockCreator:
             hosts = [get_cluster_controller_connection_from_doc(
                 cluster) for cluster in clusters]
 
-            print(hosts)
 
             push_payload = self._prepare_cluster_input()
             payload_pusher = PayloadPusher(hosts)
             responses = payload_pusher.call(push_payload)
-
             print(responses)
 
             selection_payload = {
@@ -331,7 +342,22 @@ class BlockCreator:
         return cluster_selector.select_clusters(self.input_data)
 
     def _select_post_dry_run(self, input_data):
-        post_evaluator = PostDryRunEvaluator(input_data)
+
+        cluster_allocator_policy = self.input_data.get(
+            "policies", {}).get("clusterAllocator", {})
+        if not cluster_allocator_policy:
+            raise ValueError(
+                "No 'clusterAllocator' policy found in block data")
+
+        ix = {
+            "rankingPolicyRule": cluster_allocator_policy.get("policyRuleURI", ""),
+            "settings": cluster_allocator_policy.get("settings", {}),
+            "parameters": cluster_allocator_policy.get("parameters", {}),
+            "policyCodePath": cluster_allocator_policy.get("codePath", ""),
+            "executionMode": cluster_allocator_policy.get("executionMode", ""),
+        }
+
+        post_evaluator = PostDryRunEvaluator(ix)
         return post_evaluator.select_cluster(input_data)
 
 

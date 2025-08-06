@@ -1,19 +1,21 @@
-FROM node:latest as source_builder
-ENV CONTAINER=1
-COPY . /app
-WORKDIR /app
+# Use the official Node.js image.
+FROM node:latest
+
+# Create and change to the app directory.
+WORKDIR /usr/src/app
+
+# Install app dependencies.
+COPY package*.json ./
 RUN npm install
-RUN rm -f .env
-RUN npm install -g nexe
-RUN nexe -t x64-12.9.1
 
-FROM ubuntu:latest
+# Copy the app files.
+COPY . .
 
-ENV CONTAINER=1
-RUN mkdir /app
-COPY --from=source_builder /app/app /app/
-COPY --from=source_builder /app/data /app/data
-COPY --from=source_builder /app/log_config_container.json /app
-WORKDIR /app
+# Expose the port the app runs on.
+EXPOSE 4000
 
-ENTRYPOINT ["./app"]
+# Define environment variable.
+ENV NODE_ENV production
+
+# Start the app.
+CMD [ "node", "index.js" ]

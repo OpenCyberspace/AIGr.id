@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: templates-registry
-          image: aiosv1/templates-registry:v1
+          imagePullPolicy: Always
+          image: 34.58.1.86:31280/registries/template-store:latest
           ports:
             - containerPort: 9000
           env:

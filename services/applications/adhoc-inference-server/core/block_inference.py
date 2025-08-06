@@ -9,7 +9,7 @@ class BlockInferenceClient:
         self.channel = grpc.insecure_channel(f'{host}:{port}')
         self.stub = service_pb2_grpc.AIServiceStub(self.channel)
 
-    def infer(self, session_id, seq_no, frame_ptr, data, ts, is_frame):
+    def infer(self, session_id, seq_no, frame_ptr, data, ts, is_frame, block_id):
         # Create a request message
         request = service_pb2.AIOSPacket(
             session_id=session_id,
@@ -21,6 +21,7 @@ class BlockInferenceClient:
         )
 
         # Make the call
+        metadata = [('x-service-name', block_id)]
         response = self.stub.infer(request)
 
         return response

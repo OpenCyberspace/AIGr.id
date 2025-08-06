@@ -15,14 +15,16 @@ spec:
     spec:
       containers:
         - name: tasks-db
-          image: aiosv1/tasks-db:v1
+          imagePullPolicy: Always
+          image: 34.58.1.86:31280/registries/task-service:latest
           ports:
             - containerPort: 8000
           env:
             - name: MONGO_URL
               value: "mongodb://registry-0.registries.svc.cluster.local:27017"
         - name: status-writer
-          image: aiosv1/status-writer:v1
+          imagePullPolicy: Always
+          image: 34.58.1.86:31280/registries/task-writer:latest
           env:
             - name: REDIS_HOST
               value: "localhost"

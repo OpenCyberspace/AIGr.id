@@ -1,4 +1,4 @@
-
+import logging
 
 class DefaultClusterResourceAllocatorPolicy:
 
@@ -12,6 +12,8 @@ class DefaultClusterResourceAllocatorPolicy:
 
         try:
 
+            logging.info("input_data: {}".format(input_data))
+
             if input_data['action'] == 'dry_run':
                 return {
                     "selection_score_data": {
@@ -24,13 +26,24 @@ class DefaultClusterResourceAllocatorPolicy:
 
             if input_data['action'] == 'allocation':
                 return {
-                    "node_id": "",
+                    "node_id": "cognitifai-p2",
+                    "gpus": []
+                }
+            
+            if input_data['action'] == 'scale':
+                return {
+                    "node_id": "cognitifai-p2",
+                    "gpus": []
+                }
+
+            if input_data["action"] == "reassignment":
+                return {
+                    "node_id": "cognitifai-p3",
                     "gpus": []
                 }
 
             else:
-                raise Exception(
-                    f"action {input_data['action']} not implemented")
+                raise Exception(f"action {input_data['action']} not implemented")
 
         except Exception as e:
             raise e

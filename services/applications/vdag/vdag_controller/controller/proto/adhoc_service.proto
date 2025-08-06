@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+message AIOSPacket {
+    string session_id = 1;      
+    uint64 seq_no = 2;           // Sequence number
+    string data = 4;              // Data
+    double ts = 5;               // Timestamp  
+    string output_ptr = 6;       // JSON serialized string for output pointer
+    repeated FileInfo files = 7; // Array of file structures
+}
+
+message FileInfo {
+    string metadata = 1; // JSON serialized metadata
+    bytes file_data = 2; // File data
+}
+
+// Define the message structure
+message BlockInferencePacket {
+    string block_id = 1;         // block_id is optional
+    string session_id = 3;       // Session identifier
+    uint64 seq_no = 4;           // Sequence number
+    bytes frame_ptr = 5;         // Frame pointer
+    string data = 6;              // Data
+    string query_parameters = 7;  // Parameters to use for search
+    double ts = 8;               // Timestamp
+    repeated FileInfo files = 9; // Array of file structures
+    string output_ptr = 10; // output ptr
+}
+
+// Define the gRPC service
+service BlockInferenceService {
+    rpc infer(BlockInferencePacket) returns (AIOSPacket);
+}

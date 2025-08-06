@@ -15,16 +15,17 @@ spec:
     spec:
       containers:
         - name: cluster-controller-gateway
-          image: aiosv1/cluster-controller-gateway:v1
+          image:
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           env:
             - name: CLUSTER_SERVICE_URL
               value: "http://clusters-db-service.registries.svc.cluster.local:3000"
             - name: GLOBAL_SERVICES_MAP
-              value: ""
+              value: '{"global_block_metrics_redis_host": "redis://34.58.1.86:30200/0", "global_cluster_metrics_redis_host": "redis://34.58.1.86:30200/0", "global_vdag_metrics_redis_host": "redis://34.58.1.86:30200/0", "policy_db_url": "http://34.58.1.86:30102", "blocks_db_url": "http://34.58.1.86:30100", "cluster_db_url": "http://34.58.1.86:30101", "vdag_db_url": "http://34.58.1.86:30103", "vdag_controller_db_url": "http://34.58.1.86:30103"}'
             - name: CLUSTER_CONTROLLER_GATEWAY_ACTIONS_MAP
-              value: ""
+              value: "{}"
             - name: SEARCH_SERVER_API_URL
               value: "http://search-server.utils.svc.cluster.local:12000"
             - name: CLUSTER_CONTROLLER_ROUTE
@@ -32,7 +33,7 @@ spec:
             - name: CLUSTER_CONTROLLER_GATEWAY_POLICY_MAP
               value: "{}"
             - name: POLICY_EXECUTOR_HOST_URL
-              value: ""
+              value: "http://policies-system.registries.svc.cluster.local:10000"
             - name: RESOURCE_ALLOCATOR_URL
               value: "ws://resource-allocator.utils.svc.cluster.local:8765"
             - name: GLOBAL_BLOCK_METRICS_URL
@@ -44,15 +45,29 @@ spec:
             - name: GLOBAL_TASKS_DB_URL
               value: "http://tasks-db-svc.registries.svc.cluster.local:8000"
             - name: ALLOCATION_EXECUTION_MODE
-              value: "online"
+              value: "offline"
             - name: POLICY_SYSTEM_EXECUTOR_ID
-              value: "executor-0"
+              value: "executor-001"
             - name: GLOBAL_CLUSTER_METRICS_URL
               value: "http://global-cluster-metrics.metrics-system.svc.cluster.local:8888"
             - name: POLICY_EXECUTION_MODE
               value: "local"
             - name: POLICY_RULE_REMOTE_URL
               value: "http://policies-system.registries.svc.cluster.local:10000"
+            - name: METRICS_DAEMONSET_IMAGE_NAME
+              value: 34.58.1.86:31280/cluster/daemon:latest
+            - name: METRICS_WRITER_SERVICE_IMAGE_NAME
+              value: 34.58.1.86:31280/cluster/metrics:latest
+            - name: INFRA_CONTAINER_IMAGE_NAME
+              value: 34.58.1.86:31280/cluster/infra:latest
+            - name: BLOCK_TRANSACTIONS_CONTAINER_IMAGE_NAME
+              value: 34.58.1.86:31280/cluster/block-tx:latest
+            - name: PARAMETER_UPDATER_CONTAINER_IMAGE_NAME
+              value: 34.58.1.86:31280/cluster/parameter-updater:latest
+            - name: CLUSTER_MONITOR_CONTAINER_IMAGE_NAME
+              value: 34.58.1.86:31280/cluster/monitor:latest
+            - name: HEALTH_CHECKER_CONTAINER_IMAGE_NAME
+              value: 34.58.1.86:31280/cluster/stability-checker:latest
 ---
 apiVersion: v1
 kind: Service

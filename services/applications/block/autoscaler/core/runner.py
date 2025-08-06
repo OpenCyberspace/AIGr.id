@@ -1,6 +1,9 @@
 import time
 import os
+import redis
 import logging
+import json
+import threading
 
 from .controller import ClusterControllerExecutor
 from .blocks import BlocksDB, ClustersDB
@@ -36,6 +39,11 @@ class AutoscalerRunner:
 
             self._load_policy_rule()
 
+            self.instance_listener = redis.Redis(
+            host='localhost', port=6379, db=0, password=None)
+
+            threading.Thread(target=self.listen_for_instance_changes, daemon=True).start()
+
         except Exception as e:
             logging.error(f"Error during initialization: {e}")
             raise e
@@ -59,8 +67,7 @@ class AutoscalerRunner:
                 self.auto_scaler = LocalPolicyEvaluator(
                     autoscaler_policy_rule_uri,
                     parameters=autoscaler_parameters,
-                    settings=autoscaler_settings,
-                    custom_class=DefaultAutoscalerPolicy
+                    settings=autoscaler_settings
                 )
 
                 self.sleep_interval = int(
@@ -93,14 +100,28 @@ class AutoscalerRunner:
             logging.info(f"Handling autoscaler result: {resp}")
             if not resp['skip']:
                 operation = resp.get('operation', "scale")
-                remove_instances = resp.get('remove_instances', [])
 
-                payload = {
-                    "operation": operation,
-                    "to_scale_instances": [{"block_id":  self.block_id}],
-                    "to_remove_instances": remove_instances,
-                    "block_id": self.block_id
-                }
+                payload = {}
+                
+                if operation == "upscale":
+                    payload['block_id'] = self.block_id
+                    payload['operation'] = "scale"
+                    payload['instances_count'] = resp.get('instances_count', 0)
+                    if payload['instances_count'] == 0:
+                        return
+
+                    # check if the block has provided optional allocation data:
+                    if 'allocation_data' in resp:
+                        payload['allocation_data'] = resp['allocation_data']
+                    
+                elif operation == "downscale":
+
+                    payload['block_id'] = self.block_id
+                    payload['instances_list'] = resp.get('instances_list', [])
+                    payload['operation'] = "downscale"
+                
+                else:
+                    raise Exception("invalid action {}".format(operation))
 
                 resp = self.controller_client.scale_instance(payload)
                 if not resp['success']:
@@ -114,9 +135,11 @@ class AutoscalerRunner:
         try:
             logging.info("Running autoscaler iteration")
 
+            # get current instances list:
             resp = self.auto_scaler.execute_policy_rule({
                 "block_data": self.block_data,
-                "cluster_data": self.cluster_data
+                "cluster_data": self.cluster_data,
+                "current_instances": self.current_instances
             })
 
             self._handle_autoscaler_result(resp)
@@ -126,6 +149,21 @@ class AutoscalerRunner:
         except Exception as e:
             logging.error(f"Error running autoscaler iteration: {e}")
             return False, str(e)
+
+    def listen_for_instance_changes(self):
+        while True:
+            try:
+                _, message = self.instance_listener.brpop(
+                    "K8s_POD_LIST_AUTOSCALER")
+                c_i = json.loads(message)
+                self.current_instances = c_i["ids"]
+
+                if 'executor' in self.current_instances:
+                    self.current_instances.remove("executor")
+
+                logging.info(f"Updated current_instances: {self.current_instances}")
+            except Exception as e:
+                logging.error(f"auto scaler instance update error: {e}")
 
     def run_autoscaler_iterations(self):
         logging.info("Starting autoscaler iterations")

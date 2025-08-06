@@ -15,12 +15,13 @@ spec:
     spec:
       containers:
         - name: vdag-processor
-          image: aiosv1/vdag-processor:v1
+          image: 34.58.1.86:31280/utils/vdag-processor
+          imagePullPolicy: Always
           ports:
             - containerPort: 10500
           env:
             - name: ADHOC_INFERENCE_API_URL
-              value: "http://adhoc-serviers-registry-svc.registries.svc.cluster.local:6000"
+              value: "http://inference-server-master.inference-server.svc.cluster.local:20000"
             - name: VDAG_DB_SERVICE_URL
               value: "http://vdag-db-svc.registries.svc.cluster.local:10501"
             - name: SEARCH_SERVER_API_URL

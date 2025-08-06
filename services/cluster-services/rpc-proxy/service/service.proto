@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "rpc-proxy/service;service";
+
+message InferenceMessage {
+  bytes rpc_data = 1;
+}
+
+message InferenceRespose {
+  bool message = 1;
+}
+
+service InferenceProxy {
+  rpc infer(InferenceMessage) returns (InferenceRespose);
+}

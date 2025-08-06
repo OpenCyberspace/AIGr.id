@@ -76,11 +76,25 @@ class ClusterMetrics:
         except errors.PyMongoError as e:
             logger.error(f"Error querying documents: {e}")
             return False, str(e)
+    
+    def aggregate(self, pipeline):
+        try:
+            result = self.collection.aggregate(pipeline)
+            documents = list(result)
+            logger.info(f"Aggregation successful, returned {len(documents)} documents")
+
+            for doc in documents:
+                doc.pop("_id", None)
+
+            return True, documents
+        except errors.PyMongoError as e:
+            logger.error(f"Error running aggregation: {e}")
+            return False, str(e)
 
 
 class ClusterMetricsListener:
     def __init__(self):
-        self.redis_host = "localhost"
+        self.redis_host = os.getenv("REDIS_HOST", "localhost")
         self.redis_port = 6379
         self.redis_queue = "CLUSTER_METRICS"
         self.mongo_uri = os.getenv("MONGO_URL")
@@ -89,14 +103,25 @@ class ClusterMetricsListener:
         self.mongo_conn = None
         self.cluster_metrics = None
 
-    def connect_to_redis(self):
-        try:
-            self.redis_conn = redis.Redis(
-                host=self.redis_host, port=self.redis_port)
-            logger.info("Connected to Redis")
-        except Exception as e:
-            logger.error(f"Error connecting to Redis: {e}")
-            self.redis_conn = None
+    def connect_to_redis(self, max_retries=100, base_delay=3):
+        retry_count = 0
+        while retry_count < max_retries:
+            try:
+                self.redis_conn = redis.Redis(
+                    host=self.redis_host,
+                    port=self.redis_port,
+                )
+            
+                self.redis_conn.ping()
+                logger.info("Connected to Redis")
+                return True
+            except Exception as e:
+                logger.warning(f"Redis connection attempt {retry_count + 1} failed: {e}")
+                retry_count += 1
+                time.sleep(base_delay * retry_count)
+        logger.error("Max Redis connection attempts exceeded. Giving up.")
+        self.redis_conn = None
+        return False
 
     def connect_to_mongo(self):
         try:
@@ -118,34 +143,30 @@ class ClusterMetricsListener:
                     upsert=True
                 )
                 if result.upserted_id:
-                    logger.info(
-                        f"Upserted new document with ID: {result.upserted_id}")
+                    logger.info(f"Upserted new document with ID: {result.upserted_id}")
                 else:
-                    logger.info(
-                        f"Updated document with cluster_id: {cluster_id}")
+                    logger.info(f"Updated document with clusterId: {cluster_id}")
         except errors.PyMongoError as e:
             logger.error(f"Error upserting document: {e}")
 
     def listen_for_metrics(self):
-        self.connect_to_redis()
         self.connect_to_mongo()
+        self.connect_to_redis()
 
         while True:
-            try:
-                if not self.redis_conn:
-                    self.connect_to_redis()
-
-                if self.redis_conn:
-                    _, message = self.redis_conn.brpop(self.redis_queue)
-                    if message:
-                        metrics = json.loads(message)
-                        self.upsert_cluster_metrics(metrics)
-            except redis.exceptions.RedisError as e:
-                logger.error(f"Redis error: {e}")
-                self.redis_conn = None
+            if not self.redis_conn and not self.connect_to_redis():
+                logger.error("Redis connection not available, retrying in 5 seconds")
                 time.sleep(5)
+                continue
+
+            try:
+                _, message = self.redis_conn.brpop(self.redis_queue)
+                if message:
+                    metrics = json.loads(message)
+                    self.upsert_cluster_metrics(metrics)
             except Exception as e:
-                logger.error(f"Unexpected error: {e}")
+                logger.warning(f"Lost Redis connection: {e}")
+                self.redis_conn = None
                 time.sleep(5)
 
     def start_listener(self):
@@ -153,3 +174,4 @@ class ClusterMetricsListener:
         listener_thread.daemon = True
         listener_thread.start()
         logger.info("Cluster metrics listener thread started")
+

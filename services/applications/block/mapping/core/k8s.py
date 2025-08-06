@@ -54,7 +54,7 @@ class UpdateNotifier:
                 f"Exception when calling CoreV1Api->list_namespaced_pod: {e}")
         return pods_with_blockid
 
-    def _get_ids_list(pods):
+    def _get_ids_list(self, pods):
         instance_ids = [pod.metadata.labels.get("instanceID") for pod in pods]
         return instance_ids
 

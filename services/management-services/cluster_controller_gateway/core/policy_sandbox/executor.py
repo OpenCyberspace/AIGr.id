@@ -17,10 +17,12 @@ import json
 logging.basicConfig(level=logging.INFO)
 
 
-def execute_policy_request(policy_rule_uri, input_data, parameters=None):
-    executor_id = os.getenv("POLICY_SYSTEM_EXECUTOR_ID", "executor-0")
-    executor_host_url = os.getenv(
-        "POLICY_EXECUTOR_HOST_URL", "http://localhost:10000")
+def execute_policy_request(policy_rule_uri, input_data, executor_id="", parameters=None):
+    if not executor_id:
+        executor_id = os.getenv("POLICY_SYSTEM_EXECUTOR_ID", "executor-0")
+
+
+    executor_host_url = os.getenv("POLICY_EXECUTOR_HOST_URL", "http://localhost:10000")
 
     if not executor_id:
         logging.error(
@@ -61,11 +63,14 @@ def execute_policy_request(policy_rule_uri, input_data, parameters=None):
 
 
 class PolicyFunctionExecutor:
-    def __init__(self, policy_rule_uri: str = None, parameters: dict = None, settings: dict = None, custom_class=None):
+    def __init__(self, policy_rule_uri: str = None, parameters: dict = None, settings: dict = None, custom_class=None, mode="local", executor_id=""):
 
         self.executor = None
         self.custom_function = None
-        self.mode = os.getenv("POLICY_EXECUTION_MODE", "local")
+        self.mode = os.getenv("POLICY_EXECUTION_MODE", None)
+        if not self.mode:
+            self.mode = mode
+        self.executor_id = executor_id
 
         if self.mode != "local":
             self.policy_rule_uri = policy_rule_uri
@@ -84,8 +89,7 @@ class PolicyFunctionExecutor:
                     f"Failed to initialize custom class '{custom_class.__name__}': {e}")
                 raise
         else:
-            self.policy_db = PolicyDBClient(
-                os.getenv("POLICY_DB_URL", "http://localhost:10000"))
+            self.policy_db = PolicyDBClient(os.getenv("POLICY_DB_URL", "http://localhost:10000"))
 
             logging.info(f"Fetching policy data for URI: {policy_rule_uri}")
             policy_data = self.policy_db.read_policy(policy_rule_uri)
@@ -122,8 +126,7 @@ class PolicyFunctionExecutor:
     def execute_policy_rule(self, input_data: dict):
 
         if self.mode != "local":
-            op = execute_policy_request(
-                self.policy_rule_uri, input_data, self.parameters)
+            op = execute_policy_request(self.policy_rule_uri, input_data, self.executor_id, self.parameters)
             return op
 
         if self.custom_function is not None:

@@ -37,7 +37,7 @@ class PolicyFunctionInfra:
             # Deployment spec
             container_env = [
                 client.V1EnvVar(name="POLICY_RULE_URI", value=policy_rule_uri),
-                client.V1EnvVar(name="DB_API_URL", value=os.getenv("DB_API_URL"))
+                client.V1EnvVar(name="POLICY_DB_URL", value=os.getenv("POLICY_DB_URL"))
             ]
 
             if policy_rule_parameters:
@@ -133,7 +133,7 @@ class PolicyFunctionInfra:
         service_spec = client.V1ServiceSpec(
             selector={"app": name},
             ports=[client.V1ServicePort(
-                protocol="TCP", port=5000, target_port=5000)],
+                protocol="TCP", port=5000, target_port=5000, name="rest")],
             type="ClusterIP"
         )
 
@@ -185,3 +185,32 @@ class PolicyFunctionInfra:
 
         except ApiException as e:
             raise Exception(f"Error removing deployment: {e}")
+    
+
+    def get_logs(self, name, tail=None):
+       
+        try:
+            pod_list = self.core_api.list_namespaced_pod(
+                namespace=self.namespace,
+                label_selector=f"app={name}"
+            )
+            if not pod_list.items:
+                return f"No pods found for deployment '{name}'."
+
+            logs_output = []
+            for pod in pod_list.items:
+                pod_name = pod.metadata.name
+                try:
+                    log = self.core_api.read_namespaced_pod_log(
+                        name=pod_name,
+                        namespace=self.namespace,
+                        tail_lines=tail
+                    )
+                    logs_output.append(f"--- Logs from pod {pod_name} ---\n{log}")
+                except ApiException as e:
+                    logs_output.append(f"Error fetching logs from pod {pod_name}: {e}")
+
+            return "\n\n".join(logs_output)
+
+        except Exception as e:
+            raise Exception(f"Error getting logs for deployment '{name}': {e}")

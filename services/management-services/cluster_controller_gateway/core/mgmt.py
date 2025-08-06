@@ -8,17 +8,18 @@ class ServiceMgmtClient:
     def __init__(self, base_url="base_url"):
         self.base_url = base_url
 
-    def execute_mgmt_command(self, block_id, service, mgmt_action, mgmt_data=None):
+    def execute_mgmt_command(self, block_id, service, mgmt_action, mgmt_data=None, instance_id=None):
         url = f"{self.base_url}/mgmt"
         payload = {
             "block_id": block_id,
             "service": service,
             "mgmt_action": mgmt_action,
-            "mgmt_data": mgmt_data or {}
+            "mgmt_data": mgmt_data or {},
+            "instance_id": instance_id
         }
 
         try:
-            response = requests.post(url, json=payload, timeout=5)
+            response = requests.post(url, json=payload, timeout=300)
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
@@ -30,7 +31,7 @@ class BlockManagementService:
     def __init__(self) -> None:
         self.block_client = BlocksClient()
 
-    def execute_mgmt_command(self, block_id: str, service: str, mgmt_command: str, mgmt_data: dict):
+    def execute_mgmt_command(self, block_id: str, service: str, mgmt_command: str, mgmt_data: dict, instance_id):
         try:
 
             block = self.block_client.get_block_by_id(block_id)
@@ -44,7 +45,7 @@ class BlockManagementService:
 
             server = ServiceMgmtClient(base_url=mgmt_connection_url)
             result = server.execute_mgmt_command(
-                block_id, service, mgmt_command, mgmt_data)
+                block_id, service, mgmt_command, mgmt_data, instance_id)
 
             return result
 

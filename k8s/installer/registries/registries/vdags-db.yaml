@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: vdag-db
-          image: aiosv1/vdag-db:v1
+          imagePullPolicy: Always
+          image: 34.58.1.86:31280/registries/vdag-registry:latest
           ports:
             - containerPort: 10501
           env:

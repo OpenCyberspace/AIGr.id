@@ -44,6 +44,12 @@ def map_block_to_search(search_data_str):
         search_client = SearchClient()
         result = search_client.similarity_search(search_data)
 
+        if type(result) == list and len(result) > 0:
+            return result[0]
+
+        if type(result) == list and len(result) == 0:
+            raise Exception("no block selected in the specified filter")
+
         return result
 
     except Exception as e:

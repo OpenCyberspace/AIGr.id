@@ -93,18 +93,16 @@ def block_action_path(ir: dict):
         mode = ir.get("api_mode")
 
         if mode == "select_clusters":
-            thread_pool.submit_task(execute_block_selection, ir)
+            return execute_block_selection(ir)
 
         elif mode == "allocate":
-            thread_pool.submit_task(execute_block_allocation, ir)
+            return execute_block_allocation(ir)
 
         elif mode == "dry_run":
-            thread_pool.submit_task(execute_cluster_dry_run, ir)
+            return execute_cluster_dry_run(ir)
 
         else:
             raise Exception(f"Invalid block api mode: {mode}")
-
-        return thread_pool.wait_for_result(timeout=10)
 
     except Exception as e:
         print(f"Error in block_action_path: {e}")
@@ -164,8 +162,9 @@ def execute_mgmt_command_path(ir: dict):
         mgmt_command = ir['mgmtCommand']
         mgmt_data = ir['mgmtData']
         cluster_id = ir['clusterId']
+        instance_id = ir['instanceId']
 
-        return parameter_updater.update_parameters(cluster_id, block_id, service, mgmt_command, mgmt_data)
+        return parameter_updater.update_parameters(cluster_id, block_id, service, mgmt_command, mgmt_data, instance_id)
 
     except Exception as e:
         raise e

@@ -103,5 +103,14 @@ class GlobalBlocksMetricsClient:
 
     def query_blocks(self, query_params=None):
         url = f"{self.base_url}/block/query"
-        response = requests.get(url, params=query_params)
+        response = requests.post(url, json=query_params)
         return self._handle_response(response)
+    
+    def aggregate_blocks(self, pipeline):
+        url = f"{self.base_url}/block/aggregate"
+        try:
+            response = requests.post(url, json=pipeline)
+            return self._handle_response(response)
+        except Exception as e:
+            logger.error(f"Error calling aggregate_blocks: {e}")
+            raise

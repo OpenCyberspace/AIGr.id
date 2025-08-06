@@ -11,7 +11,7 @@ class PolicyEvaluator:
         self.policy_rule_uri = policy_rule_uri
         self.settings = settings
 
-        self.policy = LocalPolicyEvaluator("", settings=settings, parameters={}, custom_class=DefaultClusterResourceAllocatorPolicy)
+        self.policy = LocalPolicyEvaluator("", settings=settings, parameters={}, custom_class=None)
         self.policy.settings = settings
         self.block_id = block_id
 

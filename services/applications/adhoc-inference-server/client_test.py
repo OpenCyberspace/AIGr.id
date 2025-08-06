@@ -1,12 +1,16 @@
 import grpc
 import json
-from core import service_pb2
-from core import service_pb2_grpc
+import service_pb2
+import service_pb2_grpc
+import time
+
+SERVER_ADDRESS = "localhost:50052"
+
 
 def run():
-    """Test the gRPC server with a sample request."""
     # Connect to the gRPC server
-    channel = grpc.insecure_channel("localhost:50052")
+    channel = grpc.insecure_channel("35.232.150.117:31500")
+    #channel = grpc.insecure_channel(SERVER_ADDRESS)
     stub = service_pb2_grpc.BlockInferenceServiceStub(channel)
 
     # Example file metadata and binary data
@@ -15,42 +19,39 @@ def run():
         file_data=b"Example file content"
     )
 
-    output_ptr = {
+    '''output_ptr = {
             "is_graph": True,
             "graph": {
-                "blk-ksshxpiy": {
-                    "outputs": [
-                        {"host": "localhost", "port": 6379, "queue_name": "blk-bfl3gbd5_inputs"}
-                    ]
-                },
-                "blk-bfl3gbd5": {
-                    "outputs": [
-                        {"host": "localhost", "port": 6379, "queue_name": "blk-tsonq3qr_inputs"}
-                    ]
-                },
-                "blk-tsonq3qr": {
-                    "outputs": []
-                }
+                "hello-multi-001": ["hello-multi-002"],
+                "hello-multi-002": ["hello-multi-003"],
+                "hello-multi-003": []
             }
-        }
+        }'''
 
     # Create the BlockInferencePacket request
     request = service_pb2.BlockInferencePacket(
-        block_id="blk-ksshxpiy",
-        session_id="session_123",
-        seq_no=1,
+        block_id="magistral-small-2506-llama-cpp-block",
+        session_id="chat-002",
+        seq_no=10,
         frame_ptr=b"",  # Empty bytes for now
-        data=json.dumps({"hey": "you"}),
-        query_parameters=json.dumps({"param1": "value1", "param2": "value2"}),
+        data=json.dumps({"type": "chat", "message": "What is your name?"}),
+        query_parameters="",
         ts=1234567890.0,
         files=[file_info],  # Attach the file
-        output_ptr=json.dumps(output_ptr)
+        output_ptr=b''
     )
 
     try:
+
+        st = time.time()
         # Make the gRPC call
         response = stub.infer(request)
+
+        et = time.time()
+
+
         print("\n=== Response Received ===")
+        print(f"Latency: {et - st}s")
         print(f"Session ID: {response.session_id}")
         print(f"Sequence No: {response.seq_no}")
         print(f"Data: {response.data}")

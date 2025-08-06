@@ -4,8 +4,10 @@ import json
 import time
 import threading
 import logging
+import random
 
-
+from .streaming import check_is_streaming_enabled, K8sNodePortManager, get_block_streaming_url
+from .log_stream import K8sPodLogsFetcher
 from .globals import init_internal_queue, init_receiver_queue, get_internal_queue
 from .block import BlocksDB
 from .policy_sandbox import LocalPolicyEvaluator
@@ -93,7 +95,8 @@ class Executor:
             })
 
             self.load_balancer = LocalPolicyEvaluator(
-                lb_policy_rule_uri, lb_parameters, lb_settings, custom_class=LoadBalancerPolicyRule)
+                lb_policy_rule_uri, lb_parameters, lb_settings
+            )
 
         self.current_instances = []
         self.instance_listener = redis.Redis(
@@ -109,8 +112,11 @@ class Executor:
                     "K8s_POD_LIST_EXECUTOR")
                 c_i = json.loads(message)
                 self.current_instances = c_i["ids"]
-                self.logger.info(
-                    f"Updated current_instances: {self.current_instances}")
+
+                if 'executor' in self.current_instances:
+                    self.current_instances.remove('executor')
+
+                self.logger.info(f"Updated current_instances: {self.current_instances}")
             except json.JSONDecodeError as e:
                 self.logger.error(f"Failed to decode JSON message: {e}")
             except redis.RedisError as e:
@@ -159,6 +165,8 @@ class Executor:
                 mgmt_action = payload.get("mgmt_action")
                 mgmt_data = payload.get("mgmt_data", {})
 
+                block_id = os.getenv("BLOCK_ID")
+
                 # handle executor management commands:
                 if mgmt_action == "estimate":
                     estimate_data = self.load_balancer.execute_policy_rule({
@@ -171,7 +179,7 @@ class Executor:
                     check_execute_data = self.load_balancer.execute_policy_rule({
                         "mode": "check_execute",
                         "inputs": mgmt_data
-                    })
+                    } )
 
                     return jsonify({"success": True, "data": check_execute_data}), 200
 
@@ -185,6 +193,69 @@ class Executor:
 
                 if not mgmt_action:
                     return jsonify({"success": False, "message": "mgmt_action is required"}), 400
+                
+                if mgmt_action == "get_logs":
+                    instance = mgmt_data.get('instanceID')
+                    if instance:
+                        lgr = K8sPodLogsFetcher()
+                        logs = lgr.get_logs_by_instance_id(instance, tail_lines=mgmt_data.get('tail', None))
+                        return jsonify({"success": True, "logs": logs})
+                    else:
+                        lgr = K8sPodLogsFetcher()
+                        logs = lgr.get_logs_by_block_id(block_id, tail_lines=mgmt_data.get('tail', None))
+                        return jsonify({"success": True, "logs": logs})
+
+                # handle enable streaming management commands:
+                if mgmt_action == "enable_streaming":
+                    if not check_is_streaming_enabled(block_id):
+                        streaming = K8sNodePortManager()
+                        streaming.enable_streaming_port(block_id)
+                    return jsonify({"success": True, "message": "streaming enabled"})
+
+                if mgmt_action == "disable_streaming":
+                    if check_is_streaming_enabled(block_id):
+                        streaming = K8sNodePortManager()
+                        streaming.disable_streaming_port(block_id)
+                    return jsonify({"success": True, "message": "streaming disabled"})
+
+                if mgmt_action == "is_streaming_enabled":
+                    enabled = check_is_streaming_enabled(block_id)
+                    return jsonify({"success": True, "enabled": enabled})
+                
+                if mgmt_action == "get_streaming_url":
+                    session_id = mgmt_data.get('session_id')
+                    if not session_id:
+                        raise Exception("session_id is not provided")
+
+                    instance_id = None
+                    try:
+
+                        if 'executor' in self.current_instances:
+                            self.current_instances.remove("executor")
+
+                        id_result = self.load_balancer.execute_mgmt_command(action="assign_streaming", mgmt_data={
+                                "session_id": session_id,
+                                "instances": self.current_instances
+                            }
+                        )
+                        instance_id = id_result.get('instance_id')
+
+                        if not instance_id:
+                            raise Exception("instance ID not assigned by policy, using random instance ID")
+
+                    except Exception as e:
+                        logging.info("load balancer failed to assign the instance for streaming session")
+                        instance_id = None
+
+                    if not instance_id:
+                        if 'executor' in self.current_instances:
+                            self.current_instances.remove('executor')
+                        instance_id = random.choice(self.current_instances)
+                        if not instance_id:
+                            raise Exception("no instance ID selected for block")
+
+                    url = get_block_streaming_url(self.block_data, instance_id)
+                    return jsonify({"success": True, "url": url})
 
                 logging.info(
                     f"Received management command: {mgmt_action} with data: {mgmt_data}")

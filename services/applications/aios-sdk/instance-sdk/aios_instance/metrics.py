@@ -1,13 +1,41 @@
-from prometheus_client import Counter, Gauge, Histogram, start_http_server
-from prometheus_client.registry import REGISTRY
 import os
 import threading
-
-import redis
 import time
 import json
+import redis
 
+from prometheus_client import Counter, Gauge, Histogram, start_http_server
+from prometheus_client.registry import REGISTRY
+
+from collections import deque
+from .block_metrics import BlockHardwareMetrics
 from .node import detect_node_id
+
+
+class RollingMetric:
+    def __init__(self, window_seconds=900):
+        self.window = window_seconds
+        self.data = deque()
+
+    def add(self, value):
+        now = time.time()
+        self.data.append((now, value))
+        self.cleanup(now)
+
+    def cleanup(self, now=None):
+        now = now or time.time()
+        while self.data and self.data[0][0] < now - self.window:
+            self.data.popleft()
+
+    def average(self, window):
+        now = time.time()
+        self.cleanup(now)
+        values = [v for t, v in self.data if t >= now - window]
+        return sum(values) / len(values) if values else 0
+
+    def current(self):
+        self.cleanup()
+        return self.data[-1][1] if self.data else 0
 
 
 class AIOSMetrics:
@@ -18,12 +46,20 @@ class AIOSMetrics:
         # Initialize Prometheus metrics
         self.metrics = {}
         self.stop_event = threading.Event()
-        self.redis_client = redis.StrictRedis(host=os.getenv(
-            "METRICS_REDIS_HOST", "localhost"), port=6379, db=0
+        self.redis_client = redis.StrictRedis(
+            host=os.getenv("METRICS_REDIS_HOST", "localhost"),
+            port=6379,
+            db=0
         )
 
+        self.block_hardware_metrics = BlockHardwareMetrics()
         self.node_id = detect_node_id()
 
+        # Rolling metrics
+        self.rolling_metrics = {}      
+        self.custom_metrics = {}        
+
+    # Prometheus Registration
     def register_counter(self, name, documentation, labelnames=None):
         if labelnames is None:
             labelnames = []
@@ -44,6 +80,7 @@ class AIOSMetrics:
         self.metrics[name] = Histogram(
             name, documentation, labelnames=labelnames, buckets=buckets, registry=REGISTRY)
 
+    # Prometheus Usage
     def increment_counter(self, name, labelnames=None):
         metric = self.metrics.get(name)
         if metric and isinstance(metric, Counter):
@@ -59,6 +96,32 @@ class AIOSMetrics:
         if metric and isinstance(metric, Histogram):
             metric.observe(value)
 
+    # Rolling Metrics API
+    def observe_rolling(self, name, value):
+        if name not in self.rolling_metrics:
+            self.rolling_metrics[name] = RollingMetric()
+        self.rolling_metrics[name].add(value)
+
+    def observe_custom_rolling(self, category, name, value):
+        if category not in self.custom_metrics:
+            self.custom_metrics[category] = {}
+        if name not in self.custom_metrics[category]:
+            self.custom_metrics[category][name] = RollingMetric()
+        self.custom_metrics[category][name].add(value)
+
+    def get_extended_metrics(self):
+        summary = {}
+        for name, metric in self.rolling_metrics.items():
+            summary[name] = {
+                "current": metric.current(),
+                "average_1m": metric.average(60),
+                "average_5m": metric.average(300),
+                "average_15m": metric.average(900)
+            }
+
+        return summary
+
+    # Misc
     def _get_labelnames(self, custom_labelnames=None):
         labelnames = {
             'blockID': self.block_id,
@@ -73,38 +136,43 @@ class AIOSMetrics:
         def _run_server():
             port = int(os.getenv("METRICS_PORT", m_port))
             start_http_server(port)
-
-            # Wait until stop_event is set
             self.stop_event.wait()
 
-        # start redis writer:
         self.write_to_redis()
 
-        # Create and start the server thread
         server_thread = threading.Thread(target=_run_server)
         server_thread.start()
 
     def write_to_redis(self):
         def _write_metrics():
             while not self.stop_event.is_set():
-                metrics_data = {}
+                metrics_data = {
+                    "blockId": self.block_id,
+                    "instanceId": self.instance_id,
+                    "nodeId": self.node_id,
+                    "type": "app",
+                    "timestamp": time.time()
+                }
+
                 for name, metric in self.metrics.items():
                     samples = metric.collect()[0].samples
-                    metrics_data[name] = {
-                        sample.name: sample.value for sample in samples}
+                    for sample in samples:
+                        if "_created" in sample.name:
+                            continue
+                        metrics_data[sample.name] = sample.value
 
-                    metrics_data.update({
-                        "blockId": self.block_id,
-                        "instanceId": self.instance_id,
-                        "nodeId": self.node_id,
-                        "type": "app"
-                    })
+                metrics_data['hardware'] = self.block_hardware_metrics.get_metrics()
 
-                json_data = json.dumps(metrics_data)
-                self.redis_client.lpush(
-                    'NODE_METRICS', json_data)
-                time.sleep(5)
+                extended_metrics = self.get_extended_metrics()
+                metrics_data.update(extended_metrics)
 
-        # Create and start the background thread
+                try:
+                    json_data = json.dumps(metrics_data)
+                    self.redis_client.lpush('NODE_METRICS', json_data)
+                except Exception as e:
+                    print(f"Error pushing metrics to Redis: {e}")
+
+                time.sleep(30)
+
         write_thread = threading.Thread(target=_write_metrics)
         write_thread.start()

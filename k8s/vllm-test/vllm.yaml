@@ -1,0 +1,83 @@
+apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: vllm
+spec:
+  replicas: 1
+  leaderWorkerTemplate:
+    size: 2
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+          role: leader
+      spec:
+        nodeSelector:
+          vllm: "true"
+        containers:
+          - name: vllm-leader
+            env:
+              - name: NVIDIA_VISIBLE_DEVICES
+                value: '0'
+              - name: NVIDIA_DRIVER_CAPABILITIES
+                value: 'all'
+            image: docker.io/vllm/vllm-openai:latest
+            command:
+              - sh
+              - -c
+              - >
+                bash /vllm-workspace/examples/online_serving/multi-node-serving.sh leader --ray_cluster_size=$(LWS_GROUP_SIZE); 
+                python3 -m vllm.entrypoints.openai.api_server --port 8080 --model Qwen/Qwen1.5-0.5B-Chat --max-model-len 8192 --tensor-parallel-size 2 --pipeline-parallel-size 1
+            ports:
+              - containerPort: 8080
+            volumeMounts:
+              - mountPath: /dev/shm
+                name: dshm
+        volumes:
+          - name: dshm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 15Gi
+    workerTemplate:
+      metadata:
+        labels:
+          role: worker
+      spec:
+        nodeSelector:
+          vllm: "true"
+        containers:
+          - name: vllm-worker
+            env:
+              - name: NVIDIA_VISIBLE_DEVICES
+                value: '0'
+              - name: NVIDIA_DRIVER_CAPABILITIES
+                value: 'all'
+            image: docker.io/vllm/vllm-openai:latest
+            command:
+              - sh
+              - -c
+              - >
+                bash /vllm-workspace/examples/online_serving/multi-node-serving.sh worker --ray_address=$(LWS_LEADER_ADDRESS)
+            volumeMounts:
+              - mountPath: /dev/shm
+                name: dshm
+        volumes:
+          - name: dshm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 15Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-leader
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    leaderworkerset.sigs.k8s.io/name: vllm
+    role: leader
+  type: NodePort

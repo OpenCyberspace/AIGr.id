@@ -31,6 +31,7 @@ class LocalCodeExecutor:
 
     def download(self):
         # Check if the path is a local file or directory
+        self.temp_dir.mkdir(parents=True, exist_ok=True)
         target_path = Path(self.download_url)
 
         print(target_path, target_path.exists())
@@ -130,6 +131,15 @@ class LocalCodeExecutor:
         except Exception as e:
             logging.error(f"Error during evaluation: {e}")
             raise
+
+    def init(self):
+        try:
+            archive_path = self.download()
+            self.unpack(archive_path)
+            self.install_dependencies()
+            self.initialize_function()
+        except Exception as e:
+            raise e
 
     def execute(self, input_data):
         try:

@@ -1,4 +1,4 @@
-const fs = require('fs')
+/* const fs = require('fs')
 const path = require('path')
 const graphql = require('graphql').graphql
 
@@ -27,4 +27,4 @@ const run = async () => {
 run().catch(e => {
     console.log(e);
     process.exit(0);
-});
+}); */

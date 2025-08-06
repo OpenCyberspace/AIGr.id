@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: spec-registry
-          image: aiosv1/spec-registry:v1
+          imagePullPolicy: Always
+          image: 34.58.1.86:31280/registries/spec-store:latest
           ports:
             - containerPort: 8000
           env:

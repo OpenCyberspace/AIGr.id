@@ -5,8 +5,11 @@ import json
 import requests
 
 from .cluster_metrics import get_cluster_metrics_connection
+from .membership import ClusterMembershipClient
+from .membership_tools import ClusterMembership, ClusterDeMembership
 from .cluster_db import ClusterClient
-from .cluster_controller import get_cluster_controller_connection, get_cluster_controller_connection_url
+from .cluster_controller import get_cluster_controller_connection, get_cluster_controller_connection_url, get_cluster_mgmt_connection_url
+from .mgmt import ServiceMgmtClient
 from .block_scheduling import BlockCreator, BlocksTaskHandler
 from .infra import K8sInfraCreateTaskHandler
 from .mgmt import BlockManagementService
@@ -167,6 +170,9 @@ def scale_instance(cluster_id):
     try:
         executor = get_cluster_controller_connection(cluster_id)
         payload = request.get_json()
+
+        logging.info("payload: {}".format(payload))
+
         result = executor.scale_instance(payload)
         return jsonify({"success": True, "data": result}), 200
     except Exception as e:
@@ -227,9 +233,10 @@ def dry_run():
     try:
         data = request.json
 
-        task_handler = BlocksTaskHandler(data)
-        task_id = task_handler.execute_dry_run()
-        return jsonify({"success": True, "data": {"message": "task scheduled in background", "task_id": task_id}}), 200
+        block_creator = BlockCreator(data, mode="dry_run")
+        result = block_creator.execute()
+
+        return jsonify({"success": True, "data": result}), 200
     except Exception as e:
         logging.error(f"Error in dry_run endpoint: {e}")
         return jsonify({"error": str(e)}), 500
@@ -270,31 +277,111 @@ def remove_cluster_infra_api():
         return jsonify({"success": False, "message": str(e)}), 500
 
 
-@app.route('/nodes/add-node-to-cluster/<cluster_id>', methods=['POST'])
-def add_node_to_cluster(cluster_id):
+# ------------------ Node add/remove methods ----------------------
+@app.route("/pre-checks/add-node/<cluster_id>", methods=["POST"])
+def pre_check_add_node(cluster_id):
     try:
+        node_data = request.json
+        node_data["cluster_id"] = cluster_id
 
-        node_data = request.get_json()
-        cluster_client = ClusterClient()
-        result = cluster_client.add_node_to_cluster(cluster_id, node_data)
+        # Step 1: Run policy check
+        membership = ClusterMembership(cluster_id)
+        allowed, updated_node_data = membership.execute_pre_check(node_data)
+        if not allowed:
+            return jsonify({"success": True, "allowed": False, "message": "Node addition not allowed by policy"})
 
-        return {"success": True, "data": result}
+        # Step 2: Call client
+        result = ClusterMembershipClient(cluster_id).pre_check_add_node(updated_node_data)
+        return jsonify(result)
 
     except Exception as e:
-        return {"success": False, "message": result}, 500
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
-@app.route('/nodes/remove-node-from-cluster/<cluster_id>/<node_id>', methods=['GET'])
-def add_node_to_cluster(cluster_id, node_id):
+@app.route("/join-node/<cluster_id>", methods=["POST"])
+def join_node(cluster_id):
     try:
-        cluster_client = ClusterClient()
-        result = cluster_client.remove_node_from_cluster(cluster_id, node_id)
+        data = request.json
+        node_data = data.get("node_data", {})
+        node_data["cluster_id"] = cluster_id
+        mode = data.get("mode", "local_network")
+        custom_ip = data.get("custom_ip")
 
-        return {"success": True, "data": result}
+        # Step 1: Run policy pre-check
+        membership = ClusterMembership(cluster_id)
+        allowed, updated_node_data = membership.execute_pre_check(node_data)
+        if not allowed:
+            return jsonify({"success": True, "allowed": False, "message": "Join not allowed by policy"})
+
+        # Step 2: Call client to generate and run join
+        result = ClusterMembershipClient(cluster_id).join_node(updated_node_data, mode=mode, custom_ip=custom_ip)
+        return jsonify(result)
 
     except Exception as e:
-        return {"success": False, "message": result}, 500
+        return jsonify({"success": False, "error": str(e)}), 500
 
+
+@app.route("/pre-checks/remove-node/<cluster_id>", methods=["POST"])
+def pre_check_remove_node(cluster_id):
+    try:
+        data = request.json
+        node_id = data["node_id"]
+
+        # Step 1: Run policy check
+        demembership = ClusterDeMembership(cluster_id)
+        allowed, updated_node_id = demembership.execute_pre_check(node_id)
+        if not allowed:
+            return jsonify({"success": True, "allowed": False, "message": "Node removal not allowed by policy"})
+
+        # Step 2: Call client
+        result = ClusterMembershipClient(cluster_id).pre_check_remove_node(updated_node_id)
+        return jsonify(result)
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/remove-node/<cluster_id>", methods=["POST"])
+def remove_node(cluster_id):
+    try:
+        data = request.json
+        node_id = data["node_id"]
+
+        # Step 1: Run policy check
+        demembership = ClusterDeMembership(cluster_id)
+        allowed, updated_node_id = demembership.execute_pre_check(node_id)
+        if not allowed:
+            return jsonify({"success": True, "allowed": False, "message": "Node removal not allowed by policy"})
+
+        # Step 2: Call client
+        result = ClusterMembershipClient(cluster_id).remove_node(updated_node_id)
+        return jsonify(result)
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/pre-checks/add-node/mgmt/<cluster_id>", methods=["POST"])
+def mgmt_add_node(cluster_id):
+    try:
+        data = request.json
+        result = ClusterMembership(cluster_id).execute_mgmt_command(data["mgmt_action"], data["mgmt_data"])
+        return jsonify({"success": True, "result": result})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/pre-checks/remove-node/mgmt/<cluster_id>", methods=["POST"])
+def mgmt_remove_node(cluster_id):
+    try:
+        data = request.json
+        result = ClusterDeMembership(cluster_id).execute_mgmt_command(data["mgmt_action"], data["mgmt_data"])
+        return jsonify({"success": True, "result": result})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+# ------------- vDAG controller APIs --------------------------
 
 @app.route("/vdag-controller/<cluster_id>", methods=["POST"])
 def proxy_vdag_controller(cluster_id):
@@ -353,19 +440,23 @@ def execute_mgmt():
         service = data.get("service")
         mgmt_command = data.get("action")
         mgmt_data = data.get("payload", {})
-
-        if not all([block_id, service, mgmt_command]):
-            return jsonify({"error": "Missing required fields: block_id, service, mgmt_command"}), 400
+        instance_id = data.get("instance_id")
+        
+        if cluster_id != "" and service == "stability_checker":
+            mgmt_connection_url = get_cluster_mgmt_connection_url(cluster_id)
+            server = ServiceMgmtClient(base_url=mgmt_connection_url)
+            result = server.execute_mgmt_command("", service, mgmt_command, mgmt_data)
+            return jsonify(result), 200
 
         # Execute management command
-        result = block_mgmt_service.execute_mgmt_command(block_id, service, mgmt_command, mgmt_data)
+        result = block_mgmt_service.execute_mgmt_command(block_id, service, mgmt_command, mgmt_data, instance_id)
 
         return jsonify(result), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route("/pre-check-policies/update", method=["POST"])
+@app.route("/pre-check-policies/update", methods=["POST"])
 def update_pre_check_policies():
     try:
         pass
@@ -374,4 +465,4 @@ def update_pre_check_policies():
 
 
 def run_app():
-    app.run(port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)

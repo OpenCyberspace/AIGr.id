@@ -85,9 +85,23 @@ def query_clusters():
         logger.error(f"Error in query_clusters: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route('/cluster/aggregate', methods=['POST'])
+def query_clusters():
+    try:
+        cluster_metrics = ClusterMetrics()
+        query_filter = request.json
+        success, result = cluster_metrics.aggregate(query_filter)
+        if success:
+            return jsonify({"success": True, "data": result}), 200
+        else:
+            return jsonify({"success": False, "error": result}), 400
+    except Exception as e:
+        logger.error(f"Error in query_clusters: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
 
 def main():
     cluster_listener = ClusterMetricsListener()
     cluster_listener.start_listener()
 
-    app.run(debug=True, port=8888)
+    app.run(debug=True, host='0.0.0.0', port=8888)

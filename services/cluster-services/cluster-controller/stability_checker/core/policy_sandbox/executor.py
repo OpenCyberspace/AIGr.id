@@ -142,7 +142,7 @@ class PolicyFunctionExecutor:
             try:
                 logging.info(
                     "Executing policy function through LocalCodeExecutor")
-                result = self.executor.execute(input_data)
+                result = self.executor.evaluate(input_data)
                 return result
             except Exception as e:
                 logging.error(
@@ -150,14 +150,3 @@ class PolicyFunctionExecutor:
                 raise
         else:
             raise RuntimeError("No executor or custom class is initialized")
-
-    def execute_mgmt_command(self, action, mgmt_data):
-        try:
-
-            if self.custom_function:
-                return self.custom_function.management(action, mgmt_data)
-            else:
-                return self.executor.mgmt(action, mgmt_data)
-
-        except Exception as e:
-            raise e

@@ -1,3 +1,7 @@
 pynvml
 flask
 requests
+psutil
+pynvml
+redis
+kubernetes

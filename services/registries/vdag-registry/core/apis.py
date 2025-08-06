@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify
 import logging
-from .crud import VDAGDatabase
+from .crud import VDAGDatabase, VDAGControllerDB
 from .schema import vDAGObject, vDAGController
 
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
 
 vdag_db = VDAGDatabase()
-vdag_controller_db = vDAGController()
+vdag_controller_db = VDAGControllerDB()
 
 
 @app.route('/vdag', methods=['POST'])
