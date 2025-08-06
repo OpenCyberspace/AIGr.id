@@ -1,0 +1,5 @@
+FROM aios_instance:v1-gpu
+
+RUN CMAKE_ARGS="-DGGML_CUDA=on" pip install --upgrade --force-reinstall --no-cache-dir llama-cpp-python   --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124
+
+RUN pip3 install -e .

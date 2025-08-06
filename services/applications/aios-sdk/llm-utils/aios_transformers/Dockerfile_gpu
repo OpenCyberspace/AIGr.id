@@ -1,12 +1,8 @@
-FROM aios_instance:v1
+FROM aios_instance:v1-gpu
 
 COPY . /installer
 
 WORKDIR /installer
 
-RUN pip3 install llama-cpp-python
-
 RUN pip3 install -e .
-
-
 

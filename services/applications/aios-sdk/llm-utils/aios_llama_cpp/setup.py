@@ -11,7 +11,6 @@ setup(
     url="",  # optional
     packages=find_packages(),
     install_requires=[
-        "llama-cpp-python",
         "prometheus-client",
         "redis",
     ],
