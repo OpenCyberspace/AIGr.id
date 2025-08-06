@@ -112,7 +112,6 @@ Each **opMode** represents a distinct configuration of how AIs and agents **coll
 | 🏛️ **DAO (Decentralized Autonomous Organization)** | AIGrid instantiated as a **self-governing protocol-native organization**, with AI agents contributing to operations and governance.                  | Like **MakerDAO** or **Aragon**, but with embedded AI agents         |
 | 🚕 **Decentralized Gig Economy** | AIGrid enables decentralized, agent-driven platforms for **on-demand services, task matching, and resource sharing** — offering a trustless, programmable alternative to gig and rental platforms. | Like **Uber**, **Airbnb**, **Fiverr** — but reimagined as open, agent-powered networks for AI |
 
-<<<<<<< HEAD
 | 🧩 **Essentials**          |
 |---------------------------|
 | [AIGrid component semantic diagram](./stack_bd.md) |
@@ -131,9 +130,6 @@ Each **opMode** represents a distinct configuration of how AIs and agents **coll
 | [Network Creation](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/installation/installation.md)  |
 | [Onboarding Cluster](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/onboarding-notes/onboarding-cluster.md)  |
 | [Onboarding Node to a Cluster](https://github.com/OpenCyberspace/OpenOS.AI-Documentation/tree/main/onboarding-notes/onboarding-node.md)  |
-=======
----
->>>>>>> 4c5b8e8684b64879ad782eb54e249e9f0c07c5c6
 
 > 💡 Each opMode can be **modularly activated or combined**, allowing AIGrid to **scale across use cases** — from grassroots digital cooperatives to planetary-scale intelligence networks.
 
