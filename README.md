@@ -163,10 +163,10 @@ Each **opMode** represents a distinct configuration of how AIs and agents **coll
 
 ---
 
-## 📝 Blog Articles:
+## 📝 Articles:
 
-1. 🌐 [AIOS x Anyscale| Ray.io Comparison](./md/anyscale-ray.md)
-2. 🧠 [AIOS x NVIDIA Dynamo inference server Comparison](./md/nvidia-dynamo.md)
+1. 🌐 [AIOS x Anyscale| Ray.io Comparison](https://docs.aigr.id/comparisions/anyscale-ray/)
+2. 🧠 [AIOS x NVIDIA Dynamo inference server Comparison](https://docs.aigr.id/comparisions/dynamo-nvidia/)
 
 ---
 
