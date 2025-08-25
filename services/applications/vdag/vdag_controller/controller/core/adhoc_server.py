@@ -48,7 +48,7 @@ class vDAGInferenceServiceServicer(vdag_service_pb2_grpc.vDAGInferenceServiceSer
 
         # quota checker APIs:
         self.quota_checker_apis = QuotaManagerAPIServer(
-            self.quota_checker.quota_cache, self.quality_checker, self.vdag_api.app
+            self.quota_checker.quota_cache, self.quota_checker, self.vdag_api.app
         )
 
         self.quality_checker_apis = QualityCheckerManagementServer(
@@ -305,6 +305,13 @@ class vDAGInferenceServiceServicer(vdag_service_pb2_grpc.vDAGInferenceServiceSer
                     data=json.dumps({"success": False, "message": "quota management policy did not allow this request"})
                 )
 
+            # check for health:
+            if not self.health_checker.is_healthy_fast_check():
+                return vdag_service_pb2.vDAGInferencePacket(
+                    session_id=request.session_id,
+                    data=json.dumps({"success": False, "message": "one or more blocks of the vDAG is not healthy at the moment"})
+                )
+
 
             logging.info(f"Received inference request for session: {request.session_id}")
             start_time = time.time()  # Start latency measurement
@@ -344,6 +351,12 @@ class vDAGInferenceServiceServicer(vdag_service_pb2_grpc.vDAGInferenceServiceSer
                 return vdag_service_pb2.vDAGInferencePacket(
                     session_id=request.session_id,
                     data=json.dumps({"success": False, "message": "quota management policy did not allow this request"})
+                )
+
+            if not self.health_checker.is_healthy_fast_check():
+                return vdag_service_pb2.vDAGInferencePacket(
+                    session_id=request.session_id,
+                    data=json.dumps({"success": False, "message": "one or more blocks of the vDAG is not healthy at the moment"})
                 )
 
             logging.info(f"Received inference request for session: {request.session_id}")

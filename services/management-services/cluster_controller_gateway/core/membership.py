@@ -39,6 +39,8 @@ class ClusterMembershipClient:
                 payload["custom_ip"] = custom_ip
 
             resp = requests.post(f"{self.base_url}/join-node", json=payload)
+            logger.info("join response message: %s", resp.json())
+
             resp.raise_for_status()
             return resp.json()
         except Exception as e:
@@ -73,4 +75,13 @@ class ClusterMembershipClient:
             return resp.json()
         except Exception as e:
             logger.error(f"remove_node failed: {e}")
+            raise
+    
+    def sync_cluster(self) -> dict:
+        try:
+            resp = requests.post(f"{self.base_url}/sync-cluster")
+            resp.raise_for_status()
+            return resp.json()
+        except Exception as e:
+            logger.error(f"sync node failed: {e}")
             raise

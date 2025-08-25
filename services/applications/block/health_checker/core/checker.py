@@ -43,7 +43,7 @@ def load_block_data():
 
 class BlockHealthChecker:
     def __init__(self) -> None:
-        self.current_instances = []
+        self.current_instances = {}
         time.sleep(15)
 
         ret, block_data = load_block_data()
@@ -64,6 +64,8 @@ class BlockHealthChecker:
             sc_policy_rule_uri = policies["stabilityChecker"].get(
                 "policyRuleURI", {})
 
+            sc_settings.update({"block_data": self.block_data})
+            sc_settings.update({"cluster_data": self.block_data.get('cluster')})
             sc_settings.update({"get_metrics": self.metrics_collector})
 
             self.stability_checker = LocalPolicyEvaluator(
@@ -94,7 +96,7 @@ class BlockHealthChecker:
                 _, message = self.instance_listener.brpop(
                     "K8s_POD_LIST_HEALTH_CHECKER")
                 c_i = json.loads(message)
-                self.current_instances = c_i["ids"]
+                self.current_instances = c_i["data"]
                 logging.info(
                     f"Updated current_instances: {len(self.current_instances)} instances.")
             except json.JSONDecodeError as e:
@@ -111,7 +113,6 @@ class BlockHealthChecker:
             json_response = response.json()
 
             if json_response.get("success"):
-                logging.info(f"Instance {url} is healthy.")
                 return json_response.get("data")
             else:
                 logging.warning(f"Instance {url} failed health check.")
@@ -169,15 +170,37 @@ class BlockHealthChecker:
         while True:
             try:
                 health_check_data = {}
-
                 for instance_id, pod_data in self.current_instances.items():
-                    pod_ip = pod_data.get("status", {}).get("podIP")
+
+                    status = pod_data.get("status", {}) or {}
+
+                    skip_healthcheck = False
+                    for cstatus in status.get("container_statuses", []) or []:
+                        state = cstatus.get("state", {})
+                        if state.get("waiting"):   # means image pull / creating
+                            reason = state["waiting"].get("reason", "Unknown")
+                            print(f"[{instance_id}] skipping health check (container waiting: {reason})")
+                            skip_healthcheck = True
+                            break
+
+                    if skip_healthcheck:
+                        health_check_data[instance_id] = True
+                        continue
+
+                    pod_ip = (
+                        status.get("pod_ip")
+                        or status.get("podIP")
+                        or (status.get("pod_ips") and status["pod_ips"][0].get("ip"))          # some clients
+                        or (status.get("pod_i_ps") and status["pod_i_ps"][0].get("ip"))        # others (as in your dump)
+                    )
 
                     if pod_ip:
                         url = f"http://{pod_ip}:18001"
                         health_status = self.check_health_of_instance(url)
 
-                        if 'success' in health_status and health_status['success']:
+                        logging.info(f"instance_id={instance_id} health_data={health_status}")
+
+                        if 'status' in health_status and health_status['status'] == "healthy":
                             health_check_data[instance_id] = True
                         else:
                             health_check_data[instance_id] = False
@@ -189,8 +212,11 @@ class BlockHealthChecker:
                 # Execute stability policy rule
                 logging.info("Executing stability policy rule.")
                 self.stability_checker.execute_policy_rule(
-                    input_data={"health_check_data": health_check_data,
-                                "instances": self.current_instances}
+                    input_data={
+                        "block_data": self.block_data,
+                        "cluster_data": self.block_data['cluster'],
+                        "health_check_data": health_check_data,
+                        "instances": self.current_instances}
                 )
 
             except Exception as e:

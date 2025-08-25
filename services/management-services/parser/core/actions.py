@@ -15,11 +15,7 @@ def create_cluster(input: dict):
         cluster_ir = IR.cluster_create_IR(input)
 
         # 2. choose path
-        ret, cluster_id = create_cluster_path(cluster_ir)
-
-        if not ret:
-            raise Exception(str(cluster_id))
-
+        cluster_id = create_cluster_path(cluster_ir)
         return cluster_id
 
     except Exception as e:

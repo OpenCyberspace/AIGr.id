@@ -139,13 +139,13 @@ def get_health_by_block(block_id):
                     "instanceId": instance_id,
                     "healthy": False,
                     "reason": f"stale metrics (last updated {int(time_diff)}s ago)",
-                    "lastMetrics": f"{time_diff}s ago"
+                    "lastMetrics": time_diff
                 })
             else:
                 instance_health.append({
                     "instanceId": instance_id,
                     "healthy": True,
-                    "lastMetrics": f"{time_diff}s ago"
+                    "lastMetrics": time_diff
                 })
 
         overall_health = all(inst["healthy"] for inst in instance_health)

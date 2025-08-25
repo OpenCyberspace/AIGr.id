@@ -61,14 +61,16 @@ class ClusterControllerInfra:
                 cluster_metrics_url = f"http://{public_host}:32301"
                 blocks_tx_service_url = f"http://{public_host}:32302"
                 public_controller_gateway = f"http://{public_host}:32000",
-                parameter_update_url = f"http://{public_host}:32303"
+                parameter_update_url = f"http://{public_host}:32303",
+                membership_url = f"http://{public_host}:30501",
 
             return {
                 "controllerService": cluster_svc_url,
                 "metricsService": cluster_metrics_url,
                 "blocksQuery": blocks_tx_service_url,
                 "publicGateway": public_controller_gateway,
-                "parameterUpdater": parameter_update_url
+                "parameterUpdater": parameter_update_url,
+                "membershipServer": membership_url
             }
 
         except Exception as e:

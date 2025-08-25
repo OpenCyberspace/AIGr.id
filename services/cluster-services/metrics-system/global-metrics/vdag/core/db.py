@@ -35,7 +35,7 @@ class VDAGMetrics:
     def update(self, vdag_id, update_fields):
         try:
             result = self.collection.update_one(
-                {"vdagURI": vdag_id},
+                {"vdagControllerId": vdag_id},
                 {"$set": update_fields},
                 upsert=True
             )
@@ -52,7 +52,7 @@ class VDAGMetrics:
 
     def delete(self, vdag_id):
         try:
-            result = self.collection.delete_one({"vdagURI": vdag_id})
+            result = self.collection.delete_one({"vdagControllerId": vdag_id})
             if result.deleted_count > 0:
                 logger.info(f"Document with vdagURI {vdag_id} deleted")
                 return True, result.deleted_count

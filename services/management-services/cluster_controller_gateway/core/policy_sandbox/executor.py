@@ -3,6 +3,7 @@ from .client import PolicyDBClient
 from .code_executor import LocalCodeExecutor
 import logging
 import os
+import copy
 import logging
 import requests
 
@@ -19,7 +20,7 @@ logging.basicConfig(level=logging.INFO)
 
 def execute_policy_request(policy_rule_uri, input_data, executor_id="", parameters=None):
     if not executor_id:
-        executor_id = os.getenv("POLICY_SYSTEM_EXECUTOR_ID", "executor-0")
+        executor_id = os.getenv("POLICY_SYSTEM_EXECUTOR_ID", "executor-001")
 
 
     executor_host_url = os.getenv("POLICY_EXECUTOR_HOST_URL", "http://localhost:10000")
@@ -102,7 +103,9 @@ class PolicyFunctionExecutor:
             if parameters is None:
                 parameters = policy_parameters
             else:
-                parameters.update(policy_parameters)
+                new_params = copy.deepcopy(parameters)
+                policy_parameters.update(new_params)
+                parameters = policy_parameters
 
             if settings is None:
                 settings = policy_data.policy_settings
@@ -142,7 +145,7 @@ class PolicyFunctionExecutor:
             try:
                 logging.info(
                     "Executing policy function through LocalCodeExecutor")
-                result = self.executor.execute(input_data)
+                result = self.executor.evaluate(input_data)
                 return result
             except Exception as e:
                 logging.error(
@@ -150,3 +153,14 @@ class PolicyFunctionExecutor:
                 raise
         else:
             raise RuntimeError("No executor or custom class is initialized")
+    
+    def execute_mgmt_command(self, action, mgmt_data):
+        try:
+
+            if self.custom_function:
+                return self.custom_function.management(action, mgmt_data)
+            else:
+                return self.executor.mgmt(action, mgmt_data)
+
+        except Exception as e:
+            raise e

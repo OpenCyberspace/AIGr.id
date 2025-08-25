@@ -1,6 +1,6 @@
 #!/bin/bash
 
-k create ns kubernetes-dashboard
+k5 create ns kubernetes-dashboard
 
 # k create secret generic kubernetes-dashboard-csrf \
 #   -n kubernetes-dashboard \
@@ -13,12 +13,12 @@ helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dash
   --namespace kubernetes-dashboard \
   --set service.type=NodePort \
   --set service.nodePort=32319 \
-  --kubeconfig=/home/cognitifai/configs/cluster-2-patch.yaml \
+  --kubeconfig=/home/cognitifai/configs/cluster-4-patch.yaml \
     --debug
 
 
-k3 create serviceaccount dashboard-admin-sa -n kubernetes-dashboard
+k5 create serviceaccount dashboard-admin-sa -n kubernetes-dashboard
 
-k3 create clusterrolebinding dashboard-admin-sa \
+k5 create clusterrolebinding dashboard-admin-sa \
   --clusterrole=cluster-admin \
   --serviceaccount=kubernetes-dashboard:dashboard-admin-sa

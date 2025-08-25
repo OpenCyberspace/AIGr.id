@@ -56,7 +56,7 @@ def delete_vdag(vdag_id):
 def get_vdag(vdag_id):
     try:
         vdag_metrics = VDAGMetrics()
-        success, result = vdag_metrics.query({"vdagId": vdag_id})
+        success, result = vdag_metrics.query({"vdagControllerId": vdag_id})
         if success:
             if len(result) == 0:
                 return jsonify({"success": False, "message": "VDAG not found"}), 400

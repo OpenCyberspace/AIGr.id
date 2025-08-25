@@ -18,6 +18,7 @@ def torch_rank_processor(
     nnodes: int,
     pod_name_prefix: str,
     model_name: str,
+    cuda_visible_devices: str,
     image: str,
     nvidia_visible_devices: str,
     nccl_socket_ifname: str,
@@ -34,7 +35,7 @@ def torch_rank_processor(
             {"name": "NCCL_SOCKET_IFNAME", "value": nccl_socket_ifname},
             {"name": "NCCL_IB_DISABLE", "value": "1"},
             {"name": "NCCL_P2P_LEVEL", "value": "SYS"},
-            {"name": "CUDA_VISIBLE_DEVICES", "value": nvidia_visible_devices},
+            {"name": "CUDA_VISIBLE_DEVICES", "value": cuda_visible_devices},
             {"name": "NVIDIA_VISIBLE_DEVICES", "value": nvidia_visible_devices},
             {"name": "NVIDIA_DRIVER_CAPABILITIES", "value": "all"},
             {"name": "MODEL_NAME", "value": model_name},
@@ -172,11 +173,13 @@ def deploy_torch_local_cluster_ranks(
             node_id = rank_conf["node_id"]
             nccl_socket_ifname = rank_conf["nccl_socket_ifname"]
             nvidia_visible_devices = rank_conf["nvidia_visible_devices"]
+            rank_cluster_id = rank_conf['cluster_id']
+            cuda_visible_devices = rank_conf['cuda_visible_devices']
 
             logger.info(f"Deploying rank {rank} on node '{node_id}'")
 
             torch_rank_processor(
-                cluster_id=cluster_id,
+                cluster_id=rank_cluster_id,
                 node_id=node_id,
                 rank=rank,
                 nnodes=nnodes,
@@ -184,6 +187,7 @@ def deploy_torch_local_cluster_ranks(
                 model_name=common_params["model_name"],
                 image=common_params["image"],
                 nvidia_visible_devices=nvidia_visible_devices,
+                cuda_visible_devices=cuda_visible_devices,
                 nccl_socket_ifname=nccl_socket_ifname,
                 master_service_url=f"{deployment_name}-rank-master.{namespace}.svc.cluster.local",
                 master_port=common_params["master_port"],

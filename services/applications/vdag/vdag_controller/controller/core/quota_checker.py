@@ -246,6 +246,9 @@ class QuotaManagerAPIServer:
             mgmt_action = data["mgmt_action"]
             mgmt_data = data["mgmt_data"]
 
+            logger.info(f"[/quota/mgmt] {mgmt_action}: {mgmt_data}")
+
+
             response = self.quota_policy.policy.execute_mgmt_command(mgmt_action, mgmt_data)
             return jsonify({"success": True, "data": response}), 200
             

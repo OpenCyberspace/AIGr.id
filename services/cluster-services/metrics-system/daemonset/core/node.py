@@ -29,12 +29,12 @@ def detect_node_id():
         # Get the specific node label "nodeId"
             node_id = node.metadata.labels.get("nodeID", None)
             if not node_id:
-                node_id = os.getenv("NODE_ID", "default-node")
+                node_id = os.getenv("NODE_ID", "")
             
             return node_id
         
         else:
-            node_id = os.getenv("NODE_ID", "default-node")
+            node_id = os.getenv("NODE_ID", "")
             return node_id
     except Exception as e:
-        raise Exception(f"failed to get node_id: {e}")
+        return ""

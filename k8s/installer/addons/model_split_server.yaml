@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-planner-server
+  namespace: utils
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-planner-server
+  template:
+    metadata:
+      labels:
+        app: llm-planner-server
+    spec:
+      containers:
+        - name: llm-planner-server
+          image: 34.58.1.86:31280/mgmt/model-split-planner:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: POLICY_DB_URL
+              value: "http://policies-system.registries.svc.cluster.local:10000"
+            - name: GLOBAL_CLUSTER_METRICS_URL
+              value: "http://global-cluster-metrics.metrics-system.svc.cluster.local:8888"
+            - name: POLICY_EXECUTION_MODE
+              value: "local"
+            - name: CLUSTER_SERVICE_URL
+              value: "http://clusters-db-service.registries.svc.cluster.local:3000"
+            - name: POLICIES_SERVER_URL
+              value: "http://policies-system.registries.svc.cluster.local:10000"
+            - name: POLICY_SYSTEM_EXECUTOR_ID
+              value: "executor-001"
+            - name: POLICY_EXECUTOR_HOST_URL
+              value: "http://policies-system.registries.svc.cluster.local:10000"
+            - name: SEARCH_SERVER_API_URL
+              value: "http://llm-planner-server.utils.svc.cluster.local:12000"
+            - name: DB_URL
+              value: "mongodb://registry-0.registries.svc.cluster.local:27017/blocks"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: llm-planner-server
+  namespace: utils
+spec:
+  selector:
+    app: llm-planner-server
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30160
+  type: NodePort

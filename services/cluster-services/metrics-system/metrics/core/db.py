@@ -52,6 +52,8 @@ def aggregate_metrics(metrics):
                     # Optionally flatten list of dicts or skip
                     for i, item in enumerate(value):
                         process_metrics(item, parent_key=f"{full_key}[{i}]")
+                elif isinstance(value, str):
+                    continue
                 else:
                     if 'averageUtil' in full_key or 'load1m' in full_key or 'load5m' in full_key or 'load15m' in full_key:
                         add_to_aggregate(full_key, value, operation='average')
@@ -82,7 +84,17 @@ def aggregate_metrics(metrics):
 
     ref = metrics[0]
     for key in ref:
-        values = [m[key] for m in metrics]
+
+        if key == "id":
+            continue
+
+        values = []
+
+        for m in metrics:
+            if key in m:
+                values.append(m[key])
+            else:
+                continue
 
         logger.info(f"sending values for aggregated = {values}")
         all_aggregated[key] = aggregate_inner(values)

@@ -1,4 +1,4 @@
 requests
 flask
-kubernetes
+kubernetes==33.1.0
 websockets

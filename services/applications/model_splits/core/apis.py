@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from .schema import SplitsDeploymentEntry
 from .crud import SplitsDeploymentDB
+from .policy import execute_splitting_policy
 from .crud import create_splits_deployment, remove_splits_deployment
 
 import logging
@@ -23,6 +24,32 @@ def create_splits():
         logger.error(f"Create API failed: {e}")
         return jsonify({"success": False, "message": str(e)}), 500
 
+@app.route("/splits/create-with-policy", methods=['POST'])
+def create_splits_with_policy():
+    try:
+        data = request.get_json()
+
+        data = execute_splitting_policy(data)
+        entry = SplitsDeploymentEntry.from_dict(data)
+
+        create_splits_deployment(entry)
+        return jsonify({"success": True, "message": f"Deployment '{entry.deployment_name}' created.", "deployment_data": data}), 200
+
+    except Exception as e:
+        logger.error(f"Create API failed: {e}")
+        return jsonify({"success": False, "message": str(e)}), 500
+
+@app.route("/splits/create-with-policy/dry-run", methods=['POST'])
+def create_splits_with_policy_dry_run():
+    try:
+        data = request.get_json()
+
+        data = execute_splitting_policy(data)
+        return jsonify({"success": True, "deployment_data": data}), 200
+
+    except Exception as e:
+        logger.error(f"Create API failed: {e}")
+        return jsonify({"success": False, "message": str(e)}), 500
 
 @app.route("/splits/delete/<deployment_name>", methods=["DELETE"])
 def delete_splits(deployment_name):
@@ -67,4 +94,4 @@ def get_splits_by_name(deployment_name):
 
 
 def run_server():
-    app.run(debug=True, port=5000)
+    app.run(port=5000, host='0.0.0.0')

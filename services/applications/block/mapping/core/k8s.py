@@ -59,7 +59,11 @@ class UpdateNotifier:
         return instance_ids
 
     def listen_for_changes(self, namespace, block_id):
+
+        counter = 0
+
         while True:
+            counter += 1
             new_pods = self.scan_pods_in_namespace(namespace, block_id)
             if len(new_pods) != len(self.current_pods):
                 logging.info(f"pushing instance updates: old_length={len(self.current_pods)}, new_length={len(new_pods)}")
@@ -68,8 +72,43 @@ class UpdateNotifier:
                     "K8s_POD_LIST_EXECUTOR", json.dumps(serialized_pods, default=str))
                 self.redis_client.lpush(
                     "K8s_POD_LIST_AUTOSCALER", json.dumps(serialized_pods, default=str))
+                
+                # special data for health checker:
+                instance_maps = {}
+                for pod in new_pods:
+                    instance_id = pod.metadata.labels.get("instanceID")
+                    if instance_id == "executor":
+                        continue
+                    instance_maps[instance_id] = pod.to_dict()
+                
+                data = {"data": instance_maps}
+                self.redis_client.lpush("K8s_POD_LIST_HEALTH_CHECKER", json.dumps(data, default=str))
                 self.current_pods = new_pods
-            time.sleep(10)
+            else:
+                if counter % 5 == 0:
+                    logging.info(f"pushing refreshed updates: old_length={len(self.current_pods)}, new_length={len(new_pods)}")
+                    serialized_pods = { "instances": [pod.to_dict() for pod in new_pods], "ids": self._get_ids_list(new_pods) }
+                    self.redis_client.lpush(
+                        "K8s_POD_LIST_EXECUTOR", json.dumps(serialized_pods, default=str))
+                    self.redis_client.lpush(
+                        "K8s_POD_LIST_AUTOSCALER", json.dumps(serialized_pods, default=str))
+                    
+                    # special data for health checker:
+                    instance_maps = {}
+                    for pod in new_pods:
+                        instance_id = pod.metadata.labels.get("instanceID")
+                        if instance_id == "executor":
+                            continue
+                        instance_maps[instance_id] = pod.to_dict()
+                    
+                    data = {"data": instance_maps}
+                    self.redis_client.lpush("K8s_POD_LIST_HEALTH_CHECKER", json.dumps(data, default=str))
+                    self.current_pods = new_pods
+
+                    # reset the counter
+                    counter = 0
+
+            time.sleep(20)
 
     def start_listening_thread(self, namespace, block_id):
         self.thread = threading.Thread(

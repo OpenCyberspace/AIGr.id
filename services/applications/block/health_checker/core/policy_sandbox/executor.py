@@ -3,6 +3,7 @@ from .client import PolicyDBClient
 from .code_executor import LocalCodeExecutor
 import logging
 import os
+import copy
 import logging
 import requests
 
@@ -19,7 +20,7 @@ logging.basicConfig(level=logging.INFO)
 
 def execute_policy_request(policy_rule_uri, input_data, executor_id="", parameters=None):
     if not executor_id:
-        executor_id = os.getenv("POLICY_SYSTEM_EXECUTOR_ID", "executor-0")
+        executor_id = os.getenv("POLICY_SYSTEM_EXECUTOR_ID", "executor-001")
 
 
     executor_host_url = os.getenv("POLICY_EXECUTOR_HOST_URL", "http://localhost:10000")
@@ -102,7 +103,9 @@ class PolicyFunctionExecutor:
             if parameters is None:
                 parameters = policy_parameters
             else:
-                parameters.update(policy_parameters)
+                new_params = copy.deepcopy(parameters)
+                policy_parameters.update(new_params)
+                parameters = policy_parameters
 
             if settings is None:
                 settings = policy_data.policy_settings

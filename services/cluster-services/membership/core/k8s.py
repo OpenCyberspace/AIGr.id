@@ -169,8 +169,7 @@ def wait_for_node_and_label(node_data: dict, expected_node_name: str, node_id_la
                 }
             }
 
-            logger.info(
-                f"Labeling node '{expected_node_name}' with nodeID={label_value}")
+            logger.info(f"Labeling node '{expected_node_name}' with nodeID={label_value}")
             v1.patch_node(name=expected_node_name, body=body)
 
             logger.info("Node labeling complete. Proceeding with post-label functionality.")

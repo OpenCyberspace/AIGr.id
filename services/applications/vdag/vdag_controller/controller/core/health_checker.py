@@ -75,82 +75,42 @@ class BlocksDB:
     def check_health(self, block_ids):
         health_results = {}
 
+        base_url = os.getenv("GLOBAL_BLOCK_METRICS_URL", "http://34.58.1.86:30201")
+
         for block_id in block_ids:
             try:
-                logger.info(f"Checking health for block {block_id}")
-                block_url = self.get_block_url_with_cache(block_id)
-                health_check_payload = {"mgmt_action": "health_check"}
+                url = f"{base_url}/block/health/{block_id}"
+                response = requests.get(url, timeout=5)
+                response.raise_for_status()
+                data = response.json()
 
-                retries = 0
-                while retries < self.max_retries:
-                    try:
-                        response = requests.post(
-                            block_url, json=health_check_payload, timeout=10
-                        )
-                        if response.status_code == 200:
-                            data = response.json()
-                            if data.get("success"):
-                                health_results[block_id] = {
-                                    "success": True,
-                                    "data": data["data"]
-                                }
-                                logger.info(
-                                    f"Health check successful for block {block_id}")
-                            else:
-                                health_results[block_id] = {
-                                    "success": False,
-                                    "data": {
-                                        "mode": "api_internal_error",
-                                        "message": data.get("message", "Unknown error")
-                                    }
-                                }
-                                logger.warning(
-                                    f"Health check failed for block {block_id}: {data.get('message')}")
-                            break
-                        else:
-                            logger.warning(
-                                f"Retrying health check for block {block_id}, attempt {retries + 1}")
-                            retries += 1
+                if not data.get("success", False):
+                    logger.warning(f"Health check failed for block {block_id}: success=False in response")
+                    health_results[block_id] = {"healthy": False, "error": "Unsuccessful response"}
+                    continue
 
-                    except requests.Timeout:
-                        logger.warning(
-                            f"Timeout while checking health for block {block_id}, retry {retries + 1}")
-                        retries += 1
-                    except requests.RequestException as e:
-                        logger.error(
-                            f"Request error during health check for block {block_id}: {e}")
-                        retries += 1
-
-                if retries == self.max_retries:
-                    health_results[block_id] = {
-                        "success": False,
-                        "data": {
-                            "mode": "network_error",
-                            "message": f"Failed to reach {block_url} after {self.max_retries} retries"
-                        }
-                    }
-                    logger.error(
-                        f"Max retries reached for block {block_id}, marking as failed.")
+                health_results[block_id] = {
+                    "healthy": data.get("healthy", False),
+                    "instances": data.get("instances", [])
+                }
 
             except Exception as e:
-                logger.error(
-                    f"Unexpected error checking health for block {block_id}: {e}")
-                health_results[block_id] = {
-                    "success": False,
-                    "data": {
-                        "mode": "network_error",
-                        "message": str(e)
-                    }
-                }
+                logger.error(f"Error checking health for block {block_id}: {e}")
+                health_results[block_id] = {"healthy": False, "error": str(e)}
 
         return health_results
 
 
 class HealthChecker:
     def __init__(self, vdag_info: vDAGObject, app: Flask, custom_init_data: dict) -> None:
+
+        self.policy = None
+
         self.vdag_info = vdag_info
         controller = self.vdag_info.controller
         self.custom_init_data = custom_init_data
+
+        logger.info(f"[custom init data] {self.custom_init_data}")
 
         self.is_initialized = False
         self.blocks_db = BlocksDB(os.getenv("BLOCKS_DB_URL"), max_retries=3)
@@ -162,11 +122,11 @@ class HealthChecker:
             if 'disable' in health_checker and health_checker['disable']:
                 logging.info("HealthChecker is disabled in configuration.")
                 return
-
-        health_checker = controller.get('healthChecker', None)
-        if not health_checker or not health_checker.get('enabled', False):
-            logger.info("HealthChecker is disabled in configuration.")
-            return
+        else:
+            health_checker = controller.get('healthChecker', None)
+            if not health_checker or not health_checker.get('enabled', False):
+                logger.info("HealthChecker is disabled in configuration.")
+                return
         
 
         self.health_checker_policy_rule = health_checker.get('healthCheckerPolicyRule', None)
@@ -182,7 +142,7 @@ class HealthChecker:
 
         # register health check API:
         app.add_url_rule("/health/check", "health_check", self.run_health_check_adhoc, methods=["GET"])
-        app.add_url_rule("/health/mgmt", "health_mgmt", )
+        app.add_url_rule("/health/mgmt", "health_mgmt", self.mgmt, methods=["POST"])
 
     def load_health_checker_policy_rule(self):
         try:
@@ -201,20 +161,47 @@ class HealthChecker:
             logger.error(f"Error loading health checker policy: {e}")
             raise e
 
-    def check_health(self, block_ids):
+    def check_health(self, block_ids, mode="default"):
         try:
             if not self.policy:
                 raise Exception("Health check policy is not initialized")
 
-            health_results = self.blocks_db.check_health(block_ids)
-            logger.info("Executing policy rule for health check results.")
-            return self.policy.execute_policy_rule({
-                "vdag": self.vdag_info.to_dict(),
-                "health_check_data": health_results
-            })
+            if mode == "default":
+
+                health_results = self.blocks_db.check_health(block_ids)
+                logger.info("Executing policy rule for health check results.")
+                return self.policy.execute_policy_rule({
+                    "mode": mode,
+                    "vdag": self.vdag_info.to_dict(),
+                    "health_check_data": health_results
+                })
+            else:
+                logger.info("Executing policy rule for health check results in fast check mode.")
+                return self.policy.execute_policy_rule({
+                    "mode": mode,
+                    "vdag": self.vdag_info.to_dict(),
+                    "health_check_data": {}
+                })
+
         except Exception as e:
             logger.error(f"Error in check_health: {e}")
             raise e
+
+    def is_healthy_fast_check(self):
+        try:
+
+            if not self.policy:
+                return True
+
+            all_blocks = []
+            for _, block in self.vdag_info.assignment_info.items():
+                all_blocks.append(block)
+
+            response = self.check_health(all_blocks, mode="fast_check")
+            return response['overall_healthy']
+        except Exception as e:
+            logger.error("health checker failed, returning True")
+            return True
 
     def run_health_check_adhoc(self):
         try:

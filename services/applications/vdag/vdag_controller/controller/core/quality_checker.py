@@ -118,6 +118,8 @@ class QualityCheckerManagementServer:
             mgmt_action = data["mgmt_action"]
             mgmt_data = data["mgmt_data"]
 
+            logging.info(f"[/quality/mgmt] {mgmt_action}: {mgmt_data}")
+
             response = self.quality_checker.policy.execute_mgmt_command(mgmt_action, mgmt_data)
             return jsonify({"success": True, "data": response})
             

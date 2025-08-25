@@ -18,8 +18,8 @@ class BaseClusterPolicy:
         self.is_initialized = False
 
         try:
-            actions = json.loads(
-                os.getenv("CLUSTER_CONTROLLER_GATEWAY_ACTIONS_MAP", '{}'))
+            actions = json.loads(os.getenv("CLUSTER_CONTROLLER_GATEWAY_ACTIONS_MAP", '{}'))
+            logger.info(f"policy map: {actions}")
         except json.JSONDecodeError:
             logger.exception(
                 "Failed to parse CLUSTER_CONTROLLER_GATEWAY_ACTIONS_MAP")

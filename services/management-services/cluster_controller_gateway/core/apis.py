@@ -8,7 +8,7 @@ from .cluster_metrics import get_cluster_metrics_connection
 from .membership import ClusterMembershipClient
 from .membership_tools import ClusterMembership, ClusterDeMembership
 from .cluster_db import ClusterClient
-from .cluster_controller import get_cluster_controller_connection, get_cluster_controller_connection_url, get_cluster_mgmt_connection_url
+from .cluster_controller import get_cluster_controller_connection, get_cluster_controller_connection_url, get_cluster_mgmt_connection_url, get_cluster_membership_connection_url
 from .mgmt import ServiceMgmtClient
 from .block_scheduling import BlockCreator, BlocksTaskHandler
 from .infra import K8sInfraCreateTaskHandler
@@ -309,12 +309,12 @@ def join_node(cluster_id):
 
         # Step 1: Run policy pre-check
         membership = ClusterMembership(cluster_id)
-        allowed, updated_node_data = membership.execute_pre_check(node_data)
+        allowed, _ = membership.execute_pre_check(node_data)
         if not allowed:
             return jsonify({"success": True, "allowed": False, "message": "Join not allowed by policy"})
 
         # Step 2: Call client to generate and run join
-        result = ClusterMembershipClient(cluster_id).join_node(updated_node_data, mode=mode, custom_ip=custom_ip)
+        result = ClusterMembershipClient(cluster_id).join_node(node_data, mode=mode, custom_ip=custom_ip)
         return jsonify(result)
 
     except Exception as e:
@@ -379,6 +379,28 @@ def mgmt_remove_node(cluster_id):
         return jsonify({"success": True, "result": result})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/sync-cluster/<cluster_id>", methods=['GET'])
+def sync_cluster(cluster_id: str):
+    try:
+        response = ClusterMembershipClient(cluster_id).sync_cluster()
+        return jsonify(response), 200
+        
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/controller/reassign-instance/<cluster_id>", methods=["POST"])
+def reassign_instance(cluster_id):
+    try:
+        executor = get_cluster_controller_connection(cluster_id)
+        payload = request.get_json()
+
+        logging.info("payload: {}".format(payload))
+
+        result = executor.reassign(payload)
+        return jsonify({"success": True, "data": result}), 200
+    except Exception as e:
+        return jsonify({"success": False, "data": str(e)}), 500
 
 
 # ------------- vDAG controller APIs --------------------------
@@ -459,7 +481,97 @@ def execute_mgmt():
 @app.route("/pre-check-policies/update", methods=["POST"])
 def update_pre_check_policies():
     try:
-        pass
+
+        new_map = request.json
+
+        cluster_id = request.args.get("cluster_id")
+        if cluster_id:
+            ret, cluster = ClusterClient().read_cluster(cluster_id)
+            if not ret:
+                raise Exception(str(cluster))
+            config = cluster['config']
+            policy_maps = config.get('actionsPolicyMap', {})
+            policy_maps.update(new_map)
+
+            # initiate update:
+            ret, resp = ClusterClient().update_cluster(cluster_id, {
+                "config.actionsPolicyMap": policy_maps
+            })
+
+            if not ret:
+                raise Exception(str(resp))
+            
+            return jsonify({"success": True, "map": policy_maps}), 200
+
+
+        # update pre-check policies:
+        actions = json.loads(os.getenv("CLUSTER_CONTROLLER_GATEWAY_ACTIONS_MAP", '{}'))
+        actions.update(new_map)
+
+        updated = json.dumps(new_map)
+        os.environ['CLUSTER_CONTROLLER_GATEWAY_ACTIONS_MAP'] = updated
+
+        return jsonify({"success": True, "map": actions})
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/pre-check-policies/add_node/dry_run/<cluster_id>", methods=["POST"])
+def dry_run_add_node(cluster_id):
+    try:
+
+        request_data = request.json
+
+        # update pre-check policies:
+        cluster_client = ClusterMembership(cluster_id)
+        allowed, resp = cluster_client.execute_pre_check(request_data)
+
+        if allowed:
+            response = ClusterMembershipClient(cluster_id).pre_check_add_node(request_data)
+            if 'allowed' in response and not response['allowed']:
+                return jsonify({"success": True, "allowed": False, "data": resp, "cluster_response": response}), 200
+            else:
+                return jsonify({"success": True, "allowed": True, "data": resp, "cluster_response": response}), 200
+
+        return jsonify({"success": True, "allowed": allowed, "data": resp}), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/pre-check-policies/remove_node/dry_run/<cluster_id>/<node_id>", methods=["POST"])
+def dry_run_remove_node(cluster_id, node_id):
+    try:
+        # update pre-check policies:
+        cluster_client = ClusterDeMembership(cluster_id)
+        allowed, resp = cluster_client.execute_pre_check(node_id)
+
+        if allowed:
+            response = ClusterMembershipClient(cluster_id).pre_check_remove_node(node_id)
+            return jsonify({"success": True, "allowed": allowed, "data": resp, "cluster_response": response}), 200
+
+        return jsonify({"success": True, "allowed": allowed, "data": resp}), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/pre-check-policies/get", methods=["GET"])
+def get_pre_check_policies():
+    try:
+
+        cluster_id = request.args.get("cluster_id")
+        if cluster_id:
+            ret, cluster = ClusterClient().read_cluster(cluster_id)
+            if not ret:
+                raise Exception(str(cluster))
+            config = cluster['config']
+            policy_maps = config.get('actionsPolicyMap', {})
+            return jsonify({"success":  True, "map": policy_maps})
+
+        # update pre-check policies:
+        actions = json.loads(os.getenv("CLUSTER_CONTROLLER_GATEWAY_ACTIONS_MAP", '{}'))
+
+        return jsonify({"success": True, "map": actions})
+        
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

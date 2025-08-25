@@ -8,7 +8,8 @@ from .metrics_db_service import MetricsWriterManager
 from .metrics_db import MetricsDBCreator
 from .metrics_daemonset import MetricsCollectorManager
 from .controller import ClusterControllerInfra
-
+from .objects import NamespaceAdminBinder, BootstrapTokenWriterInstaller
+from .controllers_2 import ControllersStackManager
 # Configure logging
 logger = logging.getLogger(__name__)
 
@@ -73,6 +74,23 @@ class KubernetesInfraCreator:
             self.namespace_manager.ensure_namespace("metrics")
             self.namespace_manager.ensure_namespace("controllers")
 
+            logger.info("Ensuring ClusterRoleBindings for default SAs via NamespaceAdminBinder...")
+            binder = NamespaceAdminBinder(kube_config_data=self.kube_config_data)
+            binder_status = binder.ensure_all()
+            logger.info("NamespaceAdminBinder status: %s", binder_status)
+
+            # === Bootstrap Token Writer (kube-system Role + RoleBinding) ===
+            logger.info("Installing bootstrap-token-writer Role and RoleBinding...")
+            btw_installer = BootstrapTokenWriterInstaller(
+                kube_config_data=self.kube_config_data,
+                role_namespace="kube-system",
+                role_name="bootstrap-token-writer",
+                subject_sa_name="default",
+                subject_sa_namespace="default",
+            )
+            btw_status = btw_installer.ensure_all()
+            logger.info("BootstrapTokenWriterInstaller status: %s", btw_status)
+
             logger.info("Creating MongoDB for metrics...")
             mongodb_creator = MetricsDBCreator(kube_config_data=self.kube_config_data)
             mongodb_creator.create()
@@ -115,7 +133,36 @@ class KubernetesInfraCreator:
 
             logger.info("Preparing global service URL map...")
             global_map = cluster_controller_manager.prepare_url_map()
+
+
+            logger.info("Deploying controllers stack (membership-server, grpc-proxy)...")
+            controllers_mgr = ControllersStackManager(
+                kube_config_data=self.kube_config_data,
+                namespace="controllers",
+                membership_image=os.getenv(
+                    "MEMBERSHIP_SERVER_IMAGE",
+                    "34.58.1.86:31280/cluster/membership:latest",
+                ),
+                grpc_proxy_image=os.getenv(
+                    "GRPC_PROXY_IMAGE",
+                    "34.58.1.86:31280/cluster/rpc:latest",
+                ),
+                membership_node_port=int(os.getenv("MEMBERSHIP_NODE_PORT", "30501")),
+                grpc_proxy_node_port=int(os.getenv("GRPC_PROXY_NODE_PORT", "32000")),
+                cluster_id=self.cluster_id,
+                cluster_metrics_service_url=os.getenv(
+                    "CLUSTER_METRICS_SERVICE_URL",
+                    "http://metrics-writer-svc.metrics.svc.cluster.local:5000",
+                ),
+                policy_db_url=os.getenv("POLICY_DB_URL", "http://34.58.1.86:30102"),
+                policy_execution_mode=os.getenv("POLICY_EXECUTION_MODE", "local")
+            )
+            controllers_status = controllers_mgr.create()
+            logger.info("Controllers stack deployed: %s", controllers_status)
+
+
             logger.info("Infrastructure created successfully.")
+
             return global_map
 
         except Exception as e:
@@ -138,6 +185,16 @@ class KubernetesInfraRemover:
     def remove(self):
         try:
             logger.info("Starting infrastructure teardown...")
+
+            try:
+                logger.info("Removing grpc-proxy and membership-server (controllers stack)...")
+                controllers_mgr = ControllersStackManager(
+                    kube_config_data=self.kube_config_data,
+                    namespace="controllers",
+                )
+                controllers_mgr.remove()
+            except Exception as e:
+                logger.warning(f"Failed to remove controllers stack (grpc-proxy/membership-server): {e}")
 
             try:
                 logger.info("Removing metrics-collector...")
@@ -209,6 +266,7 @@ def create_cluster_infra(kube_config_data: str, cluster_id: str, cluster_data: d
 
         if not (collect_interval and redis_host and block_metrics_redis_host and cluster_metrics_write_interval):
             raise ValueError("One or more required environment variables are missing.")
+            
 
         infra_creator = KubernetesInfraCreator(
             kube_config_data=kube_config_data,

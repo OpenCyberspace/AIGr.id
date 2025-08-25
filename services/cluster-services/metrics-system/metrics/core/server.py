@@ -174,7 +174,7 @@ def get_cluster_metrics():
             return jsonify({"success": False, "error": result}), 400
     except Exception as e:
         logger.error(f"Error in get_cluster_metrics: {e}")
-        return jsonify({"success": False, "error": str(e)}), 500
+        raise e
 
 
 def run():

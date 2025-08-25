@@ -263,6 +263,7 @@ class MetricsCollector:
         metrics['nodeId'] = self.node_id
         metrics['clusterId'] = os.getenv("CLUSTER_ID")
         metrics['metrics.resource.node.gpus'] = gpu_each
+        metrics['metrics.resource.node.id'] = self.node_id
         return metrics
 
     def run_collector(self):

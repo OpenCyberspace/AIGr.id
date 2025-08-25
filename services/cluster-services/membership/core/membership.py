@@ -88,6 +88,8 @@ class ClusterMembership:
             if not allowed:
                 raise Exception(str(node_data_modified))
 
+            logger.info(f"pre-check-policy-output: {node_data_modified}")
+
             data = join_node(node_data, node_data_modified['id'], mode, custom_ip)
             return data
     

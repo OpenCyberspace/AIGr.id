@@ -351,14 +351,18 @@ def handle_reassign_instance(message):
             pod_data = failed_pod.get('pod_data')
 
             block_data = BlocksClient().get_block_by_id(block_id)
-            block_metrics_api = BlockMetricsClient()
+            block_metrics_api = BlockMetricsClient(os.getenv("CLUSTER_METRICS_SERVICE_URL", "http://localhost:5000"))
             block_metrics = block_metrics_api.get_by_block_id(block_id)
             healthy_nodes = NodesAPIClient().get_healthy_nodes()
+
+            ret, cluster = ClusterClient().read_cluster(os.getenv("CLUSTER_ID"))
+            if not ret:
+                raise Exception("failed to read cluster data")
 
             payload = {
                 "block": block_data,
                 "instance_id": instance_id,
-                "cluster": block_data['cluster'],
+                "cluster": cluster,
                 "block_metrics": block_metrics,
                 "cluster_metrics": cluster_metrics,
                 "pod_name": pod_name,
@@ -378,6 +382,57 @@ def handle_reassign_instance(message):
             container_image = block_data['component']['containerRegistryInfo']['containerImage']
             create_single_instance(block_id, instance_id,
                                    container_image, node_id, gpus=gpus)
+
+    except Exception as e:
+        logger.error(f"Error scaling bloc: {e}")
+        raise
+
+
+def handle_manual_reassign_instance(message):
+
+    try:
+
+            cluster_metrics_tool = ClusterMetricsClient(os.getenv("CLUSTER_METRICS_SERVICE_URL", "http://localhost:5000"))
+            cluster_metrics = cluster_metrics_tool.get_cluster_metrics()
+
+
+            instance_id = message.get('instanceId')
+            block_id = message.get('blockId')
+            extra_data = message.get('extra_data')
+
+
+            block_data = BlocksClient().get_block_by_id(block_id)
+            block_metrics_api = BlockMetricsClient(os.getenv("CLUSTER_METRICS_SERVICE_URL", "http://localhost:5000"))
+            block_metrics = block_metrics_api.get_by_block_id(block_id)
+            healthy_nodes = NodesAPIClient().get_healthy_nodes()
+
+            ret, cluster = ClusterClient().read_cluster(os.getenv("CLUSTER_ID"))
+            if not ret:
+                raise Exception("failed to read cluster data")
+
+            payload = {
+                "block": block_data,
+                "instance_id": instance_id,
+                "cluster": cluster,
+                "block_metrics": block_metrics,
+                "cluster_metrics": cluster_metrics,
+                "healthy_nodes": healthy_nodes,
+                "extra_data": extra_data
+            }
+
+            try:
+                remove_single_instance(block_id, instance_id)
+            except Exception as e:
+                logger.info("failed to remove existing instance, skipping")
+
+
+            # execute policy rule:
+            node_id, gpus = get_node_id_and_gpus_reassignment(block_data, payload)
+            if not node_id:
+                raise Exception("no node_id returned by the policy")
+
+            container_image = block_data['component']['containerRegistryInfo']['containerImage']
+            create_single_instance(block_id, instance_id,container_image, node_id, gpus=gpus)
 
     except Exception as e:
         logger.error(f"Error scaling bloc: {e}")
@@ -609,6 +664,8 @@ class Router:
                 return handle_init_container_status_query(self.message)
             elif action == "failed_pods":
                 return run_handle_reassign_instance_in_thread(self.message)
+            elif action == "reassign":
+                return handle_manual_reassign_instance(self.message)
             else:
                 raise Exception(f"Unknown action: {action}")
         except Exception as e:

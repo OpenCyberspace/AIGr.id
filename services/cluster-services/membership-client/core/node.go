@@ -13,7 +13,8 @@ type NodeData struct {
 	Storage  StorageInfo            `json:"storage"`
 	Network  NetworkInfo            `json:"network"`
 	GPUs     GPUInfo                `json:"gpus"`
-	Metadata map[string]interface{} `json:"metadata"` // arbitrary key-value fields
+	Tags     []string               `json:"tags"`
+	Metadata map[string]interface{} `json:"nodeMetadata"` // arbitrary key-value fields
 }
 
 type VCPUInfo struct {

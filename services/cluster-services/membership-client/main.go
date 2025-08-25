@@ -5,6 +5,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"strings"
 
 	clusterclient "membership-client/core"
 )
@@ -18,6 +19,8 @@ func main() {
 		dump       = flag.Bool("dump-json", false, "Dump node data as JSON and exit")
 		action     = flag.String("action", "", "Action: dry-run-add, dry-run-remove, join, remove")
 		apiBaseURL = flag.String("api", "http://localhost:8080", "API base URL")
+		clusterId  = flag.String("cluster-id", "", "Target cluster ID")
+		tags       = flag.String("tags", "", "comma separated node tags")
 	)
 	flag.Parse()
 
@@ -30,6 +33,8 @@ func main() {
 		logger.Fatalf("Failed to collect node info: %v", err)
 	}
 
+	nodeData.Tags = strings.Split(*tags, ",")
+
 	if *dump {
 		writeJSON("node_data.json", nodeData)
 		logger.Println("Node data dumped to node_data.json")
@@ -39,7 +44,7 @@ func main() {
 	// --- Action Routing ---
 	switch *action {
 	case "dry-run-add":
-		resp, err := client.DryRunAddNodePrecheck(*nodeData)
+		resp, err := client.DryRunAddNodePrecheck(*nodeData, *clusterId)
 		if err != nil {
 			logger.Fatalf("Dry run (add-node) failed: %v", err)
 		}
@@ -49,19 +54,19 @@ func main() {
 		if nodeData.ID == "" {
 			logger.Fatalf("Node ID required for dry-run-remove")
 		}
-		resp, err := client.DryRunRemoveNodePrecheck(nodeData.ID)
+		resp, err := client.DryRunRemoveNodePrecheck(nodeData.ID, *clusterId)
 		if err != nil {
 			logger.Fatalf("Dry run (remove-node) failed: %v", err)
 		}
 		logger.Printf("Precheck remove-node passed? %v\n", resp.Allowed)
 
 	case "join":
-		if err := client.JoinNode(*nodeData, "local_network", ""); err != nil {
+		if err := client.JoinNode(*nodeData, "local_network", "", *clusterId); err != nil {
 			logger.Fatalf("Join failed: %v", err)
 		}
 
 	case "remove":
-		if err := client.RemoveNode(nodeData.ID); err != nil {
+		if err := client.RemoveNode(nodeData.ID, *clusterId); err != nil {
 			logger.Fatalf("Remove failed: %v", err)
 		}
 

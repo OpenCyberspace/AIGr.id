@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os/exec"
@@ -28,10 +29,11 @@ type PreCheckAddNodeRequest struct {
 }
 
 type PreCheckAddNodeResponse struct {
-	Allowed  bool     `json:"allowed"`
-	NodeData NodeData `json:"node_data"`
-	Success  bool     `json:"success"`
-	Error    string   `json:"error,omitempty"`
+	Allowed         bool        `json:"allowed"`
+	NodeData        NodeData    `json:"node_data"`
+	Success         bool        `json:"success"`
+	Data            interface{} `json:"data"`
+	ClusterResponse interface{} `json:"cluster_response"`
 }
 
 type MgmtRequest struct {
@@ -84,27 +86,27 @@ type RemoveNodeResponse struct {
 	Error   string      `json:"error,omitempty"`
 }
 
-func (c *ClusterClient) PreCheckAddNode(req PreCheckAddNodeRequest) (*PreCheckAddNodeResponse, error) {
-	return post[PreCheckAddNodeRequest, PreCheckAddNodeResponse](c, "/pre-checks/add-node", req)
+func (c *ClusterClient) PreCheckAddNode(req PreCheckAddNodeRequest, clusterId string) (*PreCheckAddNodeResponse, error) {
+	return post[PreCheckAddNodeRequest, PreCheckAddNodeResponse](c, "/pre-checks/add-node/"+clusterId, req)
 }
 
-func (c *ClusterClient) MgmtAddNode(req MgmtRequest) (*MgmtResponse, error) {
+func (c *ClusterClient) MgmtAddNode(req MgmtRequest, clusterId string) (*MgmtResponse, error) {
 	return post[MgmtRequest, MgmtResponse](c, "/pre-checks/add-node/mgmt", req)
 }
 
-func (c *ClusterClient) JoinNodeToCluster(req JoinNodeRequest) (*JoinNodeResponse, error) {
+func (c *ClusterClient) JoinNodeToCluster(req JoinNodeRequest, clusterId string) (*JoinNodeResponse, error) {
 	return post[JoinNodeRequest, JoinNodeResponse](c, "/pre-checks/add-node/join", req)
 }
 
-func (c *ClusterClient) PreCheckRemoveNode(req PreCheckRemoveNodeRequest) (*PreCheckRemoveNodeResponse, error) {
+func (c *ClusterClient) PreCheckRemoveNode(req PreCheckRemoveNodeRequest, clusterId string) (*PreCheckRemoveNodeResponse, error) {
 	return post[PreCheckRemoveNodeRequest, PreCheckRemoveNodeResponse](c, "/pre-checks/remove-node", req)
 }
 
-func (c *ClusterClient) MgmtRemoveNode(req MgmtRequest) (*MgmtResponse, error) {
+func (c *ClusterClient) MgmtRemoveNode(req MgmtRequest, clusterId string) (*MgmtResponse, error) {
 	return post[MgmtRequest, MgmtResponse](c, "/pre-checks/remove-node/mgmt", req)
 }
 
-func (c *ClusterClient) RemoveNodeFromCluster(req RemoveNodeRequest) (*RemoveNodeResponse, error) {
+func (c *ClusterClient) RemoveNodeFromCluster(req RemoveNodeRequest, clusterId string) (*RemoveNodeResponse, error) {
 	return post[RemoveNodeRequest, RemoveNodeResponse](c, "/pre-checks/remove-node/delete", req)
 }
 
@@ -127,41 +129,46 @@ func post[Req any, Res any](c *ClusterClient, path string, payload Req) (*Res, e
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != 200 {
+		data, _ := io.ReadAll(resp.Body)
+		c.Logger.Printf("error message: %s", data)
+		return nil, fmt.Errorf("%s", string(data))
+	}
+
 	var out Res
 	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
 		c.Logger.Printf("Failed to decode response: %v", err)
 		return nil, err
 	}
 
+	c.Logger.Printf("response: %v", out)
+
 	return &out, nil
 }
 
 // main methods:
 
-func (c *ClusterClient) DryRunAddNodePrecheck(nodeData NodeData) (*PreCheckAddNodeResponse, error) {
-	req := PreCheckAddNodeRequest{
-		NodeData: nodeData,
-	}
+func (c *ClusterClient) DryRunAddNodePrecheck(nodeData NodeData, clusterId string) (*PreCheckAddNodeResponse, error) {
 	c.Logger.Printf("[DryRunAddNodePrecheck] Sending node data for precheck: %+v", nodeData)
 
-	resp, err := post[PreCheckAddNodeRequest, PreCheckAddNodeResponse](c, "/pre-checks/add-node", req)
+	resp, err := post[NodeData, PreCheckAddNodeResponse](c, "/pre-check-policies/add_node/dry_run/"+clusterId, nodeData)
 	if err != nil {
 		c.Logger.Printf("[DryRunAddNodePrecheck] Error: %v", err)
 		return nil, err
 	}
 	if !resp.Success {
-		return resp, fmt.Errorf("add-node precheck failed: %s", resp.Error)
+		return resp, fmt.Errorf("add-node precheck failed: %s", resp.Data)
 	}
 	return resp, nil
 }
 
-func (c *ClusterClient) DryRunRemoveNodePrecheck(nodeID string) (*PreCheckRemoveNodeResponse, error) {
+func (c *ClusterClient) DryRunRemoveNodePrecheck(nodeID string, clusterId string) (*PreCheckRemoveNodeResponse, error) {
 	req := PreCheckRemoveNodeRequest{
 		NodeID: nodeID,
 	}
 	c.Logger.Printf("[DryRunRemoveNodePrecheck] Sending node ID for precheck: %s", nodeID)
 
-	resp, err := post[PreCheckRemoveNodeRequest, PreCheckRemoveNodeResponse](c, "/pre-checks/remove-node", req)
+	resp, err := post[PreCheckRemoveNodeRequest, PreCheckRemoveNodeResponse](c, "/pre-check-policies/remove_node/dry_run/"+clusterId, req)
 	if err != nil {
 		c.Logger.Printf("[DryRunRemoveNodePrecheck] Error: %v", err)
 		return nil, err
@@ -172,7 +179,7 @@ func (c *ClusterClient) DryRunRemoveNodePrecheck(nodeID string) (*PreCheckRemove
 	return resp, nil
 }
 
-func (c *ClusterClient) JoinNode(nodeData NodeData, mode string, customIP string) error {
+func (c *ClusterClient) JoinNode(nodeData NodeData, mode string, customIP string, clusterId string) error {
 	req := JoinNodeRequest{
 		NodeData: nodeData,
 		Mode:     mode,
@@ -180,7 +187,7 @@ func (c *ClusterClient) JoinNode(nodeData NodeData, mode string, customIP string
 	}
 
 	c.Logger.Printf("[JoinNode] Requesting join command for node: %s", nodeData.ID)
-	resp, err := post[JoinNodeRequest, JoinNodeResponse](c, "/pre-checks/add-node/join", req)
+	resp, err := post[JoinNodeRequest, JoinNodeResponse](c, "/join-node/"+clusterId, req)
 	if err != nil {
 		c.Logger.Printf("[JoinNode] HTTP error: %v", err)
 		return err
@@ -208,14 +215,14 @@ func (c *ClusterClient) JoinNode(nodeData NodeData, mode string, customIP string
 	return nil
 }
 
-func (c *ClusterClient) RemoveNode(nodeID string) error {
+func (c *ClusterClient) RemoveNode(nodeID string, clusterId string) error {
 	req := RemoveNodeRequest{
 		NodeID: nodeID,
 	}
 
 	c.Logger.Printf("[RemoveNode] Sending removal request for node: %s", nodeID)
 
-	resp, err := post[RemoveNodeRequest, RemoveNodeResponse](c, "/remove-node", req)
+	resp, err := post[RemoveNodeRequest, RemoveNodeResponse](c, "/remove-node/"+clusterId, req)
 	if err != nil {
 		c.Logger.Printf("[RemoveNode] HTTP error: %v", err)
 		return err

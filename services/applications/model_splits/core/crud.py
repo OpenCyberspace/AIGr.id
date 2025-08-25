@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 class SplitsDeploymentDB:
     def __init__(self):
         try:
-            uri = os.getenv("MONGO_URL", "mongodb://localhost:27017")
+            uri = os.getenv("DB_URL", "mongodb://localhost:27017")
             self.client = MongoClient(uri)
             self.db = self.client["splits"]
             self.collection = self.db["splits_deployments"]
@@ -105,7 +105,7 @@ def create_splits_deployment(entry: SplitsDeploymentEntry):
         # Deploy pods and service
         if entry.platform == "torch":
             deploy_torch_local_cluster_ranks(
-                cluster_id=entry.cluster_id[0],  # For now assuming single cluster
+                cluster_id=entry.rank_0_cluster_id,  # For now assuming single cluster
                 deployment_name=entry.deployment_name,
                 nnodes=entry.nnodes,
                 common_params=entry.common_params,

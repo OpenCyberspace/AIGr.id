@@ -81,11 +81,15 @@ class BlockInferenceServiceServicer(service_pb2_grpc.BlockInferenceServiceServic
     def process_request(self, request: service_pb2.BlockInferencePacket, extra_dict=None):
         try:
 
+            block_id = None
+
             if request.block_id == "":
                 # perform similarity search:
                 block_id = self.sessions_client.get_block_id(
                     request.session_id, request.query_parameters)
                 request.block_id = block_id
+            else:
+                block_id = request.block_id
 
             # get data from discovery cache:
             url, port = self.discovery_cache.discover(request.block_id)

@@ -4,6 +4,7 @@ from typing import Dict, List
 
 @dataclass
 class SplitsDeploymentEntry:
+    rank_0_cluster_id: str
     cluster_id: List[str]
     deployment_name: str  
     nnodes: int
@@ -21,6 +22,7 @@ class SplitsDeploymentEntry:
     def from_dict(data: Dict) -> "SplitsDeploymentEntry":
        
         return SplitsDeploymentEntry(
+            rank_0_cluster_id=data['rank_0_cluster_id'],
             cluster_id=data["cluster_id"],
             deployment_name=data["deployment_name"],
             nnodes=data["nnodes"],

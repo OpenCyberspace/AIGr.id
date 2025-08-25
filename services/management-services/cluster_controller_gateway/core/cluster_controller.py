@@ -66,6 +66,9 @@ class ClusterControllerExecutor:
     def query_init_container_data(self, payload):
         return self.execute_action("query_init_container_data", payload)
 
+    def reassign(self, payload):
+        return self.execute_action("reassign", payload)
+
 
 def get_cluster_controller_connection(cluster_id):
     try:
