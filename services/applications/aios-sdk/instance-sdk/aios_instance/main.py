@@ -11,6 +11,7 @@ from .muti_workers import ThreadJobExecutor, ProcessJobExecutor
 from .block import BlocksDB
 from .utils import SessionsManager
 from .ws import WebsocketStreamingManager
+from .policy_sandbox import LocalPolicyEvaluator
 from .metrics import AIOSMetrics
 from .aios_packet_pb2 import AIOSPacket
 from .tools import Muxer
@@ -265,6 +266,13 @@ class Block:
                 "thread_pool_mode", "thread")
             enable_pool = self.block_init_data.get("enable_thread_pool", False)
 
+            # initialize block pre/post policies:
+            self.post_processor = None
+            self.preprocessor = None
+
+            self._load_pre_policy_rule(self.block_data_full)
+            self._load_post_policy_rule(self.block_data_full)
+
             if enable_pool:
                 # wherever you put these
                 from .muti_workers import ThreadJobExecutor, ProcessJobExecutor
@@ -287,6 +295,59 @@ class Block:
 
         except Exception as e:
             raise e
+
+    
+    def _load_pre_policy_rule(self, name="pre_processing"):
+        try:
+            logging.info("Loading policy rule")
+            policies = self.block_data_full.get('policies', {})
+            if name in policies:
+                settings = policies[name].get(
+                    'settings', {})
+                parameters = policies[name].get(
+                    'parameters', {})
+                policy_rule_uri = policies[name].get(
+                    "policyRuleURI", {})
+
+             
+                self.preprocessor = LocalPolicyEvaluator(
+                    policy_rule_uri,
+                    parameters=parameters,
+                    settings=settings
+                )
+
+                logging.info("[Pre processing policy] Loaded")
+
+        except Exception as e:
+            logging.error(f"Error loading policy rule: {e}")
+            self.preprocessor = None
+    
+
+    def _load_post_policy_rule(self, name="post_processing"):
+        try:
+            logging.info("Loading policy rule")
+            policies = self.block_data_full.get('policies', {})
+            if name in policies:
+                settings = policies[name].get(
+                    'settings', {})
+                parameters = policies[name].get(
+                    'parameters', {})
+                policy_rule_uri = policies[name].get(
+                    "policyRuleURI", {})
+
+             
+                self.post_processor = LocalPolicyEvaluator(
+                    policy_rule_uri,
+                    parameters=parameters,
+                    settings=settings
+                )
+
+                logging.info("[Post processing policy] Loaded")
+
+        except Exception as e:
+            logging.error(f"Error loading policy rule: {e}")
+            self.post_processor = None
+
 
     def reconnect_redis_client(self, delay_seconds=5):
         while True:
@@ -403,6 +464,16 @@ class Block:
                 job_data = op
 
             preprocess_start = time.time()
+
+            # run block specific pre-processing
+            if self.preprocessor:
+                response =  self.preprocessor.execute_policy_rule({
+                    "packet": job_data_proto,
+                    "block_data": self.block_data_full
+                })
+
+                job_data_proto = response['packet']
+
             ret, data = self.block_module.on_preprocess(job_data_proto)
             preprocess_end = time.time()
 
@@ -439,6 +510,14 @@ class Block:
 
                 proto = entry.packet
                 proto.data = json.dumps(output)
+
+                if self.post_processor:
+                    response =  self.preprocessor.execute_policy_rule({
+                        "packet": proto,
+                        "block_data": self.block_data_full
+                    })
+
+                    proto = response['packet']
 
                 is_vdag, uri = self.check_is_vdag_packet(proto.session_id)
                 if is_vdag:
