@@ -319,7 +319,7 @@ class Block:
                 logging.info("[Pre processing policy] Loaded")
 
         except Exception as e:
-            logging.error(f"Error loading policy rule: {e}")
+            logging.error(f"[Pre processing policy] Error loading policy rule: {e}")
             self.preprocessor = None
     
 
@@ -345,7 +345,7 @@ class Block:
                 logging.info("[Post processing policy] Loaded")
 
         except Exception as e:
-            logging.error(f"Error loading policy rule: {e}")
+            logging.error(f"[Post processing policy] Error loading policy rule: {e}")
             self.post_processor = None
 
 
