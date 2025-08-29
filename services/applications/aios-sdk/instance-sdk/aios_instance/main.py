@@ -270,8 +270,8 @@ class Block:
             self.post_processor = None
             self.preprocessor = None
 
-            self._load_pre_policy_rule(self.block_data_full)
-            self._load_post_policy_rule(self.block_data_full)
+            self._load_pre_policy_rule()
+            self._load_post_policy_rule()
 
             if enable_pool:
                 # wherever you put these
@@ -306,8 +306,7 @@ class Block:
                     'settings', {})
                 parameters = policies[name].get(
                     'parameters', {})
-                policy_rule_uri = policies[name].get(
-                    "policyRuleURI", {})
+                policy_rule_uri = policies[name].get("policyRuleURI", "")
 
              
                 self.preprocessor = LocalPolicyEvaluator(

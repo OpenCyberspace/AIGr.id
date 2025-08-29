@@ -26,11 +26,15 @@ def torch_rank_processor(
     master_port: int,
     namespace: str = "splits"
 ):
-
+    """
+    Create a torchrun Pod for a given rank. Models downloaded by Transformers/HF Hub
+    will be cached on the host at /home/ubuntu/splits (persisting across pod restarts).
+    """
     try:
         pod_name = f"{pod_name_prefix}-rank-{rank}"
         role_label = "master" if rank == 0 else "worker"
 
+        # Base env
         env_vars = [
             {"name": "NCCL_SOCKET_IFNAME", "value": nccl_socket_ifname},
             {"name": "NCCL_IB_DISABLE", "value": "1"},
@@ -40,7 +44,16 @@ def torch_rank_processor(
             {"name": "NVIDIA_DRIVER_CAPABILITIES", "value": "all"},
             {"name": "MODEL_NAME", "value": model_name},
             {"name": "NCCL_DEBUG", "value": "INFO"},
-            {"name": "MAX_NEW_TOKENS", "value": "2048"}
+            {"name": "MAX_NEW_TOKENS", "value": "2048"},
+        ]
+
+        # Hugging Face / Transformers caches (models will go under TRANSFORMERS_CACHE)
+        env_vars += [
+            {"name": "HF_HOME", "value": "/cache/huggingface"},
+            {"name": "TRANSFORMERS_CACHE", "value": "/cache/huggingface/hub"},
+            {"name": "HF_DATASETS_CACHE", "value": "/cache/huggingface/datasets"},
+            # Optional: direct hub cache override (kept consistent with TRANSFORMERS_CACHE)
+            {"name": "HF_HUB_CACHE", "value": "/cache/huggingface/hub"},
         ]
 
         pod_spec = {
@@ -82,14 +95,30 @@ def torch_rank_processor(
                                 main.py
                             """
                         ],
-                        "env": env_vars
+                        "env": env_vars,
+                        "volumeMounts": [
+                            {
+                                "name": "hf-cache",
+                                "mountPath": "/cache/huggingface"
+                            }
+                        ],
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "hf-cache",
+                        "hostPath": {
+                            "path": "/home/ubuntu/splits",
+                            "type": "DirectoryOrCreate"
+                        }
                     }
                 ]
             }
         }
 
         logger.info(
-            f"Creating torchrun pod '{pod_name}' for rank {rank} on cluster '{cluster_id}'")
+            f"Creating torchrun pod '{pod_name}' for rank {rank} on cluster '{cluster_id}'"
+        )
         executor = RemoteK8sExecutor(cluster_id)
         result = executor.create_objects_from_dicts([pod_spec])
         logger.info(f"Successfully created torchrun pod: {pod_name}")
@@ -98,6 +127,7 @@ def torch_rank_processor(
     except Exception as e:
         logger.error(f"Failed to create torchrun pod for rank {rank}: {e}")
         raise
+
 
 
 def torch_create_service(
