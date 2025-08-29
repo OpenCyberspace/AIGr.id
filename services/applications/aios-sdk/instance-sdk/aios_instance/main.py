@@ -511,7 +511,7 @@ class Block:
                 proto.data = json.dumps(output)
 
                 if self.post_processor:
-                    response =  self.preprocessor.execute_policy_rule({
+                    response =  self.post_processor.execute_policy_rule({
                         "packet": proto,
                         "block_data": self.block_data_full
                     })

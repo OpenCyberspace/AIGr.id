@@ -8,7 +8,7 @@ curl -X POST http://34.58.1.86:30160/splits/create \
     "common_params": {
       "model_name": "microsoft/Phi-3-mini-128k-instruct",
       "image": "34.58.1.86:31280/example/split-runner:latest",
-      "master_port": 3000,
+      "master_port": 3000
     },
     "per_rank_params": [
       {
